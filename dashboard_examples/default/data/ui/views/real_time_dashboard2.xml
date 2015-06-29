@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<dashboard>
+  
+  <label>Real time dashboards (clickable charts)</label>
+  <row>
+    <html>
+      <div class="content_width">
+      <h1>Real-time dashboard with clickable charts</h1>
+      <p>
+        When you click on a chart or table that is running a real-time search, you create a snapshot of the equivalent absolute timerange at that moment.
+        The drilldown searches over that absolute timerange for the sourcetype that you clicked on. 
+      </p>
+      <p>
+        Here is the panel implementing the real-time drilldown.
+      </p>
+      <div class="samplecode">
+        &lt;chart&gt;
+        <br />&#160;&#160;&lt;searchString&gt;* | top sourcetype | fields - percent&lt;/searchString&gt;
+        <br />&#160;&#160;&lt;title&gt;live events, last 30 seconds, by sourcetype&lt;/title&gt;
+        <br />&#160;&#160;&lt;earliestTime&gt;rt-30s&lt;/earliestTime&gt;
+        <br />&#160;&#160;&lt;latestTime&gt;rt&lt;/latestTime&gt;
+        <br />&#160;&#160;&lt;option name="drilldown"&gt;all&lt;/option&gt;
+        <br />&#160;&#160;&lt;option name="charting.chart"&gt;bar&lt;/option&gt;
+        <br />&lt;/chart&gt;
+      </div>
+      <h1>Source code</h1>
+      <p>
+        View the <a target="_blank" href="/static/app/dashboard_examples/samples/real_time_dashboard2_sample.html">source code to implement this dashboard</a>. (Opens in a new window.)
+      </p>
+    
+    <h1>What's next?</h1>  
+      <p>
+        [<a href="/app/dashboard_examples/advanced_intro1">Next: Advanced XML - an introduction</a>]
+        <br />[<a href="/app/dashboard_examples/dashboard_real_time1">Prev: Real-time dashboard (created interactively)</a>]
+      </p>
+      <p>
+        [<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+      </p>         
+      </div> 
+    </html>
+  </row>
+  <row>
+    <chart>
+      <searchString>index=_internal * | top sourcetype | fields - percent</searchString>
+      <title>live events, last 30 seconds, by sourcetype</title>
+      <earliestTime>rt-30s</earliestTime>
+      <latestTime>rt</latestTime>
+      <option name="drilldown">all</option>
+      <option name="charting.chart">bar</option>
+    </chart>
+  </row>
+  
+</dashboard>

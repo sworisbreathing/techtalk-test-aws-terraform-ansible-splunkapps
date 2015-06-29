@@ -1,0 +1,95 @@
+<view onunloadCancelJobs="False" autoCancelInterval="100">
+  <!--  autoCancelInterval is set here to 100  -->
+  <label>Table demo</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="ServerSideInclude" layoutPanel="viewHeader">
+    <param name="src">
+      drilldown_table1.html
+    </param>
+  </module>
+  <module name="SearchBar" layoutPanel="splSearchControls-inline" autoRun="True">
+    <param name="default">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput
+      | timechart avg(eps) by series
+    </param>
+    <param name="useAssistant">true</param>
+    <param name="useTypeahead">true</param>
+    <param name="useOwnSubmitButton">False</param>
+    <module name="TimeRangePicker">
+      <param name="selected">Last 24 hours</param>
+      <param name="searchWhenChanged">True</param>
+      <module name="SubmitButton">
+        <param name="allowSoftSubmit">True</param>
+        <module name="Message" layoutPanel="graphArea">
+          <param name="filter">splunk.search.job</param>
+          <param name="clearOnJobDispatch">True</param>
+          <param name="maxSize">2</param>
+          <module name="ResultsHeader" layoutPanel="graphArea">
+            <param name="entityLabel">results</param>
+            <param name="entityName">results</param>
+            <module name="Paginator">
+              <param name="entityName">results</param>
+              <param name="maxPages">10</param>
+              
+              <module name="StaticContentSample" layoutPanel="resultsAreaLeft">
+                <param name="text"><![CDATA[
+                  <p><b>This table attempts to send a drilldown search for the exact table cell.</b></p> 
+                  <p><b>In some cases this adds a second term to the drilldown search.</b></p> 
+                  <p><b>In other cases it falls back transparently as though you had clicked on a row drilldown.</b></p>
+                  <p><b>In displays an error when you cannot drilldown on a column.</b><br /><br /></p>
+                ]]></param>
+              </module>
+              <module name="SimpleResultsTable" layoutPanel="resultsAreaLeft">
+                <param name="drilldown">all</param>
+                <param name="entityName">results</param>
+                <module name="ConvertToDrilldownSearch">
+                  <module name="JobProgressIndicator"></module>
+                  <module name="ResultsHeader" layoutPanel="resultsAreaLeft">
+                    <param name="prefix">The drilldown search has</param>
+                    <param name="entityLabel">results</param>
+                    <param name="entityName">results</param>
+                    <module name="EventsViewer">
+                      <param name="segmentation">full</param>
+                      <param name="reportFieldLink">report_builder_format_report</param>
+                    </module> <!-- EventsViewer -->
+                  </module> <!-- ResultsHeader -->
+                </module> <!-- ConvertToDrilldownSearch -->
+              </module> <!-- SimpleResultsTable -->
+              
+              <module name="StaticContentSample" layoutPanel="resultsAreaRight">
+                <param name="text"><![CDATA[
+                  <p><b>This table uses the more general row drilldown.</b></p>
+                  <p><b>Row drilldown generally works fine for most use cases.</b></p>
+                ]]></param>
+              </module>
+              <module name="SimpleResultsTable" layoutPanel="resultsAreaRight">
+                <param name="drilldown">row</param>
+                <param name="entityName">results</param>
+                <module name="ConvertToDrilldownSearch">
+                  <module name="JobProgressIndicator"></module>
+                  <module name="ResultsHeader" layoutPanel="resultsAreaRight">
+                    <param name="prefix">The drilldown search has</param>
+                    <param name="entityLabel">events</param>
+                    <param name="entityName">events</param>
+                    <module name="EventsViewer">
+                      <param name="segmentation">full</param>
+                      <param name="reportFieldLink">report_builder_format_report</param>
+                    </module> <!-- EventsViewer -->
+                  </module> <!-- ResultsHeader -->
+                </module> <!-- ConvertToDrilldownSearch -->
+              </module> <!-- SimpleResultsTable -->
+
+            </module> <!-- Paginator -->
+          </module> <!-- ResultsHeader -->
+        </module> <!-- Message -->
+      </module> <!-- SubmitButton -->
+    </module> <!-- TimeRangePicker -->
+  </module> <!-- SearchBar -->
+
+</view>

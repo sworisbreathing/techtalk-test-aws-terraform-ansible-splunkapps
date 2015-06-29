@@ -1,0 +1,87 @@
+<view template="dashboard.html" onunloadCancelJobs="False" autoCancelInterval="100" isVisible="False">
+  <!--  autoCancelInterval is set here to 100  -->
+  <label>Series Viewer</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  
+  <module name="TimeRangePicker" layoutPanel="mainSearchControls">
+    <param name="selected">All time</param>
+    <param name="searchWhenChanged">True</param>
+    <module name="FieldSearch">
+      <param name="field">group</param>
+      <module name="FieldSearch">
+        <param name="field">series</param>
+        
+        <module name="SubmitButton">
+          <param name="allowSoftSubmit">True</param>
+          <param name="label">Search</param>
+          <module name="Message" layoutPanel="messaging">
+            <param name="filter">splunk.search.job</param>
+            <param name="clearOnJobDispatch">True</param>
+            <param name="maxSize">2</param>
+            <module name="StaticContentSample">
+              <param name="text">This view is designed to be linked to from another page. Note that instead of operating merely on the search in the link,  this view uses that search only as a starting point and then runs 3 seperate searches. 
+              &lt;br&gt;
+              &lt;br&gt;
+              NOTE: if you have not read the &lt;a href="advanced_form_search1"&gt;High Level Concepts&lt;/a&gt; intro, do so now. 
+              &lt;br&gt;
+              &lt;br&gt;
+              this view has a cousin,  series_display,  and in fact you can change the URL yourself right now to see the difference.    series_display shows the normal way of doing things, where there's an underlying base search string and you're layering more intentions on top of that to make your charts and tables. 
+              &lt;br&gt;
+              &lt;br&gt;
+              This view demonstrates that the reverse approach can be taken to a certain extent as well.  Where instead of changing intentions at the top you swap out the base search string underneath.   Since the SearchBar is absent from this page the incoming items in the URL querystring will stick around as intentions. This gives us an unusual degree of freedom to now swap out the underlying base search to run different transforming searches.
+              &lt;br&gt;
+              &lt;br&gt;
+              in particular,  we have 3 HiddenSearch modules that contain searches that look like  "* | timechart sum(kb)", "* | timechart avg(kbps)" and "* | timechart min(eps) max(eps) avg(eps)". The asterisks on the left side will get filled in by the addterm intentions. NOTE: if you put a SearchBar at the top of this view, like series_display has, this wont work not work because then Search Bar will flatten the incoming intentions into a search string, and then we have no way of merging the two search strings together again. 
+              </param>
+            </module>
+            <module name="GenericHeader" layoutPanel="panel_row1_col1">
+              <param name="label">Total kb indexed over time</param>
+              <module name="HiddenSearch">
+                <param name="search">* | timechart sum(kb)</param>
+                <module name="HiddenChartFormatter">
+                  <param name="chart">column</param>
+                  <module name="JobProgressIndicator"></module>
+                  <module name="FlashChart"></module>
+                </module>
+              </module>   
+            </module>
+
+            <module name="GenericHeader" layoutPanel="panel_row1_col1">
+              <param name="label">Avg kbps indexed over time</param>
+              <module name="HiddenSearch">
+                <param name="search">* | timechart avg(kbps)</param>
+                <module name="HiddenChartFormatter">
+                  <param name="chart">line</param>
+                  <param name="chart.nullValueMode">zero</param>
+                  <module name="JobProgressIndicator"></module>
+                  <module name="FlashChart"></module>
+                </module>
+              </module>   
+            </module>
+            
+            <module name="GenericHeader" layoutPanel="panel_row1_col2">
+              <param name="label">eps over time</param>
+              <module name="HiddenSearch">
+                <param name="search">* | timechart min(eps) max(eps) avg(eps)</param>
+                <module name="HiddenChartFormatter">
+                  <param name="chart">line</param>
+                  <param name="chart.nullValueMode">zero</param>
+                  <module name="JobProgressIndicator"></module>
+                  <module name="FlashChart"></module>
+                </module>
+              </module>
+            </module>
+
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+</view>            
+

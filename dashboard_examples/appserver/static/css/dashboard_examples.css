@@ -1,0 +1,39 @@
+
+/* module layout */
+.white_bg_outer {
+    border-style:solid; 
+    border-width: 2px; 
+    padding: 6px; 
+    width: 50%;
+}
+
+.white_bg {
+    border-style:solid; 
+    border-width: 2px; 
+    padding: 6px;
+    background-color: #ffffff;
+ }
+
+.gray_bg  {
+    border-style:solid; 
+    border-width: 2px; 
+    padding: 6px; 
+    border-color: #88ccff;
+    background-color: #eeeeee;
+}
+
+/* from coredocs stylesheet */
+.samplecode {
+    overflow: auto;
+/*    width: 648px; */
+    width: auto;
+    padding: 15px;
+    background: #EEE;
+    border-radius: 6px;
+    display: block;
+    font-family: monospace;
+    margin: 1em 0px;
+    color:#333;
+    font-size:11px;
+}
+

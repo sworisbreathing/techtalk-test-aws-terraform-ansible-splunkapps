@@ -1,0 +1,461 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Drilldown introduction</h1> 
+
+<textarea id="codeTextArea">
+
+<view template="dashboard.html">
+  <label>Drilldown views</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+ 
+ 
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1">
+    <param name="src">drilldown_intro.html</param>
+  </module>
+  
+  
+  <module name="StaticContentSample" layoutPanel="panel_row2_col1" group="Table drilldown to a new view">
+    <param name="text"><![CDATA[
+      <p><b>&lt;Click&gt; displays drilldown results in this window.</b></p>
+      <p><b>&lt;CTRL+Click&gt; (&lt;CMD+Click&gt; on Mac) displays results in a new window.</b></p>.
+      <p><b>This panel specifies drilldown = row</b></p>
+    ]]></param>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row2_col1" autoRun="True">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput
+      | chart sum(kb) over series | sort -sum(kb) | head 10
+    </param>
+    <param name="earliest">-1h</param>
+    <module name="JobProgressIndicator"></module>
+    <module name="SimpleResultsTable">
+      <param name="displayRowNumbers">False</param>
+      <param name="drilldown">row</param>
+      <param name="entityName">results</param>
+      <module name="ConvertToDrilldownSearch">
+        <module name="ViewRedirector">
+          <param name="viewTarget">flashtimeline</param>
+        </module> <!--  ViewRedirector -->
+      </module> <!-- ConvertToDrilldownSearch -->
+    </module> <!-- SimpleResultsTable -->
+  </module> <!-- HiddenSearch -->
+
+  <module name="StaticContentSample" layoutPanel="panel_row2_col2" group="Use drilldown=all">
+    <param name="text"><![CDATA[
+      <p><b>This panel specifies drilldown=all instead of the simpler drilldown=row.</b></p>
+      <p><b>When you click any cell, the drilldown includes the split-by value.</b></p>
+      <p><b>Drilldown results appear open in a new window.</b></p>
+    ]]></param>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row2_col2" autoRun="True">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput | timechart span=10m sum(kb) by series
+    </param>
+    <param name="earliest">-1h</param>
+    <module name="JobProgressIndicator"></module>
+    <module name="SimpleResultsTable">
+      <param name="displayRowNumbers">False</param>
+      <param name="drilldown">all</param>
+      <param name="entityName">results</param>
+      <module name="ConvertToDrilldownSearch">
+        <module name="ViewRedirector">
+          <param name="viewTarget">flashtimeline</param>
+          <param name="popup">True</param>
+        </module> <!-- ViewRedirector -->
+      </module> <!-- ConvertToDrilldownSearch -->
+    </module> <!-- SimpleResultsTable -->
+  </module> <!-- HiddenSearch -->
+
+  
+  <module name="StaticContentSample" layoutPanel="panel_row3_col1" group="Transforming search">
+    <param name="text"><![CDATA[
+      <p><b>This panel contains a search bar pre-populated with a transforming search.</p></b>  
+      <p><b>Specify your own search in the search bar.</p></b>  
+    ]]></param>
+  </module>
+  <module name="SearchBar" layoutPanel="panel_row3_col1" autoRun="True">
+    <param name="default">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput | timechart sum(kb) by series
+    </param>
+    <param name="useAssistant">true</param>
+    <param name="useTypeahead">true</param>
+    <param name="useOwnSubmitButton">False</param>
+    <module name="TimeRangePicker">
+      <param name="selected">Last 24 hours</param>
+      <param name="searchWhenChanged">True</param>
+      <module name="SubmitButton">
+        <param name="label">Search</param>
+        <param name="allowSoftSubmit">True</param>
+        <module name="JobProgressIndicator"></module>
+        <module name="Paginator">
+          <param name="count">5</param>
+          <param name="entityName">results</param>
+          <param name="maxPages">20</param>
+          <module name="SimpleResultsTable">
+            <param name="entityName">results</param>
+            <param name="drilldown">all</param>
+            <param name="displayRowNumbers">False</param>
+            <module name="ConvertToDrilldownSearch">
+              <module name="ViewRedirector">
+                <param name="viewTarget">flashtimeline</param>
+              </module> <!-- ViewRedirector -->
+            </module> <!-- ConvertToDrilldownSearch -->
+          </module> <!-- SimpleResultsTable -->
+        </module> <!-- Paginator -->
+      </module> <!-- SubmitButton -->
+    </module> <!-- TimeRangePicker -->
+  </module> <!-- SearchBar -->
+
+  <module name="StaticContentSample" layoutPanel="panel_row3_col2" group="Drilldown variations">
+    <param name="text"><![CDATA[
+    <p><b>You can put any combination of modules in a drilldwon, not just the ViewRedirector module.</b></p>
+    <p><b>This panel specifies a JobProgressIndicator, a header, and another SimpleResultsTable.</b></p>
+    <p><b>It contains another drilldown interaction that opens a new window.</b></p>
+    ]]></param>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row3_col2" autoRun="True">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput
+      | chart sum(kb) over series | sort -sum(kb) | head 10
+    </param>
+    <param name="earliest">-1h</param>
+    <module name="JobProgressIndicator"></module>
+    <module name="SimpleResultsTable">
+      <param name="displayRowNumbers">False</param>
+      <param name="drilldown">row</param>
+      <param name="entityName">results</param>
+      <module name="ConvertToDrilldownSearch">        
+        <module name="JobProgressIndicator"></module>       
+        <module name="SimpleResultsHeader">
+          <param name="headerFormat">The drilldown search has $count$ events</param>
+          <param name="entityName">events</param>
+        </module> <!-- SimpleResultsHeader -->        
+        <module name="SimpleResultsTable">
+          <param name="drilldown">all</param>
+          <param name="entityName">results</param>
+          <param name="displayRowNumbers">False</param>
+          <module name="ConvertToDrilldownSearch">
+            <module name="ViewRedirector">
+              <param name="viewTarget">flashtimeline</param>
+            </module> <!-- ViewRedirector -->
+          </module> <!-- ConvertToDrilldownSearch -->
+        </module> <!-- SimpleResultsTable -->
+      </module> <!-- ConvertToDrilldownSearch -->
+    </module> <!-- SimpleResultsTable -->
+  </module> <!-- HiddenSearch -->
+
+
+
+
+  <module name="StaticContentSample" layoutPanel="panel_row4_col1" group="Custom wiring: Use drilldown into a different base search">
+    <param name="text"><![CDATA[
+    <p><b>Sometimes you display events from one space (such as summary indexing)
+    . . .<br />...but want the drilldown search to drill into a different space.</b><p>
+    <p><b>In this case, swap out the base search by putting a HiddenSearch before ConvertToDrilldownSearch.</b><p>
+    <p><b>This example renders the table using <code>| eventcount</code>, but drilldown clicks go into a * search.</b><p>      
+    ]]></param>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row4_col1" autoRun="True">
+    <param name="search">
+      | eventcount summarize=false report_size=true index=*
+      | fields index count server size_bytes
+      | sort - count
+    </param>
+    <module name="Paginator">
+      <param name="count">5</param>
+      <param name="entityName">results</param>
+      <param name="maxPages">20</param>
+      <module name="SimpleResultsTable">
+        <param name="drilldown">row</param>
+
+        <!-- Drilling down into the eventcount command is pointless.   -->
+        <!-- so switch the base search to *  -->
+        <module name="HiddenSearch">
+          <param name="search">*</param>
+          <module name="ConvertToDrilldownSearch">
+            <!-- at this point run the drilldown search. -->
+            <module name="JobProgressIndicator"></module>           
+            <module name="SimpleResultsHeader">
+              <param name="headerFormat">The drilldown search has $count$ events</param>
+              <param name="entityName">events</param>
+            </module> <!-- SimpleResultsHeader -->
+            <module name="Paginator">
+              <param name="entityName">events</param>
+              <param name="maxPages">10</param>
+              <module name="SimpleResultsTable">
+                <param name="displayRowNumbers">False</param>
+                <param name="entityName">events</param>
+                <param name="drilldown">all</param>
+                <module name="ConvertToDrilldownSearch">
+                  <module name="ViewRedirector">
+                    <param name="viewTarget">flashtimeline</param>
+                  </module> <!-- ViewRedirector -->
+                </module> <!-- ConvertToDrilldownSearch -->
+              </module> <!-- SimpleResultsTable -->
+            </module> <!-- Paginator -->
+          </module> <!-- ConvertToDrilldownSearch -->
+        </module> <!-- HiddenSearch -->
+      </module> <!-- SimpleResultsTable -->      
+    </module> <!-- Paginator -->
+  </module> <!-- HiddenSearch -->
+
+
+  <module name="StaticContentSample" layoutPanel="panel_row4_col2" group="Custom wiring: Use click arguments in other ways">
+    <param name="text">
+      <![CDATA[
+      <p><b>The keys from clickable tables and charts are useful in various ways.</b></p>
+      <p><b>ConvertToDrilldownSearch is a common, simple way to use them implicitly.</b></p>
+      <p><b>However, you can also wire up the args in other intentions.</b></p>
+      <p><b>This panel wires up clicks on the sum(kb) by sourcetype chart to then display
+      <br />a second chart of avg(eps) over time for the particular sourcetype.</b></p>     
+    ]]></param>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row4_col2_grp1" autoRun="True">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput
+      | chart sum(kb) over series | sort -sum(kb) | head 10
+    </param>
+    <param name="earliest">-1h</param>
+    <module name="HiddenChartFormatter">
+      <param name="charting.chart">bar</param>
+      <param name="charting.primaryAxisTitle.text">Sourcetype</param>
+      <param name="charting.secondaryAxisTitle.text">KB Indexed</param>
+      <param name="charting.legend.placement">none</param>
+      <module name="JobProgressIndicator"/>
+      
+      <!-- The JSChart for the drilldown -->
+      <module name="JSChart">
+        <param name="width">100%</param>
+        <param name="height">160px</param>
+        <param name="enableResize">False</param>
+
+        <!-- Swap out the search to a timechart.  -->
+        <module name="HiddenSearch">
+          <param name="search">
+            index=_internal source=*metrics.log group=per_sourcetype_thruput | timechart avg(eps)
+          </param>
+          <param name="earliest">-1h</param>
+          <!-- Grab the clicked value and put it in as a searchterm, series="someSourcetype"  -->
+          <module name="ConvertToIntention" layoutPanel="panel_row4_col2_grp2">
+            <param name="intention">
+              <param name="name">addterm</param>
+              <param name="arg">
+                <param name="series">$click.value$</param>
+              </param>
+              <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+              <param name="flags"><list>indexed</list></param>
+            </param>
+
+            <!-- Finally, render the search in another JSChart, and throw in a JobProgressIndicator for good measure. -->
+            <module name="JobProgressIndicator"></module>
+
+            <!-- Add a header the user sees what they clicked on. -->
+            <module name="SimpleResultsHeader">
+              <param name="entityName">results</param>
+              <param name="headerFormat">EPS over time for sourcetype=$click.value$ $time$</param>
+            </module> <!-- SimpleResultsHeader -->
+            <module name="HiddenChartFormatter">
+              <param name="chart">line</param>
+              <param name="primaryAxisTitle.text">Time</param>
+              <param name="secondaryAxisTitle.text">events per second</param>
+              <param name="legend.placement">none</param>
+              <module name="JSChart">
+                <param name="width">100%</param>
+                <param name="height">160px</param>
+                <param name="enableResize">False</param>
+                <!--  You cann add more here, such as another HiddenSearch, a converter,  a ViewRedirector...-->
+              </module> <!-- JSChart -->
+            </module> <!-- HiddenChartFormatter -->
+          </module> <!-- ConvertToIntention -->
+        </module> <!-- HiddenSearch -->
+      </module> <!-- JSChart -->
+    </module> <!-- HiddenChartFormatter -->
+  </module> <!-- HiddenSearch -->
+   
+
+  <module name="StaticContentSample" layoutPanel="panel_row5_col1" group="Custom wiring: just how long is this long tail....">
+    <param name="text"><![CDATA[
+      <p><b>Lets end on a high note. This set of three panels allows you to
+      <br />find particular events that are greatly contributing to index volume.</b></p>
+    ]]></param>
+  </module>
+  <!--  Start off with a little search to generate the a list of 'foo' for all per_foo_thruput  -->
+  <!--  The lister module StaticSelect can do this MUCH more easily and we wouldn't need a search . . .-->
+  <!--  . . .but to illustrate multi-level table drilldown, this panel uses a HiddenSearch rendering into a table. -->
+  <module name="HiddenSearch" layoutPanel="panel_row5_col1" autoRun="true">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_*_thruput
+      | eval group=replace(group,"per_","") | eval group=replace(group,"_thruput","")
+      | top group | fields - percent, count
+    </param>
+    <param name="earliest">-15m</param>
+    
+    <!-- A simple header. -->
+    <module name="SimpleResultsHeader" layoutPanel="panel_row5_col1_grp1">
+      <param name="entityName">results</param>
+      <param name="headerFormat">Choose source, sourcetype, index or host</param>
+    </module> <!-- SimpleResultsHeader -->
+    <!-- When the user clicks on this table they select a 'group' value. -->
+    <module name="SimpleResultsTable" layoutPanel="panel_row5_col1_grp1">
+      <param name="displayRowNumbers">False</param>
+      <param name="drilldown">row</param>
+      <param name="entityName">results</param>
+      <param name="drilldownPrefix">click1</param>
+
+      <!-- At this point the 'group' value is retrieved as $click.value$ -->
+      <module name="HiddenSearch">
+        <param name="search">
+          index=_internal source=*metrics.log | chart sum(kb) by series | sort - sum(kb)
+        </param>
+        
+        <!-- This module grabs the value for group and puts it in as a searchterm, group="per_foo_thruput"  -->
+        <module name="ConvertToIntention">
+          <param name="intention">
+            <param name="name">addterm</param>
+            <param name="arg">
+              <param name="group">per_$click1.value$_thruput</param>
+            </param>
+            <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+            <param name="flags"><list>indexed</list></param>
+          </param>
+          
+          <!-- Add a simple little dynamic header here above the next table. -->
+          <module name="SimpleResultsHeader" layoutPanel="panel_row5_col1_grp2">
+            <param name="entityName">results</param>
+            <param name="headerFormat">Top 10 $click1.value$s $time$</param>
+          </module> <!-- SimpleResultsHeader -->
+          
+          <!--  Second table.  When the user clicks on this one, they select a particular 'series' -->
+          <!--  that is, a particular source, sourcetype or host. -->
+          <module name="SimpleResultsTable" layoutPanel="panel_row5_col1_grp2">
+            <param name="displayRowNumbers">False</param>
+            <param name="drilldown">row</param>
+            <param name="entityName">results</param>
+            <param name="drilldownPrefix">click2</param>
+            
+            <!-- From here on the user has picked both the group and the series. -->
+            <!-- group is click.value and series is click2.value -->
+            
+            <!-- Add a TimeRangePicker.  The user should be able to pick the  -->
+            <!--  timerange of the main searches, although hardcode the other to open at 1 hour -->
+            <module name="TimeRangePicker" layoutPanel="panel_row5_col1_grp3">
+              <param name="searchWhenChanged">True</param>
+              <param name="selected">Last 15 minutes</param>
+              
+              <!--  new base Search which into which loads all final intentions -->
+              <module name="HiddenSearch">
+                <param name="search">
+                  index = _internal * | stats count by punct | sort -count
+                </param>
+
+                <!--  Use click.value key again (group) to build an intention -->
+                <module name="ConvertToIntention">
+                  <param name="intention">
+                    <param name="name">addterm</param>
+                    <param name="arg">
+                      <param name="$click1.value$">$click2.value$</param>
+                    </param>
+                    <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+                    <param name="flags"><list>indexed</list></param>
+                  </param>
+
+                  
+                  <!--  Another simple dynamic header for the user to see what they're looking at. -->
+                  <module name="SimpleResultsHeader">
+                    <param name="entityName">results</param>
+                    <param name="headerFormat">Top 10 punct values for this $click1.value$</param>
+                  </module> <!-- SimpleResultsHeader -->
+                  
+                  <!--  Turn on preview so the user can see charts render progressively. -->
+                  <!--  and cause that's how we roll -->
+                  <module name="EnablePreview">
+                    <param name="display">false</param>
+                    <param name="enable">true</param>
+                    <module name="SimpleResultsTable" layoutPanel="panel_row5_col1_grp3">
+                      <param name="displayRowNumbers">False</param>
+                      <param name="drilldown">row</param>
+                      <param name="drilldownPrefix">click3</param>
+                      <param name="entityName">results</param>
+
+
+                      <!--  Like the damn energizer bunny we're still going...... -->
+                      <!--  now the user has picked a key, and a punct.  Kick them to the flashtimeline view to view the real events -->
+                      <module name="HiddenSearch">
+                        <param name="search">*</param>
+
+                        <!--  use that click.value key again (group)   to build an intention -->
+                        <module name="ConvertToIntention">
+                          <param name="intention">
+                            <param name="name">addterm</param>
+                            <param name="arg">
+                              <param name="$click1.value$">$click2.value$</param>
+                            </param>
+                            <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+                            <param name="flags"><list>indexed</list></param>
+                          </param>
+                          <!--  Use the punct value to build another intention -->
+                          <module name="ConvertToIntention">
+                            <param name="intention">
+                              <param name="name">addterm</param>
+                              <param name="arg">
+                                <param name="punct">$click3.value$</param>
+                              </param>
+                              <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+                              <param name="flags"><list>indexed</list></param>
+                            </param>
+                            <module name="ViewRedirector">
+                              <param name="viewTarget">flashtimeline</param>
+                            </module> <!-- ViewRedirector -->
+                          </module> <!-- ConvertToIntention -->
+                        </module> <!-- ConvertToIntention -->
+                      </module> <!-- HiddenSearch -->
+                    </module> <!-- SimpleResultsTable -->
+                  </module> <!-- EnablePreview -->
+                </module> <!-- ConvertToIntention -->
+              </module> <!-- HiddenSearch -->
+            </module> <!-- TimeRangePicker -->
+          </module> <!-- SimpleResultsTable -->
+        </module> <!-- ConvertToIntention -->
+      </module> <!-- HiddenSearch -->
+    </module> <!-- SimpleResultsTable -->
+  </module> <!-- HiddenSearch -->
+
+  <module name="ServerSideInclude" layoutPanel="panel_row6_col1">
+    <param name="src">drilldown_intro_layout.html</param>
+  </module>
+
+ </view>
+
+
+</textarea>
+</div>
+

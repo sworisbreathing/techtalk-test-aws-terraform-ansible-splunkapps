@@ -1,0 +1,45 @@
+<view template="dashboard.html">
+  <!-- use dashboard Mako template -->
+  <!-- chrome modules follow -->
+  <label>Advanced XML: Layout</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  
+  <!-- import documentation into panels -->
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1">
+    <param name="src">advanced_intro3.html</param>
+  </module>
+
+  <module name="ServerSideInclude" layoutPanel="panel_row2_col1">
+    <param name="src">advanced_intro3_source.html</param>
+  </module>
+  
+  <!-- Left and right panels -->
+  <module name="HiddenSearch" layoutPanel="panel_row3_col1" group="Left panel (Row 3, Column 1)" autoRun="True">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput
+      | chart sum(kb) by series | sort -sum(kb) | head 10
+    </param>
+    <param name="earliest">-1h</param>
+    <module name="SimpleResultsTable"></module>
+  </module>
+
+  <module name="HiddenSearch" layoutPanel="panel_row3_col2" group="Right panel (Row 3, Column 2)" autoRun="True">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput
+      | chart sum(kb) by series | sort -sum(kb) | head 10
+    </param>
+    <param name="earliest">-1h</param>
+    <module name="SimpleResultsTable"></module>
+  </module>
+
+  <module name="ServerSideInclude" layoutPanel="panel_row4_col1">
+    <param name="src">advanced_intro3_layout.html</param>
+  </module>
+
+</view>

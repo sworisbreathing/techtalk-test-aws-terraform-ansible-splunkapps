@@ -1,0 +1,88 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Auto-dispatched form using a dropdown for inputs</h1> 
+
+<textarea id="codeTextArea">
+
+<form>
+  <label>autoRun example using a dropdown for inputs</label>
+
+  <!-- 
+  * Set autoRun to true, by default this is false.
+  * autoRun will wait for the search used to populate the dropdown to finish
+  * and will then kick off the search for the entire form.
+   -->
+  <fieldset autoRun="true">
+    
+    <input type="dropdown" token="process_name">
+        <label>Pipeline process name:</label>
+        <suffix>*</suffix>
+        <populatingSearch fieldForValue="name" fieldForLabel="name" earliest="-4h">
+          index=_internal sourcetype=splunkd group=pipeline
+          | chart sum(cpu_seconds) as total_cpu by name | sort -total_cpu
+        </populatingSearch>
+    </input>
+    
+   <input type="time" />
+   
+  </fieldset>
+      
+  <row>
+    <chart>
+        <title>Avg CPU seconds by processor</title>
+        <searchTemplate>
+          index=_internal sourcetype=splunkd group=pipeline name=$process_name$
+          | chart avg(cpu_seconds) by processor
+        </searchTemplate>
+        <option name="charting.chart">column</option>
+    </chart>
+    <table>
+        <title>Top called processor</title>
+        <searchTemplate>
+          index=_internal sourcetype=splunkd group=pipeline name=$process_name$
+          | top processor
+        </searchTemplate>
+    </table>
+  </row>
+
+  <row>
+    <chart>
+        <title>Cumulative hits over time</title>
+        <searchTemplate>
+          index=_internal sourcetype=splunkd group=pipeline name=$process_name$
+          |  timechart max(cumulative_hits)
+        </searchTemplate>
+        <option name="charting.chart">line</option>
+        <option name="charting.legend.placement">none</option>
+    </chart>
+  </row>
+  
+</form>
+
+
+
+
+
+</textarea>
+</div>
+

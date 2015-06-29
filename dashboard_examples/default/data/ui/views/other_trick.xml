@@ -1,0 +1,23 @@
+<view template="dashboard.html" stylesheet="export_button.css">
+  <label>Other trick</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+ 
+
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1" group="Common navigation element using ServerSideInclude">
+    <param name="src">custom_navigation_example.html</param>
+  </module>
+
+  <module name="ServerSideInclude" layoutPanel="panel_row2_col1" group="Other trick">
+    <param name="src">other_trick_example.html</param>
+  </module>
+  
+ </view>

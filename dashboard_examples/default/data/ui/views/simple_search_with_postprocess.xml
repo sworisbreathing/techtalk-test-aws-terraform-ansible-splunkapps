@@ -1,0 +1,37 @@
+<view onunloadCancelJobs="False" autoCancelInterval="100">
+  <label>Simple Search Demo with PostProcess</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+
+  <module name="SearchBar" layoutPanel="splSearchControls-inline">
+    <param name="useAssistant">true</param>
+    <param name="useTypeahead">true</param>
+    <param name="useOwnSubmitButton">False</param>
+    <module name="TimeRangePicker">
+      <param name="selected">All time</param>
+      <param name="searchWhenChanged">True</param>
+      <module name="SubmitButton">
+        <param name="label">Restart Search</param>
+        <param name="allowSoftSubmit">True</param>
+
+        <module name="PostProcessBar" layoutPanel="mainSearchControls">
+
+          <module name="Message" layoutPanel="graphArea">
+            <param name="filter">splunk.search.job</param>
+            <param name="clearOnJobDispatch">True</param>
+            <param name="maxSize">2</param>
+            
+            <module name="SimpleResultsTable">
+            </module>
+            
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+</view>

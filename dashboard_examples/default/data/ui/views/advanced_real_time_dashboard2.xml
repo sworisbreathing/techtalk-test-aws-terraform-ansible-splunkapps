@@ -1,0 +1,71 @@
+<view template="dashboard.html" isVisible="false">
+  <label>Advanced real time dashboards 2</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+
+  <!-- NOTE: we're only using StaticContentSample so that the views are more easily copy-and-pastable.   --> 
+  <!-- using the ServerSideInclude module is a more scalable and recommended way to put in your content, -->
+  <!-- and you dont have to escape your HTML like this -->
+  <module name="StaticContentSample" layoutPanel="panel_row1_col1">
+    <param name="text">
+      Now lets make the chart clickable.  Since this is a real time search, the click will take you to another real time search, just for the events matching the sourcetype that you clicked on. 
+      &lt;br&gt;
+      &lt;br&gt;
+      If you want to know more about the 'Chart/Table drilldown' feature in 4.1,  check out the 'Drilldown examples' in this App. 
+    
+    </param>
+  </module>
+
+  <!-- EXAMPLE BEGINS -->
+  <module name="HiddenSearch" layoutPanel="panel_row2_col1" group="live events, last 30 seconds, by sourcetype" autoRun="True">
+    <param name="search">* | top sourcetype | fields - percent</param>
+    <param name="earliest">rt-5m</param>
+    <param name="latest">rt</param>
+    
+    <module name="HiddenChartFormatter">
+      <param name="charting.chart">bar</param>
+      <param name="charting.primaryAxisTitle.text">Sourcetype</param>
+      <param name="charting.secondaryAxisTitle.text">## of events</param>
+      <param name="charting.legend.placement">None</param>
+      
+      <!-- TODO - remove this when SPL-29581 is fixed -->
+      <module name="EnablePreview">
+        <param name="enable">True</param>
+        <param name="display">False</param>
+      </module>
+
+      <module name="FlashChart">
+        <param name="width">100%</param>
+        <param name="height">400px</param>
+        
+        <!-- here is our drilldown pattern (See Drilldown examples in ui_examples app for more details)-->
+        <!-- we dont have to do any fancy custom wiring here so its nice and simple -->
+        <module name="ConvertToDrilldownSearch">
+          <module name="ViewRedirector">
+            <param name="viewTarget">flashtimeline</param>
+          </module>
+        </module>
+
+      </module>
+
+    </module>
+
+  </module>
+  
+  <!-- NOTE: we're only using StaticContentSample so that the views are more easily copy-and-pastable.   --> 
+  <!-- using the ServerSideInclude module is a more scalable and recommended way to put in your content, -->
+  <!-- and you dont have to escape your HTML like this -->
+  <module name="StaticContentSample" layoutPanel="panel_row3_col1">
+    <param name="text">Now we'll finish with a couple of simple examples all on one page. 
+    &lt;a href="advanced_real_time_dashboard3"&gt;Next&lt;/a&gt;
+    </param>
+  </module>
+</view>

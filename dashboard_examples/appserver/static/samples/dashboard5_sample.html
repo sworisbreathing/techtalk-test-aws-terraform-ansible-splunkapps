@@ -1,0 +1,107 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Simple XML dashboards - Chart drilldown</h1> 
+
+<textarea id="codeTextArea">
+
+<dashboard>
+  
+  <label>Simple XML dashboards - Chart drilldown</label>
+<row>
+  <html>
+   <!-- documentation panel -->
+  </html>
+</row>
+  
+  <!-- Second row of 2 panels -->
+
+ <row>
+    
+    <chart>
+      <title>Chart: default drilldown (Same as specifying all)</title>
+      <searchString>
+         index=_internal source="*metrics.log" group=per_sourcetype_thruput | timechart sum(kb) by series
+      </searchString>
+      <earliestTime>-25h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="height">200px</option>
+      <option name="charting.chart">area</option>
+      <option name="charting.primaryAxisTitle.text">Time</option>
+      <option name="charting.secondaryAxisTitle.text">Count</option>
+    </chart>
+
+    <chart>
+      <title>Chart: explicit all (Same as default drilldown)</title>
+      <searchString>
+         index=_internal source="*metrics.log" group=per_sourcetype_thruput | timechart sum(kb) by series
+      </searchString>
+      <earliestTime>-25h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="height">200px</option>
+      <option name="charting.chart">area</option>
+      <option name="charting.primaryAxisTitle.text">Time</option>
+      <option name="charting.secondaryAxisTitle.text">Count</option>
+      <option name="drilldown">all</option>
+    </chart>
+
+  </row>
+ <row>
+     <chart>
+      <title>Chart: explicit no drilldown</title>
+      <searchString>
+         index=_internal source="*metrics.log" group=per_sourcetype_thruput | timechart sum(kb) by series<
+      /searchString>
+      <earliestTime>-25h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="height">200px</option>
+      <option name="charting.chart">area</option>
+      <option name="charting.primaryAxisTitle.text">Time</option>
+      <option name="charting.secondaryAxisTitle.text">Count</option>
+      <option name="drilldown">none</option>
+    </chart>
+
+    <single>
+      <title>Single value: custom drilldown</title>
+      <searchString>
+         index=_internal source="*splunkd.log" ( log_level=ERROR OR log_level=WARN* OR log_level=FATAL OR log_level=CRITICAL)
+         | stats count as log_events
+      </searchString>
+      <earliestTime>-1d</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="beforeLabel">Found:</option>
+      <option name="afterLabel">Splunk server log events</option>
+      <option name="count">10</option>
+      <option name="displayRowNumbers">true</option>
+      <option name="linkFields">result</option>
+      <option name="linkView">flashtimeline</option>
+      <option name="linkSearch">
+         search index=_internal source="*splunkd.log" ( log_level=ERROR OR log_level=WARN* OR log_level=FATAL OR log_level=CRITICAL)
+      </option>
+    </single>
+
+ </row>
+
+</dashboard>
+</textarea>
+</div>
+

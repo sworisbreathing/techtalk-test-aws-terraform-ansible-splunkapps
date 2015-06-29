@@ -1,0 +1,156 @@
+<dashboard>
+  
+  <label>Introduction to dashboards</label>
+
+
+  <!-- First row of panels -->
+  <row>
+
+    <html>
+      <div class="content_width">
+      <h1>Splunk Dashboard Examples</h1>
+
+      <h2 style="padding-top: 6px">About this app</h2>
+      <p>
+        This app provides various examples that show how to build dashboards, forms, and views for Splunk 5+. The app contains two sections:
+      </p>
+      <blockquote>
+        <p>
+          <b><a href="/app/dashboard_examples/dashboard1">Simple XML Dashboards and Forms</a></b>
+          <br />Splunk recommends that you start with simple XML. Most of the basic functionality for dashboards and forms is available with simple XML.
+        </p>
+        <p>
+          You do not need to be a professional coder to use Splunk's simple XML.
+          Splunk provides interactive editors to get you started with dashboards.
+          You can then enhance the generated dashboards with a few tweaks to the simple XML code.
+          Splunk provides an embedded XML Editor to help you update the XML code.
+        </p>
+        <p>
+          <b><a href="/app/dashboard_examples/advanced_intro1">Advanced XML</a></b>
+          <br />Use advanced XML to create custom dashboards with advanced features.
+          Advanced XML, as the name implies, is for advanced users with significant programming experience.
+        </p>
+        <p>
+          If you want to learn more about a particular module refer to the
+          <a target="_blank" href="http://docs.splunk.com/Documentation/Splunk/5.0/AdvancedDev/ModuleReference">Module Reference</a> available from Splunk core documentation. 
+          You can also access the <a href="../../modules">generated module reference</a> that is available from your own Splunk instance. 
+        </p>
+      </blockquote>
+      
+      <h2 style="padding-top: 6px">Contents</h2>
+      <table cellpadding="12" bgcolor="#efefef">
+        <tr valign="top">
+          <td width="40%">
+          <p><b><u>Simple XML Dashboards and Forms</u></b></p>
+          <p>
+          <b>Dashboards</b>
+          <br /><b><a href="/app/dashboard_examples/dashboard1">Dashboards using simple XML</a></b>
+          <br /><b><a href="/app/dashboard_examples/dashboard2">Inline search options</a></b>
+          <br /><b><a href="/app/dashboard_examples/dashboard3">Chart options</a></b>
+          <br /><b><a href="/app/dashboard_examples/dashboard4">Table drilldown</a></b>
+          <br /><b><a href="/app/dashboard_examples/dashboard5">Chart drilldown</a></b>
+          <br /><b><a href="/app/dashboard_examples/dashboard6">Dynamic drilldown</a></b>
+          </p>
+          <p>
+          <b>Forms</b>
+          <br /><b><a href="/app/dashboard_examples/forms1">Forms using simple XML</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_table">Basic table</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_dropdown">Select dropdown</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_multiple_inputs">Multiple inputs</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_text_and_radio">Text filed with dynamic radio buttons</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_static_definitions">Static select dropdown with static definitions</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_inverted_flow_search">Panel-defined search</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_inverted_flow_dropdown">Panel-defined search driven by select dropdown</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_inverted_flow_postprocess1">Panel-defined search with post process</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_inverted_flow_postprocess2">Panel-defined search with post process 2</a></b>
+          <br /><b><a href="/app/dashboard_examples/auto_dispatch_form1">Basic autoRun form</a></b>
+          <br /><b><a href="/app/dashboard_examples/auto_dispatch_form2">autoRun form using a dropdown for inputs</a></b>
+          <br /><b><a href="/app/dashboard_examples/auto_dispatch_form3">autoRun form without a Submit button</a></b>
+          </p>
+          <p>
+          <b>Real-time dashboards</b>
+          <br /><b><a href="/app/dashboard_examples/real_time_dashboard1">Introduction to real-time dashboards</a></b>
+          <br /><b><a href="/app/dashboard_examples/dashboard_real_time1">Real-time dashboard (created interactively)</a></b>
+          <br /><b><a href="/app/dashboard_examples/real_time_dashboard2">Real-time dashboards with clickable charts</a></b>
+          </p>
+          </td>
+          <td bgcolor="white" width="1%"> </td>
+          <td>
+          <p><b><u>Advanced XML</u></b></p>
+            <p><b>Introduction</b>
+              <br /><b><a href="/app/dashboard_examples/advanced_intro1">Advanced XML introduction</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_hello">Hello world</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_intro2">Modules</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_intro3">Layout</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_intro4">Patterns</a></b>
+            </p>
+            <p><b>Listers</b>
+              <br /><b><a href="/app/dashboard_examples/advanced_lister_intro">Intro to listers</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_lister_chart">Lister with JSChart</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_lister_multiple_elements">Lister driving multiple elements</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_lister_multiple_elements2">Two listers driving multiple elements</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_lister_redirects">Two listers using charts and redirects</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_lister_static_and_dynamic">Static and dynamic listers</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_lister_stringreplace">Listers and stringreplace intentions</a></b>
+              <br /><b><a href="/app/dashboard_examples/advanced_lister_with_searchbar">Lister with a form search</a></b>
+            </p>
+            <p><b>Switchers</b>
+              <br /><b><a href="/app/dashboard_examples/switcher1">Switcher modules</a></b>
+              <br /><b><a href="/app/dashboard_examples/switcher_compare">Switcher module comparison</a></b>
+              <br /><b><a href="/app/dashboard_examples/switcher_time_ui_with_scheduled_jobs">Switcher with time controls</a></b>
+            </p>
+            <p><b>Drilldown</b>
+              <br /><b><a href="/app/dashboard_examples/drilldown_intro">Drilldown views</a></b>
+              <br /><b><a href="/app/dashboard_examples/drilldown_table1">Drilldown from tables</a></b>
+              <br /><b><a href="/app/dashboard_examples/drilldown_chart1">Drilldown from charts</a></b>
+              <br /><b><a href="/app/dashboard_examples/drilldown_chart2">Custom drilldown actions</a></b>
+            </p>
+          </td>
+
+        <td>
+          <p><br /></p>
+            <p><b>Search Performance</b>
+              <br /><b><a href="/app/dashboard_examples/search_performance1">Search performance base</a></b>
+              <br /><b><a href="/app/dashboard_examples/search_performance2">Search performance II</a></b>
+              <br /><b><a href="/app/dashboard_examples/search_performance3">Search performance III</a></b>
+              <br /><b><a href="/app/dashboard_examples/search_performance4">Search performance IV</a></b>
+            </p>
+            <p><b>Miscellany</b>
+              <br /><b><a href="/app/dashboard_examples/dashboard_with_post_process1">Using postProcess on dashboards</a></b>
+              <br /><b><a href="/app/dashboard_examples/custom_charting1">Time-based charting tool</a></b>
+              <br /><b><a href="/app/dashboard_examples/custom_css_export_button">Custom CSS</a></b>
+              <br /><b><a href="/app/dashboard_examples/static_content">Static content and common nav panel</a></b>
+              <br /><b><a href="/app/dashboard_examples/embedding_other_views">Embedding other views</a></b>
+              <br /><b><a href="/app/dashboard_examples/other_trick">Another trick (redirect from the Nav menu)</a></b>
+              <br /><b><a href="/app/dashboard_examples/extended_field_search1">Hidden intention with addterm</a></b>
+              <br /><b><a href="/app/dashboard_examples/extended_field_search2">Hidden intention with stringreplace</a></b>
+            </p>          
+        </td>
+      </tr>
+      </table>      
+      
+      <h2 style="padding-top: 6px">About the examples</h2>
+      <p>
+        Examples are the easiest way to learn how to create dashboards, forms, and views.
+        This app contains more than 50 examples spread among various categories.
+        Each example contains inline documentation that explains how it works, plus links to open the source code.
+      </p>
+      <h2>Example source code</h2>
+      <p>
+        The source code for each example contains comments explaining details of the implementation.
+      </p>
+      <p>
+        <span style="text-decoration: underline">Simple XML</span>: The source for simple XML dashboards and forms open in a separate window for easy vieweing.
+      </p>
+      <p>
+        <span style="text-decoration: underline">Advanced XML</span>: The source for advanced XML also opens in a new window.
+        The advanced XML examples contain module diagrams to help you visualize how to combine modules into useful patterns.
+      </p>
+
+      </div>      
+    </html>
+  
+
+  </row>
+
+</dashboard>

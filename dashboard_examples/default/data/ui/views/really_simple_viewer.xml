@@ -1,0 +1,54 @@
+<view onunloadCancelJobs="False" autoCancelInterval="100" isVisible="False">
+  <!--  autoCancelInterval is set here to 100  -->
+  <label>Example of an extremely stripped down view</label>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="SearchBar" layoutPanel="splSearchControls-inline">
+    <param name="useAssistant">true</param>
+    <param name="useTypeahead">true</param>
+    <param name="useOwnSubmitButton">False</param>
+    <module name="TimeRangePicker">
+      <param name="selected">All time</param>
+      <param name="searchWhenChanged">True</param>
+      <module name="SubmitButton">
+        <param name="allowSoftSubmit">True</param>
+        <module name="Message" layoutPanel="graphArea">
+          <param name="filter">splunk.search.job</param>
+          <param name="clearOnJobDispatch">True</param>
+          <param name="maxSize">2</param>
+          <module name="JobStatus">
+            <param name="resultsLink">
+              <param name="popup">True</param>
+              <param name="viewTarget">report_builder_define_data</param>
+              <param name="transformedResultsViewTarget">report_builder_format_report</param>
+            </param>
+            <module name="FlashTimeline" layoutPanel="graphArea">
+              <param name="height">120px</param>
+              <param name="width">100%</param>
+              <module name="FieldPicker" layoutPanel="resultsOptions">
+                <param name="fields">host sourcetype source</param>
+                <param name="link">
+                  <param name="view">report_builder_format_report</param>
+                </param>              
+                
+                <module name="EventsViewer" layoutPanel="resultsAreaLeft">
+                  <param name="segmentation">full</param>
+                  <param name="reportFieldLink">report_builder_format_report</param>
+                </module>
+                           
+                <module name="MultiFieldViewer" layoutPanel="resultsOptions">
+                  <param name="link">
+                    <param name="view">report_builder_format_report</param>
+                  </param>
+                </module>
+              </module>
+            </module>
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+</view>

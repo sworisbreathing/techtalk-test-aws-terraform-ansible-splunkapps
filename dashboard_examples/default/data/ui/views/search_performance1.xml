@@ -1,0 +1,51 @@
+<view template="search.html">
+  <label>Search performance base</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+
+  <module name="ServerSideInclude" layoutPanel="viewHeader">
+    <param name="src">
+      search_performance1.html
+    </param>
+  </module>  
+
+  <module name="SearchBar" layoutPanel="splSearchControls-inline">
+    <param name="useAssistant">true</param>
+    <param name="useTypeahead">true</param>
+    <param name="useOwnSubmitButton">False</param>
+    <module name="TimeRangePicker">
+      <param name="selected">Last 24 hours</param>
+      <param name="searchWhenChanged">True</param>
+      <module name="SubmitButton">
+        <param name="allowSoftSubmit">True</param>
+        
+        <module name="SimpleResultsHeader" layoutPanel="resultsAreaLeft">
+          <param name="entityName">events</param>
+          <param name="headerFormat">events (%(count)s)</param>
+        </module> <!-- SimpleResultsHeader -->
+        <module name="FieldPicker" layoutPanel="sidebar">
+          <param name="fields">host index source sourcetype clientip status bytes</param>
+          <module name="MultiFieldViewer"></module> 
+          <module name="SimpleResultsTable" layoutPanel="resultsAreaLeft"></module>
+        </module> <!-- FieldPicker -->
+     </module> <!-- SubmitButton -->
+    </module> <!-- TimeRangePicker -->
+  </module> <!-- SearchBar -->
+  
+</view>
+
+
+  
+  
+  
+
+
+
+
+  
+ 

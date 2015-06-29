@@ -1,0 +1,165 @@
+<view>
+  <label>ExtendedFieldSearch with stringreplace</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+  <module name="StaticContentSample" layoutPanel="mainSearchControls">
+    <param name="text">This example shows the same thing but with the stringreplace intention.  Although stringreplace allows you to do complex token replacement that simple addterm intentions cannot do,  it comes with some loss of flexibility.  This is because you need to control both sides of the game - the base search has to have $foo$ in it, and the intention for $foo$ has to be present.  In the former example the addterm intentions were happy to insert themselves into various different base search strings but here stringreplace can only insert into the one with stringreplace tokens. Fortunately in this example we are able to use a workaround and we can use HiddenIntention modules (with 'plot' intentions) instead of HiddenSearch modules to achieve the same three timechart graphs.  </param>
+  </module>
+  
+  <!-- sample HiddenSearch that lays down the base search.    -->
+  <module name="HiddenSearch" layoutPanel="mainSearchControls">
+    <param name="search">index=_internal source=*metrics.log group=per_sourcetype_thruput series=$sourcetypeToken$ $anotherSearchTermToken$</param>
+    <!-- we could put in a TimeRangePicker module but to keep it's simple we just hardwire here to search only the last 6 hours -->
+    <param name="earliest">-6h</param>
+
+    <module name="ExtendedFieldSearch">
+      <param name="field">Sourcetype</param>
+      <param name="intention">
+        <param name="name">stringreplace</param>
+        <param name="arg">
+          <param name="sourcetypeToken">
+            <param name="default">*</param>
+            <param name="fillOnEmpty">true</param>
+          </param>
+        </param>
+      </param>
+      <param name="replacementMap">
+        <param name="arg">
+          <param name="sourcetypeToken">
+            <param name="value"></param>
+          </param>
+        </param>
+      </param>
+
+      <module name="ExtendedFieldSearch">
+        <param name="field">other search terms</param>
+        <param name="default">eps&gt;1</param>
+        <param name="intention">
+          <param name="name">stringreplace</param>
+          <param name="arg">
+            <param name="anotherSearchTermToken">
+              <param name="default"> </param>
+              <param name="fillOnEmpty">true</param>
+            </param>
+          </param>
+        </param>
+        <param name="replacementMap">
+          <param name="arg">
+            <param name="anotherSearchTermToken">
+              <param name="value"/>
+            </param>
+          </param>
+        </param>
+        
+        <module name="SubmitButton">
+          <param name="allowSoftSubmit">True</param>
+          <param name="label">Search</param>
+
+          <!-- HiddenIntention to add "| timechart sum(kb)" -->
+          <module name="HiddenIntention">
+            <param name="intention">
+              <param name="name">plot</param>
+              <param name="arg">
+                <param name="mode">timechart</param>
+                <param name="fields">
+                  <list>
+                    <list>sum</list>
+                    <list>kb</list>
+                  </list>
+                </param>
+              </param>
+            </param>
+            <module name="HiddenChartFormatter">
+              <param name="chart">column</param>
+              <param name="chart.stackMode">stacked</param>
+              <param name="primaryAxisTitle.text">Time</param>
+              <param name="secondaryAxisTitle.text">sum(kb)</param>
+              <param name="legend.placement">None</param>
+              <module name="FlashChart" layoutPanel="resultsAreaLeft">
+                <param name="width">100%</param>
+                <param name="height">200px</param>
+              </module>
+            </module>
+          </module>
+
+          <!-- HiddenIntention for | timechart avg(kbps) -->
+          <module name="HiddenIntention">
+            <param name="intention">
+              <param name="name">plot</param>
+              <param name="arg">
+                <param name="mode">timechart</param>
+                <param name="fields">
+                  <list>
+                    <list>avg</list>
+                    <list>kbps</list>
+                  </list>
+                </param>
+              </param>
+            </param>
+            <module name="HiddenChartFormatter">
+              <param name="chart">line</param>
+              <param name="chart.stackMode">stacked</param>
+              <param name="primaryAxisTitle.text">Time</param>
+              <param name="secondaryAxisTitle.text">avg(kbps)</param>
+              <param name="legend.placement">None</param>
+              <module name="FlashChart" layoutPanel="resultsAreaLeft">
+                <param name="width">100%</param>
+                <param name="height">200px</param>
+              </module>
+            </module>
+          </module>
+
+          <!-- Chart for: index=_internal metrics NOT sendout group=<group> series=<series> | timechart sum(kb) -->
+          
+          <!-- HiddenIntention for | timechart median(eps) max(eps) min(eps) -->
+          <module name="HiddenIntention">
+            <param name="intention">
+              <param name="name">plot</param>
+              <param name="arg">
+                <param name="mode">timechart</param>
+                <param name="fields">
+                  <list>
+                    <list>median</list>
+                    <list>eps</list>
+                  </list>
+                  <list>
+                    <list>max</list>
+                    <list>eps</list>
+                  </list>
+                  <list>
+                    <list>min</list>
+                    <list>eps</list>
+                  </list>
+                </param>
+              </param>
+            </param>
+            
+            <module name="HiddenChartFormatter">
+              <param name="chart">line</param>
+              <param name="chart.stackMode">stacked</param>
+              <param name="primaryAxisTitle.text">Time</param>
+              <param name="secondaryAxisTitle.text">median(eps) max(eps) min(eps)</param>
+              <param name="legend.placement">None</param>
+              <module name="FlashChart" layoutPanel="resultsAreaRight">
+                <param name="width">100%</param>
+                <param name="height">200px</param>
+              </module>
+            </module>
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+
+
+
+
+</view>

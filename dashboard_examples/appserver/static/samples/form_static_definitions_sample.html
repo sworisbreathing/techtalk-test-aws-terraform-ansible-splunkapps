@@ -1,0 +1,69 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Form search with static select dropdown and radio buttons</h1> 
+
+<textarea id="codeTextArea">
+
+
+<form>
+    <label>Static select drop down and radio buttons</label>
+    
+    <fieldset>        
+        <!-- Define a simple dropdown form driven by a search -->
+        <input type="dropdown" token="from">
+            <label>Select from address</label>
+            <choice value="*">Any</choice>
+            <choice value="*splunk.com">splunk.com</choice>
+            <choice value="*spam*">spam</choice>
+        </input>
+    
+        <!--
+            searchWhenChanged allows the change to immediately propagate to the results,
+            and does not force the clicking of the submit button
+        -->
+        <input type="radio" token="size" searchWhenChanged="True">
+            <label>Select size</label>
+            <prefix>size</prefix>
+            <default>*</default>
+            <choice value="=*">Any</choice>
+            <choice value="=0">0</choice>
+            <choice value=">100">greater than 100</choice>
+        </input>
+    </fieldset>
+    
+    <!-- define master search template, with replacement tokens delimited with $ -->
+    <searchTemplate>index=sample from="$from$" $size$</searchTemplate>
+    
+    
+    <row>
+        <!-- output the results as a 50 row events table -->
+        <table>
+            <title>Matching events</title>
+            <option name="count">50</option>
+        </table>
+    </row>
+</form>
+
+</textarea>
+</div>
+

@@ -1,0 +1,91 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Multi-panel form with one search and four post-process searches</h1> 
+
+<textarea id="codeTextArea">
+
+<form>
+  <label>Panel-defined search with post-process</label>
+
+  <fieldset>
+   
+      <input type="dropdown" token="reportTypeToken">
+            <label>Select name</label>
+            <default>Sourcetype</default>
+            <choice value="index">Index</choice>
+            <choice value="sourcetype">Sourcetype</choice>
+            <choice value="source">Source</choice>
+            <choice value="host">Host</choice>
+        </input>
+
+      <input type="time">
+        <default>Last 4 hours</default>
+      </input>
+
+  </fieldset>
+  
+   <!-- define a search that returns, in one result set, all of the data that is 
+    requested by the subsequent panels -->
+  <searchTemplate>
+    index=_internal source=*metrics.log group="per_$reportTypeToken$_thruput"
+    | bin _time span=1m | stats count by series, eps, kb, kbps, _time
+  </searchTemplate>
+  
+  <row>
+      <table>
+          <title>eps over time</title>
+          <searchPostProcess>timechart avg(eps) by series</searchPostProcess>
+      </table>
+      <chart>
+          <title>KB indexed over time</title>
+          <searchPostProcess>timechart sum(kb) by series</searchPostProcess>
+          <option name="height">300px</option>
+          <option name="charting.chart">area</option>
+          <option name="charting.chart.stackMode">stacked</option>
+      </chart>
+  </row>
+
+  <row>
+      <table>
+          <title>Top sourcetypes by volume</title>
+          <searchPostProcess>
+            chart sum(sumKB) over series | rename series as sourcetype | sort -sum(kb)
+          </searchPostProcess>
+          <fields>sourcetype, sum(kb)</fields>
+          <option name="count">20</option>
+      </table>
+      <chart>
+          <title>Top sourcetypes by eps</title>
+          <searchPostProcess>
+            chart avg(eps) over series | sort -avg(eps)
+          </searchPostProcess>
+          <option name="height">300px</option>
+          <option name="charting.chart">bar</option>
+          <option name="charting.legend.placement">none</option>
+      </chart>
+  </row>
+  
+</form>
+</textarea>
+</div>
+

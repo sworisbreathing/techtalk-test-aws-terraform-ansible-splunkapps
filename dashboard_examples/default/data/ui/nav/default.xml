@@ -1,0 +1,123 @@
+<nav>
+  <collection label="Home" >
+    <view name="dashboard0" default="true" />
+  </collection>
+  <collection label="Simple XML">
+    <collection label="Dashboard intro">
+      <view name="dashboard1" />
+      <view name="dashboard2" />
+      <view name="dashboard3" />
+      <view name="dashboard4" />
+      <view name="dashboard5" />
+      <view name="dashboard6" />
+    </collection>
+
+    <collection label="Form search intro">
+      <view name="forms1" />
+      <view name="form_table" />
+      <view name="form_dropdown" />
+      <view name="form_multiple_inputs" />
+      <view name="form_text_and_radio" />
+      <view name="form_static_definitions" />
+      <view name="form_inverted_flow_search" />
+      <view name="form_inverted_flow_dropdown" />
+      <view name="form_inverted_flow_postprocess1" />
+      <view name="form_inverted_flow_postprocess2" />
+      <view name="auto_dispatch_form1" />
+      <view name="auto_dispatch_form2" />
+      <view name="auto_dispatch_form3" />
+    </collection>
+    
+    <collection label="Simple real time dashboards">
+      <view name="real_time_dashboard1" />
+      <view name="dashboard_real_time1" />
+      <view name="real_time_dashboard2" />
+    </collection>
+    
+  </collection>
+  
+    
+  <collection label="Advanced XML">
+    <view name="advanced_intro1" />
+    <view name="advanced_hello" />
+    <view name="advanced_intro2" />
+    <view name="advanced_intro3" />
+    <view name="advanced_intro4" />
+    
+
+    <collection label="Advanced XML: Listers">
+      <view name="advanced_lister_intro" />
+      <view name="advanced_lister_chart" />
+      <view name="advanced_lister_multiple_elements" />
+      <view name="advanced_lister_multiple_elements2" />
+      <view name="advanced_lister_redirects" />
+
+      <view name="advanced_lister_static_and_dynamic" />
+      <view name="advanced_lister_stringreplace" />
+      <view name="advanced_lister_with_searchbar" />
+
+    </collection>
+
+    <collection label="Advanced XML: Switchers">
+      <view name="switcher1" />
+      <view name="switcher_compare" />
+      <view name="switcher_time_ui_with_scheduled_jobs" />
+    </collection>
+    
+    <view name="dashboard_with_post_process1" />
+
+    <collection label="Drilldown examples">
+      <view name="drilldown_intro" />
+      <view name="drilldown_table1" />
+      <view name="drilldown_chart1" />
+      <view name="drilldown_table2" />
+      <view name="drilldown_chart2" />
+    </collection>
+    
+    <collection label="Advanced real time dashboard examples">
+      <view name="advanced_real_time_dashboard1" />
+      <view name="advanced_real_time_dashboard2" />
+      <view name="advanced_real_time_dashboard3" />
+    </collection>
+
+    <collection label="Affecting search performance">
+      <view name="search_performance1" />
+      <view name="search_performance2" />
+      <view name="search_performance3" />               
+      <view name="search_performance4" />
+      <view name="search_performance5" />
+      
+    </collection>
+    <collection label="Exploring reports in time">
+      <view name="custom_charting1"/>
+      <saved name="Custom charting by sourcetype" />
+      <saved name="Custom charting by source" />
+    </collection>
+
+    <collection label="Custom CSS">
+      <view name="custom_css_export_button"/>
+    </collection>
+
+    <collection label="Static content and other tricks">
+      <view name="static_content"/>
+      <view name="embedding_other_views"/>
+      <view name="other_trick"/>
+      <a href="http://google.com?q=yep you can put any external url into the nav">Insert your own links</a>
+    </collection>    
+
+    <collection label="Other">
+      <view name="extended_field_search1"/>
+      <view name="extended_field_search2"/>
+      <view name="extended_field_search3"/>
+
+    </collection>
+  </collection> 
+
+  <collection label="Additional Views">
+    <view source="unclassified" />
+  </collection>  
+  <collection label="Saved Searches">
+    <saved source="unclassified" />
+  </collection>
+
+</nav>

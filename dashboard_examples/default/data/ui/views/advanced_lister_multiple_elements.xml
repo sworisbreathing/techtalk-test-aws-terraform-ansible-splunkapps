@@ -1,0 +1,111 @@
+<view template="dashboard.html">
+  <label>Lister driving multiple elements</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+ 
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1">
+    <param name="src">advanced_lister_multiple_elements.html</param>
+  </module>
+ 
+  <!-- Series selector -->
+  <module name="SearchSelectLister" layoutPanel="panel_row2_col1">
+    <param name="settingToCreate">series_setting</param>
+    <param name="search">
+      index=_internal source=*metrics.log group="per_sourcetype_thruput"
+      | chart count over series
+    </param>
+    <param name="earliest">-1h</param>
+    <param name="label">Sourcetype</param>
+    <param name="searchFieldsToDisplay">
+      <!--
+        TODO use list lookups and the lookup command to get another field that is a pretty label here.
+        'Sourcetypes' vs 'Sources' vs 'Indexes'
+      -->
+      <list>
+        <param name="label">series</param>
+        <param name="value">series</param>
+      </list>
+    </param>
+    <module name="ConvertToIntention">
+      <param name="settingToConvert">series_setting</param>
+      <param name="intention">
+        <param name="name">addterm</param>
+        <param name="arg">
+          <param name="series">$target$</param>
+        </param>
+        <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+        <param name="flags"><list>indexed</list></param>
+      </param>
+      
+      <module name="GenericHeader">
+        <param name="label">KB Indexed over time</param>
+      </module> <!-- GenericHeader -->
+      <module name="HiddenSearch">
+        <param name="search">
+          index=_internal source=*metrics.log group="per_sourcetype_thruput"
+          | timechart sum(kb)
+        </param>
+        <param name="earliest">-1h</param>        
+        <module name="HiddenChartFormatter">
+          <param name="chart">column</param>
+          <param name="primaryAxisTitle.text">Sourcetype</param>
+          <param name="secondaryAxisTitle.text">KB Indexed</param>
+          <param name="legend.placement">none</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">150px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSearch -->
+      
+      <module name="GenericHeader">
+        <param name="label">Average events per second over time</param>
+      </module> <!-- GenericHeader -->
+      <module name="HiddenSearch">
+        <param name="search">
+          index=_internal source=*metrics.log group="per_sourcetype_thruput"
+          | timechart avg(eps)
+        </param>
+        <param name="earliest">-1h</param>
+        <module name="HiddenChartFormatter">
+          <param name="chart">area</param>
+          <param name="chart.stackMode">stacked</param>
+          <param name="primaryAxisTitle.text">Sourcetype</param>
+          <param name="secondaryAxisTitle.text">Events per second</param>
+          <param name="legend.placement">none</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">150px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSearch -->
+
+      <module name="GenericHeader">
+        <param name="label">average kbps over time</param>
+      </module> <!-- GenericHeader -->
+      <module name="HiddenSearch">
+        <param name="search">
+          index=_internal source=*metrics.log group="per_sourcetype_thruput"
+          | timechart avg(kbps)
+        </param>
+        <param name="earliest">-1h</param>
+        <module name="SimpleResultsTable"></module>
+      </module> <!-- GenericHeader -->      
+    </module> <!-- ConvertToIntention -->
+  </module> <!-- SearchSelectLister -->
+  
+  <module name="ServerSideInclude" layoutPanel="panel_row3_col1">
+    <param name="src">advanced_lister_multiple_elements_layout.html</param>
+  </module>   
+
+ </view>

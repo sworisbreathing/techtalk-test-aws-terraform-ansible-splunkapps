@@ -1,0 +1,99 @@
+<dashboard>
+  
+  <label>Simple XML dashboards - Chart drilldown</label>
+<row>
+  <html>
+    <div class="content_width">
+    <h1>Simple XML dashboards - Chart drilldown</h1>
+    <p>
+      These panels illustrate drilldown behavior in charts. The first row shows the default implementation for drilldown, which produces the same results
+      as explicitly  specifying All for drilldown. The bottom row shows how to disable drilldown behavior for charts and how to specify a custom drilldown for a single value.
+    </p>
+    <ul>
+        <li>
+          <p><b>all</b><br />Enables drilldown behavior in a chart.</p>
+        </li>
+        <li>
+          <p><b>none</b><br />Disables drilldown behavior in a chart.</p>
+        </li>
+        <li>
+          <p><b>Single value custom drilldown</b><br />Specify a custom drilldown using the linkFields, linkView, and linkSearch options.</p>
+        </li>
+   </ul>
+   <h1>Source code</h1>
+    <p>
+      View the <a target="_blank" href="/static/app/dashboard_examples/samples/dashboard5_sample.html">source code to implement this dashboard</a>. (Opens in a new window.)
+    </p>
+    
+    <h1>What's next?</h1>  
+    <p>
+      [<a href="/app/dashboard_examples/dashboard6">Next: Simple XML dashboards - Dynamic drilldown</a>]
+      <br />[<a href="/app/dashboard_examples/dashboard4">Prev: Simple XML dashboards - Table drilldown</a>]
+    </p>
+    <p>
+      [<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+    </p>
+    </div>
+    </html>
+</row>
+  
+  <!-- Second row of 2 panels -->
+
+ <row>
+    
+    <chart>
+      <title>Chart: default drilldown (Same as specifying all)</title>
+      <searchString>index=_internal source="*metrics.log" group=per_sourcetype_thruput | timechart sum(kb) by series</searchString>
+      <earliestTime>-25h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="height">200px</option>
+      <option name="charting.chart">area</option>
+      <option name="charting.primaryAxisTitle.text">Time</option>
+      <option name="charting.secondaryAxisTitle.text">Count</option>
+    </chart>
+
+    <chart>
+      <title>Chart: explicit all (Same as default drilldown)</title>
+      <searchString>index=_internal source="*metrics.log" group=per_sourcetype_thruput | timechart sum(kb) by series</searchString>
+      <earliestTime>-25h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="height">200px</option>
+      <option name="charting.chart">area</option>
+      <option name="charting.primaryAxisTitle.text">Time</option>
+      <option name="charting.secondaryAxisTitle.text">Count</option>
+      <option name="drilldown">all</option>
+    </chart>
+
+  </row>
+ <row>
+     <chart>
+      <title>Chart: explicit no drilldown</title>
+      <searchString>index=_internal source="*metrics.log" group=per_sourcetype_thruput | timechart sum(kb) by series</searchString>
+      <earliestTime>-25h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="height">200px</option>
+      <option name="charting.chart">area</option>
+      <option name="charting.primaryAxisTitle.text">Time</option>
+      <option name="charting.secondaryAxisTitle.text">Count</option>
+      <option name="drilldown">none</option>
+    </chart>
+
+    <single>
+      <title>Single value: custom drilldown</title>
+      <searchString>index=_internal source="*splunkd.log" ( log_level=ERROR OR log_level=WARN* OR log_level=FATAL OR log_level=CRITICAL) | stats count as log_events</searchString>
+      <earliestTime>-1d</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="beforeLabel">Found:</option>
+      <option name="afterLabel">Splunk server log events</option>
+      <option name="count">10</option>
+      <option name="displayRowNumbers">true</option>
+      <option name="linkFields">result</option>
+      <option name="linkView">flashtimeline</option>
+      <option name="linkSearch">search index=_internal source="*splunkd.log" ( log_level=ERROR OR log_level=WARN* OR log_level=FATAL OR log_level=CRITICAL)</option>
+    </single>
+
+ </row>
+
+
+
+</dashboard>

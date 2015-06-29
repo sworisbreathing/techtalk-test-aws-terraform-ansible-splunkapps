@@ -1,0 +1,634 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Introduction to lister modules</h1> 
+
+<textarea id="codeTextArea">
+
+<view template="dashboard.html">
+  <label>Intro to listers</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+ 
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1">
+    <param name="src">advanced_lister_intro.html</param>
+  </module> 
+  
+  <module name="StaticContentSample" layoutPanel="panel_row2_col1">
+    <param name="text">
+      This simple example uses a complex SearchSelectLister that generates the 10 sourcetypes with the most data indexed in the last hour.
+      When a user clicks on one of these sourcetypes, they are redirected to the timeline view and run a search for just the events
+      from that sourcetype over the past 2 hours.
+    </param>
+  </module>
+  <!--  The base search is just "*",  over the past 2 hours  -->
+  <module name="HiddenSearch" layoutPanel="panel_row2_col1" group="SearchSelectLister"  autoRun="True">
+    <param name="search">*</param>
+    <param name="earliest">-2h</param>
+    <module name="SearchSelectLister">
+      <param name="settingToCreate">series_setting</param>
+      <param name="search">
+        index=_internal metrics NOT source="*web_service.log" NOT source="*access.log" NOT source="*/searches.log"
+        NOT source="*intentions.log" NOT source="*splunkd.log" group="per_sourcetype_thruput"
+        | chart sum(kb) over series | sort -sum(kb) | head 10 | sort series
+      </param>
+      <param name="earliest">-1h</param>
+      <param name="label">source</param>
+      <param name="searchWhenChanged">True</param>
+      <param name="searchFieldsToDisplay">
+        <list>
+          <param name="label">series</param>
+          <param name="value">series</param>
+        </list>
+      </param>
+      <module name="ConvertToIntention">
+        <param name="settingToConvert">series_setting</param>
+        <param name="intention">
+          <param name="name">addterm</param>
+          <param name="arg">
+            <param name="sourcetype">$target$</param>
+          </param>
+          <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+          <param name="flags"><list>indexed</list></param>
+        </param>
+        <module name="SubmitButton">
+          <param name="label">Search</param>
+          <module name="ViewRedirector">
+            <param name="viewTarget">flashtimeline</param>
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+
+
+  <module name="StaticContentSample" layoutPanel="panel_row2_col2">
+    <param name="text">
+      This example is the same except instead of SearchSelectLister it uses
+      SearchLinkLister and ViewRedirector. The takeaway is that listers are interchangeable,
+      so if you'd rather have radio buttons just use SearchRadioLister.
+    </param>
+  </module>
+  <module name="HiddenSearch" layoutPanel="panel_row2_col2" group="SearchLinkLister">
+    <param name="search">*</param>
+    <param name="earliest">-2h</param>
+    <module name="SearchLinkLister">
+      <param name="settingToCreate">series_setting</param>
+      <param name="search">
+        index=_internal metrics NOT source="*web_service.log" NOT source="*access.log" NOT source="*/searches.log"
+        NOT source="*intentions.log" NOT source="*splunkd.log"
+        | chart sum(kb) over series | sort -sum(kb) | head 10 | sort series
+      </param>
+      <param name="earliest">-1h</param>
+      <param name="searchWhenChanged">True</param>
+      <param name="searchFieldsToDisplay">
+        <list>
+          <param name="label">series</param>
+          <param name="value">series</param>
+        </list>
+      </param>
+      <module name="ConvertToIntention">
+        <param name="settingToConvert">series_setting</param>
+        <param name="intention">
+          <param name="name">addterm</param>
+          <param name="arg">
+            <param name="sourcetype">$target$</param>
+          </param>
+          <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+          <param name="flags"><list>indexed</list></param>
+        </param>
+        <module name="ViewRedirector">
+          <param name="viewTarget">flashtimeline</param>
+        </module>
+      </module>
+    </module>
+  </module>
+
+  <module name="StaticContentSample" layoutPanel="panel_row3_col1">
+    <param name="text">
+      This example uses a SearchSelectLister to provide a list of indexes.
+      Then, a second SearchSelectLister generates a link for each sourcetype within the chosen index. 
+    </param>
+  </module>
+  <module name="StaticContentSample" layoutPanel="panel_row3_col1">
+    <param name="text">
+      The user creates a search constructed from the selected index and sourcetype.
+      When the user clicks the SubmitButton module the search travels down to the
+      ViewRedirector module, which opens a new view.
+    </param>
+  </module>
+  <module name="StaticContentSample" layoutPanel="panel_row3_col1">
+    <param name="text">
+      The ViewRedirector module launches a popup window.
+      Instead of the timeline it uses a simple stripped down view created just for this app.  
+    </param>
+  </module>
+  
+  <module name="SearchSelectLister" layoutPanel="panel_row3_col1" group="Two SearchSelectListers and ViewRedirector">
+    <param name="label">Index</param>
+    <param name="settingToCreate">index_setting</param>
+    <param name="search">
+      | eventcount summarize=false index=*
+      | search index!="splunklogger" index!="summary" index!="history"
+      | sort -index
+    </param>
+    <param name="searchWhenChanged">True</param>
+    <param name="selected">main</param>
+    <param name="searchFieldsToDisplay">
+      <list>
+        <param name="label">index</param>
+        <param name="value">index</param>
+      </list>
+    </param>
+    <module name="ConvertToIntention">
+      <param name="settingToConvert">index_setting</param>
+      <param name="intention">
+        <param name="name">stringreplace</param>
+        <param name="arg">
+          <param name="index">
+            <param name="fillOnEmpty">True</param>
+            <param name="prefix">index=</param>
+            <param name="value">$target$</param>
+          </param>
+        </param>
+      </param>
+      <module name="SearchSelectLister">
+        <param name="label">Sourcetype</param>
+        <param name="settingToCreate">sourcetype_setting</param>
+        <param name="search">| metadata type="sourcetypes" $index$</param>
+        <param name="applyOuterIntentionsToInternalSearch">True</param>
+        <param name="searchFieldsToDisplay">
+          <list>
+            <param name="label">sourcetype</param>
+            <param name="value">sourcetype</param>
+          </list>
+        </param>
+        <module name="HiddenSearch">
+          <param name="search">$index$ $sourcetype$</param>
+
+          <module name="ConvertToIntention">
+            <param name="settingToConvert">sourcetype_setting</param>
+            <param name="intention">
+              <param name="name">stringreplace</param>
+              <param name="arg">
+                <param name="sourcetype">
+                  <param name="fillOnEmpty">True</param>
+                  <param name="prefix">sourcetype=</param>
+                  <param name="value">$target$</param>
+                </param>
+              </param>
+            </param>
+            <module name="SubmitButton">
+              <param name="label">Search</param>
+              <module name="ViewRedirector">
+                <param name="viewTarget">really_simple_viewer</param>
+                <param name="popup">True</param>
+              </module>
+            </module>
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+
+  <module name="StaticContentSample" layoutPanel="panel_row3_col2">
+    <param name="text">
+      This example is similar to the one on the left.
+      However, the second module is a SearchLinkLister.
+      The ViewRedirector does not open a new window.</param>
+  </module>
+  
+  <module name="SearchSelectLister" layoutPanel="panel_row3_col2" group="SearchSelectLister and SearchLinkLister">
+    <param name="label">which index</param>
+    <param name="settingToCreate">index_setting</param>
+    <param name="search">
+      | eventcount summarize=false index=*
+      | search index!="splunklogger" index!="summary" index!="history"
+      | sort -index
+    </param>
+    <param name="searchWhenChanged">True</param>
+    <param name="selected">main</param>
+    <param name="searchFieldsToDisplay">
+      <list>
+        <param name="label">index</param>
+        <param name="value">index</param>
+      </list>
+    </param>
+    <module name="ConvertToIntention">
+      <param name="settingToConvert">index_setting</param>
+      <param name="intention">
+        <param name="name">stringreplace</param>
+        <param name="arg">
+          <param name="index">
+            <param name="fillOnEmpty">True</param>
+            <param name="prefix">index=</param>
+            <param name="value">$target$</param>
+          </param>
+        </param>
+      </param>
+      <module name="SearchLinkLister">
+        <param name="settingToCreate">sourcetype_setting</param>
+        <param name="search">| metadata type="sourcetypes" $index$</param>
+        <param name="applyOuterIntentionsToInternalSearch">True</param>
+        <param name="searchFieldsToDisplay">
+          <list>
+            <param name="label">sourcetype</param>
+            <param name="value">sourcetype</param>
+          </list>
+        </param>
+        <module name="HiddenSearch">
+          <param name="search">$index$ $sourcetype$</param>
+
+          <module name="ConvertToIntention">
+            <param name="settingToConvert">sourcetype_setting</param>
+            <param name="intention">
+              <param name="name">stringreplace</param>
+              <param name="arg">
+                <param name="sourcetype">
+                  <param name="fillOnEmpty">True</param>
+                  <param name="prefix">sourcetype=</param>
+                  <param name="value">$target$</param>
+                </param>
+              </param>
+            </param>
+            
+            <module name="ViewRedirector">
+              <param name="viewTarget">flashtimeline</param>
+            </module>
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+
+  <module name="StaticContentSample" layoutPanel="panel_row4_col1">
+    <param name="text">
+      Now take a bunch of leaps ahead and put it all together. Add a Sorter module and a Paginator module.
+      Add a HiddenSearch+SimpleResultsHeader pattern to provide 'Sources (208)'.
+      Duplicate the same pattern for both Sourcetypes and Hosts.
+    </param>
+  </module>
+ 
+  <module name="SearchSelectLister" layoutPanel="panel_row4_col1" group="Complex lister">
+    <param name="label">which index</param>
+    <param name="settingToCreate">index_setting</param>
+    <param name="search">
+      | eventcount summarize=false index=*
+      | search index!="splunklogger" index!="summary" index!="history"
+      | sort -index</param>
+    <param name="searchWhenChanged">True</param>
+    <param name="selected">main</param>
+    <param name="searchFieldsToDisplay">
+      <list>
+        <param name="label">index</param>
+        <param name="value">index</param>
+      </list>
+    </param>
+    
+    <!-- Take info from the SearchSelectLister and turn it into an intention. 
+         This one intention is consumed in six different places.
+         
+         Use the combination of HiddenSearch + SimpleResultsHeader in the first three child-branches
+         to generate the 'Sourcetypes (14)' headers.
+         
+         Then the three SearchLinkLister modules are configured with
+         applyOuterIntentionsToInternalSearch="True"
+      -->  
+    <module name="ConvertToIntention">
+      <param name="settingToConvert">index_setting</param>
+      <param name="intention">
+        <param name="name">stringreplace</param>
+        <param name="arg">
+          <param name="index">
+            <param name="fillOnEmpty">True</param>
+            <param name="prefix">index=</param>
+            <param name="value">$target$</param>
+          </param>
+        </param>
+      </param>
+      <module name="HiddenSearch">
+        <param name="search">| metadata type=sources $index$</param>
+        <module name="SimpleResultsHeader" layoutPanel="panel_row4_col1_grp1">
+          <param name="entityName">results</param>
+          <param name="headerFormat">Sources (%(count)s)</param>
+        </module>
+      </module>
+      <module name="HiddenSearch">
+        <param name="search">| metadata type=sourcetypes $index$</param>
+        <module name="SimpleResultsHeader" layoutPanel="panel_row4_col1_grp2">
+          <param name="entityName">results</param>
+          <param name="headerFormat">Sourcetypes (%(count)s)</param>
+        </module>
+      </module>
+      <module name="HiddenSearch">
+        <param name="search">| metadata type=hosts $index$</param>
+        <module name="SimpleResultsHeader" layoutPanel="panel_row4_col1_grp3">
+          <param name="entityName">results</param>
+          <param name="headerFormat">Hosts (%(count)s)</param>
+        </module>
+      </module>
+
+
+      <!--  from here on, it's all just dealing with sources.
+            Put each of these 3 branches in its own grp layoutPanel
+            so that they float alongside each other within the same panel.
+      -->
+      <module name="Sorter" layoutPanel="panel_row4_col1_grp1">
+        <param name="sortKey">totalCount</param>
+        <param name="sortDir">desc</param>
+        <param name="fields">
+          <list>
+            <param name="label">Source</param>
+            <param name="value">source</param>
+          </list>
+          <list>
+            <param name="label">Total Count</param>
+            <param name="value">totalCount</param>
+          </list>
+          <list>
+            <param name="label">First Time</param>
+            <param name="value">firstTime</param>
+          </list>
+        </param>
+
+        <module name="Paginator">
+          <param name="count">10</param>
+          <param name="entityName">settings</param>
+          <param name="maxPages">10</param>
+
+          <!--  The next module generates the blue links.
+                Although it configures its own internal search, 
+                it has a flag that allows it to apply intentions
+                from the main context to its internal search.  
+          -->
+          <module name="SearchLinkLister">
+            <param name="settingToCreate">list1</param>
+            <param name="search">| metadata type=sources $index$</param>
+            <param name="applyOuterIntentionsToInternalSearch">True</param>
+            <param name="searchFieldsToDisplay">
+              <list>
+                <param name="label">source</param>
+                <param name="value">source</param>
+              </list>
+              <list>
+                <param name="label">totalCount</param>
+                <param name="labelFormat">number</param>
+              </list>
+            </param>
+            <!--
+              Further upstream a ConvertToIntention module made a stringreplace intention for a metadata search.   
+              Use it again, this time to convert the same setting to a simpler addterm intention.   
+              (The first intention is consumed by the searchSelectLister, but the setting is still available.)
+            -->
+            <module name="ConvertToIntention">
+              <param name="settingToConvert">index_setting</param>
+              <param name="intention">
+                <param name="name">addterm</param>
+                <param name="arg">
+                  <param name="index">$target$</param>
+                </param>
+                <!--
+                  Tell the addterm intention to put the term in the first search clause no matter what.
+                -->
+                <param name="flags"><list>indexed</list></param>
+              </param>
+              <!--
+                This takes some getting used to:
+                Here is where the setting generated by the SearchLinkLister
+                when the user clicks a link is converted into an intention.
+              -->
+              <module name="ConvertToIntention">
+                <param name="settingToConvert">list1</param>
+                <param name="intention">
+                  <param name="name">addterm</param>
+                  <param name="arg">
+                    <param name="source">$target$</param>
+                  </param>
+                  <!--
+                    Tell the addterm intention to put the term in the first search clause no matter what.
+                  -->
+                  <param name="flags"><list>indexed</list></param>
+                </param>
+                <!--
+                  Finally, whenever any context information hits this ViewRedirector
+                  the usersis instantly redirected.
+                  
+                  However, because of 'SearchLinkLister', nothing arrives here
+                  until the moment the user clicks the blue link.
+                -->
+                <module name="ViewRedirector">
+                  <param name="viewTarget">flashtimeline</param>
+                </module>
+              </module>
+            </module>
+          </module>
+        </module>
+      </module>
+
+
+
+      <!--  This section is all about dealing with displaying the list of sourcetypes. -->
+      <module name="Sorter" layoutPanel="panel_row4_col1_grp2">
+        <param name="sortKey">totalCount</param>
+        <param name="sortDir">desc</param>
+        <param name="fields">
+          <list>
+            <param name="label">Sourcetype</param>
+            <param name="value">sourcetype</param>
+          </list>
+          <list>
+            <param name="label">Total Count</param>
+            <param name="value">totalCount</param>
+          </list>
+          <list>
+            <param name="label">First Time</param>
+            <param name="value">firstTime</param>
+          </list>
+        </param>
+
+        <module name="Paginator">
+          <param name="count">10</param>
+          <param name="entityName">settings</param>
+          <param name="maxPages">10</param>
+
+          <!--  Here is the module that generates the blue links. Note that although it configures its own internal search, 
+          it has a flag that allows it to apply intentions from the main context to its internal search.  
+          -->
+          <module name="SearchLinkLister">
+            <param name="settingToCreate">list1</param>
+            <param name="search">| metadata type=sourcetypes $index$</param>
+            <param name="applyOuterIntentionsToInternalSearch">True</param>
+            <param name="searchFieldsToDisplay">
+              <list>
+                <param name="label">sourcetype</param>
+                <param name="value">sourcetype</param>
+              </list>
+              <list>
+                <param name="label">totalCount</param>
+                <param name="labelFormat">number</param>
+              </list>
+            </param>
+            <!--  Further upstream the example uses ConvertToIntention to make a stringreplace intention for a metadata search.   
+            Here it uses it again, this time to convert the same setting to a simpler addterm intention.   
+            (The first intention has been consumed by the searchSelectLister, but the setting is still available. )   -->
+            <module name="ConvertToIntention">
+              <param name="settingToConvert">index_setting</param>
+              <param name="intention">
+                <param name="name">addterm</param>
+                <param name="arg">
+                  <param name="index">$target$</param>
+                </param>
+                <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+                <param name="flags"><list>indexed</list></param>
+              </param>
+              <!--
+                    This takes some getting used to, but here is where the setting generated by the SearchLinkLister 
+                    when the user clicks a link is converted into an intention.
+              -->
+              <module name="ConvertToIntention">
+                <param name="settingToConvert">list1</param>
+                <param name="intention">
+                  <param name="name">addterm</param>
+                  <param name="arg">
+                    <param name="sourcetype">$target$</param>
+                  </param>
+                  <!--
+                    Tell the addterm intention to put the term in the first search clause no matter what.
+                  -->
+                  <param name="flags"><list>indexed</list></param>
+                </param>
+                <!--  And finally,  whenever any context information hits this ViewRedirector it instantly redirects. 
+                      Because of the internals of 'SearchLinkLister', nothing arrives here until the moment the user
+                      clicks the blue link.
+                -->
+                <module name="ViewRedirector">
+                  <param name="viewTarget">flashtimeline</param>
+                </module>
+              </module>
+            </module>
+          </module>
+        </module>
+      </module>
+
+
+      <!--  This section is all about dealing with displaying the list of hosts. -->
+      <module name="Sorter" layoutPanel="panel_row4_col1_grp3">
+        <param name="sortKey">totalCount</param>
+        <param name="sortDir">desc</param>
+        <param name="fields">
+          <list>
+            <param name="label">Host</param>
+            <param name="value">host</param>
+          </list>
+          <list>
+            <param name="label">Total Count</param>
+            <param name="value">totalCount</param>
+          </list>
+          <list>
+            <param name="label">First Time</param>
+            <param name="value">firstTime</param>
+          </list>
+        </param>
+
+        <module name="Paginator">
+          <param name="count">10</param>
+          <param name="entityName">settings</param>
+          <param name="maxPages">10</param>
+
+          <!--  the module that generates the blue links. Note that it although it configures its own internal search, 
+          it has a flag that allows it to apply intentions from the main context,  to its internal search.  
+          -->
+          <module name="SearchLinkLister">
+            <param name="settingToCreate">list1</param>
+            <param name="search">| metadata type=hosts $index$</param>
+            <param name="applyOuterIntentionsToInternalSearch">True</param>
+            <param name="searchFieldsToDisplay">
+              <list>
+                <param name="label">host</param>
+                <param name="value">host</param>
+              </list>
+              <list>
+                <param name="label">totalCount</param>
+                <param name="labelFormat">number</param>
+              </list>
+            </param>
+            <!--
+                Further upstream the example used ConvertToIntention to make a stringreplace intention for a metadata search.   
+                Here it uses it again, this time to convert the same setting to a simpler addterm intention.   
+                (The first intention has been consumed by the searchSelectLister but the setting is still available. )
+            -->
+            <module name="ConvertToIntention">
+              <param name="settingToConvert">index_setting</param>
+              <param name="intention">
+                <param name="name">addterm</param>
+                <param name="arg">
+                  <param name="index">$target$</param>
+                </param>
+                <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+                <param name="flags"><list>indexed</list></param>
+              </param>
+              <!--
+                  This takes some getting used to, but here is where the setting generated by the SearchLinkLister 
+                  when the user clicks a link is converted into an intention.
+                -->
+              <module name="ConvertToIntention">
+                <param name="settingToConvert">list1</param>
+                <param name="intention">
+                  <param name="name">addterm</param>
+                  <param name="arg">
+                    <param name="host">$target$</param>
+                  </param>
+                  <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+                  <param name="flags"><list>indexed</list></param>
+                </param>
+                <!--  And finally whenever any context information hits this ViewRedirector the user is instantly redirected. 
+                      because of the internals of 'SearchLinkLister', nothing will arrive here until the moment the user
+                      clicks the blue link.  -->
+                <module name="ViewRedirector">
+                  <param name="viewTarget">flashtimeline</param>
+                </module>
+              </module>
+            </module>
+          </module>
+        </module>
+      </module>
+
+    </module>
+  </module>
+  
+  <module name="ServerSideInclude" layoutPanel="panel_row5_col1">
+    <param name="src">advanced_lister_intro_layout.html</param>
+  </module> 
+  
+ </view>
+
+</textarea>
+</div>
+

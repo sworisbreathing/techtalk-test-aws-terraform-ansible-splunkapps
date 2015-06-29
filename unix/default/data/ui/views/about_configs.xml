@@ -1,0 +1,95 @@
+<view template="dashboard.html">
+  <label>Config Files Overview</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+  <module name="SearchBar" layoutPanel="splSearchControls-inline">
+    <param name="useAssistant">true</param>
+    <param name="useTypeahead">true</param>
+    <param name="q">index=os</param>
+    <param name="useOwnSubmitButton">False</param>
+    <module name="TimeRangePicker">
+      <param name="selected">All time</param>
+      <module name="SubmitButton">
+        <param name="allowSoftSubmit">True</param>
+        <module name="ViewRedirector" layoutPanel="mainSearchControls">
+          <param name="viewTarget">flashtimeline</param>
+        </module>
+      </module>
+    </module>
+  </module>
+  <module name="GenericHeader" layoutPanel="panel_row2_col1" autoRun="True">
+	<param name="label">Configuration Sources</param>
+	<module name="HiddenSavedSearch">
+	  <param name="savedSearch">UNIX - All Configs</param>
+	  <module name="Paginator">
+		<param name="count">20</param>
+		<param name="entityName">results</param>
+		<param name="maxPages">10</param>
+		<module name="LinkList">
+		  <param name="initialSortDir">desc</param>
+		  <param name="labelFieldSearch">index=os</param>
+		  <param name="valueField">totalCount</param>
+		  <param name="labelField">source</param>
+		  <param name="labelFieldTarget">flashtimeline</param>
+		  <param name="initialSort">totalCount</param>
+		</module>
+	  </module>
+	</module>
+  </module>
+
+  <module name="GenericHeader" layoutPanel="panel_row2_col2" autoRun="True">
+    <param name="label">Most Changing Configurations</param>
+    <module name="TimeRangePicker">
+      <param name="searchWhenChanged">True</param>
+      <param name="selected">Last 24 Hours</param>
+	  <module name="JobProgressIndicator">
+		<module name="HiddenSearch" autoRun="True">
+		  <param name="search">index="os" eventtype="nix_configs" | strcat source "@" host changelist | top changelist</param>
+		  <module name="Paginator">
+			<param name="count">20</param>
+			<param name="entityName">results</param>
+			<param name="maxPages">10</param>
+			<module name="SimpleResultsTable">
+			</module>
+		  </module>
+		</module>
+	  </module>
+	</module>
+  </module>
+
+  <module name="GenericHeader" layoutPanel="panel_row3_col1" autoRun="True">
+    <param name="label">Timeline of Configuration Changes</param>
+    <module name="TimeRangePicker">
+      <param name="searchWhenChanged">True</param>
+      <param name="selected">Last 24 Hours</param>
+	  <module name="HiddenSavedSearch" autoRun="True">
+		<param name="savedSearch">UNIX - Timechart Config Changes</param>
+		<module name="JobProgressIndicator">
+		  <module name="HiddenChartFormatter">
+			<param name="chart">column</param>
+			<param name="primaryAxisTitle.text">Time</param>
+			<param name="chart.stackMode">stacked</param>
+			<param name="secondaryAxisTitle.text">Source @ Host</param>
+			<module name="JSChart">
+			  <param name="width">700px</param>
+			  <param name="height">200px</param>
+			</module>
+			<module name="ViewRedirectorLink">
+			  <param name="viewTarget">report_builder_display</param>
+			  <param name="label">View full results</param>
+			</module>
+		  </module>
+		</module>
+	  </module>
+	</module>
+  </module>
+
+</view>

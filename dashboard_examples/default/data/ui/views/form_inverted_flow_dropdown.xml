@@ -1,0 +1,121 @@
+<form>
+  <label>Panel-defined search driven by select drop down</label>
+
+  <fieldset>
+    
+      <html>
+        <div class="form_bg"><div class="content_width">
+        <h1>Simple XML - Multi-panel linked form search driven by select dropdown</h1>
+        <p>
+          This form search dispatches four separate searches in the four panels, each listening
+          to the common 'sourcetypeToken' specified by the dropdown list.  This is useful for a page that groups together disparate form searches
+          that share a common search keyword/token.
+        </p>
+        <p><b>Note:</b> because this page dispatches multiple searches, the JobStatus bar does not appear.
+        </p>
+        <p>
+          &lt;searchTemplate&gt; specified for each panel. Each panel pipes the results to a different time chart.
+        </p>
+        <div class="samplecode">
+            &lt;searchTemplate&gt;
+            <br />&#160;&#160;index=_internal source=*metrics.log group="per_sourcetype_thruput"
+            <br />&#160;&#160;series="$sourcetypeToken$" | <b>timechart sum(kb)</b>
+            <br />&lt;/searchTemplate&gt;
+            <br /><br />&lt;searchTemplate&gt;
+            <br />&#160;&#160;index=_internal source=*metrics.log group="per_sourcetype_thruput"
+            <br />&#160;&#160;series="$sourcetypeToken$" | <b>timechart avg(eps)</b>
+            <br />&lt;/searchTemplate&gt;
+            <br /><br />&lt;searchTemplate&gt;
+            <br />&#160;&#160;index=_internal source=*metrics.log group="per_sourcetype_thruput"
+            <br />&#160;&#160;series="$sourcetypeToken$" | <b>timechart max(eps)</b>
+            <br /><br />&lt;searchTemplate&gt;
+            <br />&#160;&#160;index=_internal source=*metrics.log group="per_sourcetype_thruput"
+            <br />&#160;&#160;series="$sourcetypeToken$" | <b>timechart avg(ebps)</b>
+            <br />&lt;/searchTemplate&gt;
+        </div>
+        <p>
+          The common search input used by all panels:
+        </p>
+        <div class="samplecode"><pre><![CDATA[
+<input type="dropdown" token="sourcetype"> 
+
+  <label>Sourcetype</label> 
+  <suffix>*</suffix> 
+
+  <populatingSearch fieldForValue="series" fieldForLabel="series" earliest="-60m"> 
+    index=_internal source=*metrics.log group="per_sourcetype_thruput" 
+    | chart count over series 
+  </populatingSearch> 
+
+</input>]]></pre></div>
+        
+        <h1>Source code</h1>
+        <p>
+          View the <a target="_blank" href="/static/app/dashboard_examples/samples/form_inverted_flow_dropdown_sample.html">source code to implement this form</a>. (Opens in a new window.)
+        </p>
+        
+        <h1>What's next?</h1>
+        <p>
+          [<a href="/app/dashboard_examples/form_inverted_flow_postprocess1">Next: Form with post-process search</a>]
+          <br />[<a href="/app/dashboard_examples/form_inverted_flow_dropdown">Prev: Multi-panel linked form search driven by select dropdown</a>]
+        </p>
+        <p>
+          [<a href="../dashboard_examples/forms1">Simple XML Forms Home</a>]
+          <br />[<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+        </p>         
+        </div></div>
+        
+        <p style="padding-top: 6px;"></p>
+        <hr />
+      </html>
+
+       <!-- Define a simple dropdown form driven by a search -->
+       <input type="dropdown" token="sourcetype">
+           <label>Sourcetype</label>
+           <suffix>*</suffix>
+           <populatingSearch fieldForValue="series" fieldForLabel="series" earliest="-60m">
+            index=_internal source=*metrics.log group="per_sourcetype_thruput" | chart count over series
+           </populatingSearch>
+       </input>
+      <input type="time" />
+  </fieldset>
+   
+  <row>
+      <chart>
+          <title>KB Indexed over time</title>
+          <searchTemplate>
+            index=_internal source=*metrics.log group="per_sourcetype_thruput" series="$sourcetype$" | timechart sum(kb)
+          </searchTemplate>
+          <option name="charting.chart">area</option>
+      </chart>
+      <table>
+          <title>average kbps over time</title>
+          <searchTemplate>
+            index=_internal source=*metrics.log group="per_sourcetype_thruput" series="$sourcetype$" | timechart avg(kbps)
+          </searchTemplate>
+      </table>
+  </row>
+
+  <row>
+      <table>
+          <title>Max events per second over time</title>
+          <searchTemplate>
+            index=_internal source=*metrics.log group="per_sourcetype_thruput" series="$sourcetype$" | timechart max(eps)
+          </searchTemplate>
+          <option name="count">20</option>
+      </table>
+      <chart>
+          <title>Average events per second over time</title>
+          <searchTemplate>
+            index=_internal source=*metrics.log group="per_sourcetype_thruput" series="$sourcetype$" | timechart avg(eps)
+          </searchTemplate>
+          <option name="charting.chart">line</option>
+          <option name="charting.legend.placement">none</option>
+      </chart>
+  </row>
+  
+</form>
+
+
+
+

@@ -1,0 +1,113 @@
+py-ontapi version 0.2  
+
+Jim Crumpler <Jim.Crumpler@netapp.com>
+
+(c) Copyright 2009 NetApp, Inc. The code is provided "as is" without
+support or warranties of any kind.  The user is licensed to use the
+code for any legal purpose.
+
+py-ontapi
+=========
+
+This package contains an unofficial Python interface to the NetApp
+Data ONTAP APIs.
+
+The interface is roughly modelled on the Java interface documented in
+the NetApp Manage ONTAP SDK.  It does not require the SDK to run, but
+you'll need the SDK for the documentation on the actual ONTAP API
+commands.
+
+I originally wrote this interface for my own personal use, however I
+suspect it might be useful to others so I've packaged it up.  Keep in
+mind this is not a formal package, nor is it well tested, so use your
+own judgement and testing before use.
+
+Feedback welcome.
+
+Jim Crumpler
+
+Requirements and Notes
+======================
+
+This is an initial release with no cross platform testing.
+(OpenSolaris with NetBSD pkgsrc for what its worth). Theoretically it
+should work on anything, however I'm unsure of weird dependencies such
+as if xml.sax or openssl are installed by default or what happens on
+Window, etc.  See how you go.
+
+Crypto fuctions not tested. Recent vfiler tunnelling addition not
+tested. Debug functions (setSnoop()) minimally implemented yet to show
+HTTP requests - use toPrettyString() on any NaElement to debug
+results). Some functions are not implemented - these will raise an
+exception of NotImplementedError.  Limited ONTAP version testing.
+
+Does not work on Python 3.
+
+urllib2 in Python < 2.6 doesn't support IPv6.  I tried Python 2.6.2
+and it seems to work fine.
+
+DFM APIs should also work.
+
+Installation
+============
+The usual python disutils setup.py.  (eg python setup.py install)
+
+
+Examples
+========
+
+#!/usr/bin/python
+## print a list of volumes
+
+from ontapi.NaServer import *
+from ontapi.NaElement import *
+
+server = NaServer('filer1')
+server.setAdminUser('root', 'passwd')
+
+cmd = NaElement('volume-list-info')
+results = server.invokeElem(cmd)
+
+volumes = results.getChildByName('volumes')
+
+for volume in volumes.getChildren():
+    name = volume.getChildContent('name')
+    state = volume.getChildContent('state')
+    print name, state
+    pass
+
+
+More Examples
+=============
+
+The commands are mostly the same as the Java bindings. A few different things:
+
+There's a NaServer.invoke command, similar to the Perl version except
+it takes a dictionary of arguments.
+
+    results = server.invoke('volume-list-info', {'verbose': 'true'})
+
+There's also a few functions for converting XML trees to dictionaries,
+such as NaElement.getChildenFlattened().
+
+
+    cmd = NaElement('system-get-info')
+
+    results = server.invokeElem(cmd)
+
+    for name, value in results.getChildByName('system-info').getChildrenFlattened().items():
+        print '%s=%s' % (name, value)
+        pass
+
+
+To use https simply add this:
+
+    server.setTransportType('https')
+
+Its often handy to observe the results to work out what to do next:
+
+    print results.toPrettyString()
+
+Set the API version similar to other language bindings:
+
+    server = NaServer('filer1', 1, 7)

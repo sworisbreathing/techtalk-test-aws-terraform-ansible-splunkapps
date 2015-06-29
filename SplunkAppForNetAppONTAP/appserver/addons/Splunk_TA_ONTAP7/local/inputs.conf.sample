@@ -1,0 +1,16 @@
+# The below stanzas are examples only, and should be customized to suit your
+# environment.
+
+[monitor:///opt/netapp_logs/10.160.114.230/etc/log]
+disabled = false
+followTail = 0
+host_segment = 3
+index = netapp
+blacklist = (stats)|(/mlog/.last_rotate)|(/log/autosupport)
+
+[script://$SPLUNK_HOME/etc/apps/Splunk_TA_ONTAP7/bin/SNap.py -h 01]
+disabled = 0
+interval = 500
+sourcetype = netapp:internal
+index = netapp
+

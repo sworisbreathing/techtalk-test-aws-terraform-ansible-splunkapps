@@ -1,0 +1,90 @@
+<form>
+  <label>autoRun example using a dropdown for inputs</label>
+
+  <!-- 
+  * Set autoRun to true, by default this is false.
+  * autoRun will wait for the search used to populate the dropdown to finish
+  * and will then kick off the search for the entire form.
+   -->
+  <fieldset autoRun="true">
+    <html>
+      <div class="form_bg"><div class="content_width">
+      <h1>Simple XML - Auto-dispatched form using a dropdown for inputs</h1>
+      <p>
+        Another example showing a form that is automatically run when the form loads. This form uses a dropdown  that selects all the processes in the pipeline.
+      </p>
+      <p>
+        The default value for a dropdown is the first value in the list, which is used to initially populate the form.
+      </p>
+      <p>
+        This example is similar to the <a href="../form_dropdown">Form select drop</a> example, except that it specifies a default value for the input field and runs the search when the form loads.
+        Select another process from the dropdown list to see additional results.
+      </p>
+      <h1>Source code</h1>
+      <p>
+        View the <a target="_blank" href="/static/app/dashboard_examples/samples/auto_dispatch_form2_sample.html">source code to implement this form</a>. (Opens in a new window.)
+      </p>
+      
+      <h1>What's next?</h1>
+      <p>
+        [<a href="/app/dashboard_examples/auto_dispatch_form3">Next: AutoRun form without a Submit button</a>]
+        <br />[<a href="/app/dashboard_examples/auto_dispatch_form1">Prev: Basic autoRun form</a>]
+      </p>
+      <p>
+        [<a href="../dashboard_examples/forms1">Simple XML Forms Home</a>]
+        <br />[<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+      </p>         
+      </div></div>
+      
+      <p style="padding-top: 6px"></p>
+      <hr />
+    </html>
+    
+    <input type="dropdown" token="process_name">
+        <label>Pipeline process name:</label>
+        <suffix>*</suffix>
+        <populatingSearch fieldForValue="name" fieldForLabel="name" earliest="-4h">
+          index=_internal sourcetype=splunkd group=pipeline
+          | chart sum(cpu_seconds) as total_cpu by name | sort -total_cpu
+        </populatingSearch>
+    </input>
+    
+   <input type="time" />
+   
+  </fieldset>
+      
+  <row>
+    <chart>
+        <title>Avg CPU seconds by processor</title>
+        <searchTemplate>
+          index=_internal sourcetype=splunkd group=pipeline name=$process_name$
+          | chart avg(cpu_seconds) by processor
+        </searchTemplate>
+        <option name="charting.chart">column</option>
+    </chart>
+    <table>
+        <title>Top called processor</title>
+        <searchTemplate>
+          index=_internal sourcetype=splunkd group=pipeline name=$process_name$
+          | top processor
+        </searchTemplate>
+    </table>
+  </row>
+
+  <row>
+    <chart>
+        <title>Cumulative hits over time</title>
+        <searchTemplate>
+          index=_internal sourcetype=splunkd group=pipeline name=$process_name$
+          |  timechart max(cumulative_hits)
+        </searchTemplate>
+        <option name="charting.chart">line</option>
+        <option name="charting.legend.placement">none</option>
+    </chart>
+  </row>
+  
+</form>
+
+
+
+

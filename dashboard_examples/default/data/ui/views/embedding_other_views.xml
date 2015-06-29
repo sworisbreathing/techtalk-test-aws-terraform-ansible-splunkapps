@@ -1,0 +1,44 @@
+<view template="dashboard.html" stylesheet="export_button.css">
+  <label>Embedding other views</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+ 
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1" group="Common navigation element using ServerSideInclude">
+    <param name="src">custom_navigation_example.html</param>
+  </module>
+
+  <module name="StaticContentSample" layoutPanel="panel_row2_col1">
+    <param name="text">
+      &lt;p&gt;
+        The panel below uses the IFrameInclude module to embed a different view from this app (embedded_view). The embedded view contains no app menus and no Splunk chrome.
+      &lt;/p&gt;
+      
+      &lt;p&gt;
+        The bottom panel embeds an external web page.
+      &lt;/p&gt;
+      
+      &lt;p&gt;
+        &lt;b&gt;Note:&lt;/b&gt;The IFrameInclude module may not work well for more sophisticated use cases
+      &lt;/p&gt;
+    </param>
+  </module>
+
+  <module name="IFrameInclude" layoutPanel="panel_row3_col1" group="IFrameInclude with another view">
+    <param name="src">/app/dashboard_examples/embedded_view</param>
+  </module>
+
+  <module name="IFrameInclude" layoutPanel="panel_row4_col1" group="IFrameInclude with an external page">
+  <param name="height">1600</param>
+    <param name="src">http://docs.splunk.com/Documentation/Splunk</param>
+  </module>
+  
+  
+ </view>

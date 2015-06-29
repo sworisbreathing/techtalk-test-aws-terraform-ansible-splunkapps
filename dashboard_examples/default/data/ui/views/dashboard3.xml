@@ -1,0 +1,63 @@
+<dashboard>
+  
+  <label>Simple XML dashboards - Chart options</label>
+
+
+  <!-- First row of a single comment -->
+  <row>
+
+    <html>
+      <div class="content_width">
+      <h1>Simple XML dashboard - Chart options</h1>
+      <p>
+        If your panel displays charts using a saved report created with Splunk's Report Builder, then the chart automatically
+        uses the formatting defined in Report Builder. Use the &lt;searchName&gt; tag to reference the saved report.  
+        A chart option specified in the simple XML code for the panel overrides the saved settings.
+        Panels that use an inline search with the &lt;searchString&gt; tag should also specify chart formatting options inline.
+      </p>
+    <h1>Source code</h1>
+    <p>
+      View the <a target="_blank" href="/static/app/dashboard_examples/samples/dashboard3_sample.html">source code to implement this dashboard</a>. (Opens in a new window.)
+    </p>
+    
+    <h1>What's next?</h1>  
+      <p>
+        [<a href="/app/dashboard_examples/dashboard4">Next: Simple XML dashboards - Table drilldown</a>]
+        <br />[<a href="/app/dashboard_examples/dashboard2">Prev: Simple XML dashboards - Inline search options</a>]
+      </p>
+      <p>
+        [<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+      </p>
+      </div>
+    </html>
+
+  </row>
+  
+  
+  <!-- Second row of 2 panels -->
+  <row>
+    
+    <!-- execute an inline search, over the last day (from -25h to -1h), display as a line chart with inline charting options-->
+    <chart>
+      <title>Top five sourcetypes (by total KB indexed) in the last 24 hours</title>
+      <searchString>index=_internal source="*metrics.log" group=per_sourcetype_thruput | timechart sum(kb) by series</searchString>
+      <earliestTime>-25h</earliestTime>
+      <latestTime>-1h</latestTime>
+      <option name="height">400px</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.primaryAxisTitle.text">Time</option>
+      <option name="charting.secondaryAxisTitle.text">Count</option>
+    </chart>
+
+    <!-- execute a saved search, display using the viewstate that was saved 
+    when the user saved this report in Report Builder.  In this case it will be 
+    a bar chart with x-axis and y-axis titles set properly. -->
+    <chart>
+      <searchName>Pipeline processors with most processor time</searchName>
+      <option name="height">400px</option>
+    </chart>
+    
+  </row>
+
+
+</dashboard>

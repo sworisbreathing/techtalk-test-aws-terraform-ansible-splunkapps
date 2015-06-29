@@ -1,0 +1,80 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Multi-panel linked form search driven by select dropdown</h1> 
+
+<textarea id="codeTextArea">
+
+<form>
+  <label>Panel-defined search driven by select drop down</label>
+
+  <fieldset>
+       <!-- Define a simple dropdown form driven by a search -->
+       <input type="dropdown" token="sourcetype">
+           <label>Sourcetype</label>
+           <suffix>*</suffix>
+           <populatingSearch fieldForValue="series" fieldForLabel="series" earliest="-60m">
+            index=_internal source=*metrics.log group="per_sourcetype_thruput" | chart count over series
+           </populatingSearch>
+       </input>
+      <input type="time" />
+  </fieldset>
+   
+  <row>
+      <chart>
+          <title>KB Indexed over time</title>
+          <searchTemplate>
+            index=_internal source=*metrics.log group="per_sourcetype_thruput" series="$sourcetype$" | timechart sum(kb)
+          </searchTemplate>
+          <option name="charting.chart">area</option>
+      </chart>
+      <table>
+          <title>average kbps over time</title>
+          <searchTemplate>
+            index=_internal source=*metrics.log group="per_sourcetype_thruput" series="$sourcetype$" | timechart avg(kbps)
+          </searchTemplate>
+      </table>
+  </row>
+
+  <row>
+      <table>
+          <title>Max events per second over time</title>
+          <searchTemplate>
+            index=_internal source=*metrics.log group="per_sourcetype_thruput" series="$sourcetype$" | timechart max(eps)
+          </searchTemplate>
+          <option name="count">20</option>
+      </table>
+      <chart>
+          <title>Average events per second over time</title>
+          <searchTemplate>
+            index=_internal source=*metrics.log group="per_sourcetype_thruput" series="$sourcetype$" | timechart avg(eps)
+          </searchTemplate>
+          <option name="charting.chart">line</option>
+          <option name="charting.legend.placement">none</option>
+      </chart>
+  </row>
+  
+</form>
+
+</textarea>
+</div>
+

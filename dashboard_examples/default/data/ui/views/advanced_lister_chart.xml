@@ -1,0 +1,71 @@
+<view template="dashboard.html">
+  <label>Lister with JSChart</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+   
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1">
+    <param name="src">advanced_lister_chart.html</param>
+  </module>
+
+  <!-- Group selector -->
+  <module name="SearchSelectLister" layoutPanel="panel_row3_col1">
+    <param name="settingToCreate">group_setting</param>
+    <param name="search">
+      index=_internal source=*metrics.log group="per_*_thruput"
+      | chart count over group
+    </param>
+    <param name="earliest">-1h</param>
+    <param name="label">Group</param>
+    <param name="searchFieldsToDisplay">
+      <!--
+        TODO use list lookups and the lookup command to get another field
+        that is a pretty label here. 'Sourcetypes' vs 'Sources' vs 'Indexes'
+      -->
+      <list>
+        <param name="label">group</param>
+        <param name="value">group</param>
+      </list>
+    </param>
+    <module name="ConvertToIntention">
+      <param name="settingToConvert">group_setting</param>
+      <param name="intention">
+        <param name="name">addterm</param>
+        <param name="arg">
+          <param name="group">$target$</param>
+        </param>
+        <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+        <param name="flags"><list>indexed</list></param>
+      </param>
+      <module name="HiddenSearch">
+        <param name="search">
+          index=_internal source=*metrics.log | chart sum(kb) over series | sort -sum(kb) | head 10
+        </param>
+        <param name="earliest">-1h</param>
+        <module name="HiddenChartFormatter">
+          <param name="chart">bar</param>
+          <param name="primaryAxisTitle.text">Sourcetype</param>
+          <param name="secondaryAxisTitle.text">KB Indexed</param>
+          <param name="legend.placement">none</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">320px</param>
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+
+  <module name="ServerSideInclude" layoutPanel="panel_row4_col1">
+    <param name="src">advanced_lister_chart_layout.html</param>
+  </module>
+ 
+ </view>

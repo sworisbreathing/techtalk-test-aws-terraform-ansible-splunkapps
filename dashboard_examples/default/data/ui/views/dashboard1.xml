@@ -1,0 +1,138 @@
+<dashboard>
+  
+  <label>Dashboards using simple XML</label>
+  
+  <row>
+    <html>
+      <div class="content_width">
+      <h1>Dashboards using simple XML</h1>
+      <p>
+        This dashboard contain panels created using Splunk's simple XML.
+      </p>
+      <p>
+        All of the panels in this dashboard (with the exception of this HTML panel) can be created and edited using the Dashboard Editor and corresponding panel
+        editors. 
+      </p>
+      <p>
+         Enable the Dashboard Editors by selecting the <b>Edit: On</b> button. For each panel, select <b>Edit</b> to open the panel editors.
+      </p>
+       
+      <p>
+        View and edit the simple XML code behind this dashboard by selecting <b>Edit XML</b>.
+      </p>
+      
+      <h2>About the Splunk Dashboard Editor</h2>
+      <p>
+        The Splunk Dashboard Editor and corresponding Panel, Visualization, and Search Editors, allow you to create and edit dashboards and panels without editing a single line of code. You can specify inline or saved searches, display returned data in various charts and other visualizations, and specify drilldown behavior. Read more about the Dashboard editor [here].
+      </p>
+      <p>
+        To add functionality not available from the Dashboard Editors, edit the simple XML directly using the Splunk XML Editor or an editor of your choice.
+      </p>
+      
+      <h2>Available panels</h2>
+      <p>In simple XML, the available panels are:</p>
+      <ul>
+        <li><strong>table</strong>: A tabular listing of search data.</li>
+        <li><strong>chart</strong>: A graphical representation of search data.</li>
+        <li><strong>event</strong>: A raw listing of search event data.  Can be used to access custom event renderers.</li>
+        <li><strong>single</strong>: A single value display.  Uses all the module options for SingleValue.</li>
+        <li><strong>html</strong>: Renders inline HTML.</li>
+      </ul>
+      
+      <h2>About the panels in this dashboard</h2>
+      <ul>
+        <li>
+        <p>
+          <b>HTML panel (Dashboard using simple XML)</b>
+          <br />The HTML panel displays inline HTML. Specify your content between the &lt;html&gt; tags in the panel code. You can add links to other pages in an app, or link to any other page on the Internet. 
+        </p>
+        </li>
+        <li>
+        <p>
+         <b>Inline and saved searches (High CPU processors)</b>
+          <br />These two panels illustrate how to specify an inline search and a saved search in a panel. These panels also illustrate table and chart visualizations.
+        </p>
+        </li>
+        <li>
+        <p>
+          <b>Display single values (Splunk server loge events)</b>
+          <br />Three panels that show the variety of ways to specify single values.
+        </p>
+        </li>
+      </ul>
+    <h1>Source code</h1>
+    <p>
+      View the <a target="_blank" href="/static/app/dashboard_examples/samples/dashboard1_sample.html">source code to implement this dashboard</a>. (Opens in a new window.)
+    </p>
+    
+    <h1>What's next?</h1>  
+      <p>
+        [<a href="/app/dashboard_examples/dashboard2">Next: Simple XML - Inline search options</a>]
+      </p>
+      <p>
+        [<a href="/app/dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+      </p>
+      </div>
+    </html>
+  </row>
+  <row>
+    
+    <!-- execute an inline search, display as a table -->
+    <table>
+      <title>High CPU processors (inline search)</title>
+      <searchString>index="_internal" source="*metrics.log" group="pipeline" | chart sum(cpu_seconds) over processor | sort -sum(cpu_seconds) | rename sum(cpu_seconds) as "Total CPU Seconds"</searchString>
+      <earliestTime>-60m</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="showPager">true</option>
+    </table>
+
+    <!-- execute as saved search, display as a table -->
+    <chart>
+      <title>High CPU processors (saved search)</title>
+      <searchName>Pipeline processors with most processor time</searchName>
+      <option name="height">400px</option>
+    </chart>
+    
+  </row>
+    <!-- this grouping attribute says that the first 3 elements should be 
+  rendered into the first panel, the next 4 into the second, and the 
+  last 2 elements into the third panel  -->
+  <row>    
+    <!-- execute as inline search, display as single value -->
+    <single>
+      <title>Splunk server log events</title>
+      <searchString>index=_internal source="*splunkd.log" ( log_level=ERROR OR log_level=WARN* OR log_level=FATAL OR log_level=CRITICAL) | stats count as log_events</searchString>
+      <earliestTime>-1d</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="beforeLabel">Found:</option>
+      <option name="afterLabel">Splunk server log events</option>
+      <option name="count">10</option>
+      <option name="displayRowNumbers">true</option>
+    </single>
+
+    <chart>
+      <title>Splunk server log events</title>
+      <searchString>index=_internal source="*splunkd.log" ( log_level=ERROR OR log_level=WARN* OR log_level=FATAL OR log_level=CRITICAL) | stats count as log_events</searchString>
+      <earliestTime>-1d</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="charting.chart">radialGauge</option>
+      <option name="charting.chart.rangeValues">[0,500,5000,10000]</option>
+      <option name="charting.gaugeColors">[0x84e900,0xffe800,0xbf3030]</option>
+      <option name="count">10</option>
+      <option name="displayRowNumbers">true</option>
+    </chart>
+
+    <chart>
+      <searchString>index=_internal source="*splunkd.log" ( log_level=ERROR OR log_level=WARN* OR log_level=FATAL OR log_level=CRITICAL) | stats count as log_events</searchString>
+      <title>Splunk server log events</title>
+      <earliestTime>-1d</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="charting.chart">fillerGauge</option>
+      <option name="charting.chart.rangeValues">[0,500,5000,10000]</option>
+      <option name="charting.gaugeColors">[0x84e900,0xffe800,0xbf3030]</option>
+      <option name="count">10</option>
+      <option name="displayRowNumbers">true</option>
+    </chart>    
+  </row>
+
+</dashboard>

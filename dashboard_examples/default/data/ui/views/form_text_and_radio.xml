@@ -1,0 +1,90 @@
+<form>
+  <label>Text field with dynamic radio buttons</label>
+  
+  <!-- define master search template; leave time unbounded so that the time input can be used -->
+    <searchTemplate>index=sample from="$from$" $otherFilter$</searchTemplate>
+
+  <fieldset>
+    <html>
+    <div class="form_bg"><div class="content_width">
+    <h1>Simple XML - Form search with text field and dynamic radio buttons</h1>
+    <p>
+      This form search dynamically adds radio buttons, based on the search.
+    </p>
+    <p>
+      The &lt;populatingSearch&gt; tag populates the radio buttons. The &lt;searchWhenChanged&gt; tag propagates any change in selection immediately to the results.
+      The form uses a time picker so it does not specify a time range.
+    </p>
+    <div class="samplecode">
+      &lt;input type="radio" token="from" searchWhenChanged="true"&gt;
+      <br />&#160;&#160;&lt;label&gt;Select from address&lt;/label&gt;
+      <br />&#160;&#160;&lt;choice value="*"&gt;Any&lt;/choice&gt;
+      <br />&#160;&#160;&lt;populatingSearch fieldForValue="from" fieldForLabel="from"&gt;
+      <br />&#160;&#160;&#160;&#160;&lt;![CDATA[index=sample | top from | stats count by from]]&gt;
+      <br />&#160;&#160;&lt;/populatingSearch&gt;
+      <br />&lt;/input&gt;
+      <br />
+      <br />&lt;input type="text" token="otherFilter"&gt;
+      <br />&#160;&#160;&lt;label&gt;other search&lt;/label&gt;
+      <br />&#160;&#160; &lt;seed&gt;*&lt;/seed&gt;
+      <br />&lt;/input&gt;
+      
+      <br /><br />&lt;input type="time" /&gt;
+    </div>
+    
+    <h1>Source code</h1>
+    <p>
+      View the <a target="_blank" href="/static/app/dashboard_examples/samples/form_text_and_radio_sample.html">source code to implement this form</a>. (Opens in a new window.)
+    </p>
+    
+    <h1>What's next?</h1>
+    <p>
+      [<a href="/app/dashboard_examples/form_static_definitions">Next: Forms using static dropdowns and radio buttons</a>]
+      <br />[<a href="/app/dashboard_examples/form_multiple_inputs">Prev: Forms using multiple inputs</a>]
+    </p>
+    <p>
+      [<a href="../dashboard_examples/forms1">Simple XML Forms Home</a>]
+      <br />[<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+    </p>
+
+    </div></div>
+    
+    <p style="padding-top: 6px"></p>
+    <hr />
+    <p style="padding-top: 20px">
+      Specify a value for from to populate the radio buttons.
+    </p>
+    
+  </html> 
+  <!-- Define a radio button list, populated from a search.
+       searchWhenChanged propagates any change in selection immediately to the results.
+  -->
+  <input type="radio" token="from" searchWhenChanged="true">
+    <label>Select from address</label>
+    <choice value="*">Any</choice>
+    <populatingSearch fieldForValue="from" fieldForLabel="from">
+      <![CDATA[index=sample | top from | stats count by from]]>
+    </populatingSearch>
+  </input>
+  
+  <input type="text" token="otherFilter">
+    <label>other search</label>
+    <seed>*</seed>
+  </input>
+  
+  <!-- add default TimePicker -->
+  <input type="time" />
+      
+  </fieldset>
+  
+  <row>
+    
+  <!-- show results in event viewer -->
+  <event>
+    <title>Results</title>
+    <option name="count">50</option>
+  </event>
+    
+</row>
+  
+</form>

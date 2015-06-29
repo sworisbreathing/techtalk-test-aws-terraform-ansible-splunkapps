@@ -1,0 +1,68 @@
+<div class="form_bg"><div class="content_width">
+<h1>Advanced XML: Time-based charting</h1>
+<p>
+    This view is similar to the advanced charting view.
+    However, it contains a timeline that is fully functional to narrow down, zoom in, and zoom out.
+</p>
+<p>
+    The JSChart module implements a drilldown pattern &ndash; you can click elements to see the corresponding events below.
+</p>
+<p>
+    Type in any reporting search, for example:
+</p>
+<div class="samplecode">
+    index=_internal source=*metrics.log group=per_sourcetype_thruput
+    <br />| chart avg(eps) by series | sort 10 - avg(eps)
+</div>
+
+<h1>Pre-populate this view with saved searches</h1>
+<p>
+    You can pre-populate this view from the Nav Menu with saved searches, which are defined in <code>savedsearches.conf</code>.
+    Go to the following menu items to pre-populate the view:
+</p>
+<blockquote>
+    <p><b>Advanced XML > Exploring reports in time > Custom charting by sourcetype</b>
+    <br />Advanced XML > Exploring reports in time > Custom charting by source</b></p>
+</blockquote>
+
+<p>
+    The Nav menu defines the menu items that specify the saved searches:
+</p>
+<div class="samplecode"><pre>
+. . .
+&lt;collection label="Exploring reports in time"&gt;
+  &lt;view name="custom_charting1"/&gt;
+  &lt;saved name="Custom charting by sourcetype" /&gt;
+  &lt;saved name="Custom charting by source" /&gt;
+&lt;/collection>
+. . .
+</pre></div>
+
+<p>
+    Here are the locations for the source of the Nav Menu and <code>savedsearches.conf</code>.
+</p>
+
+<div class="samplecode">
+$SPLUNK_HOME/etc/apps/dashboard_examples/default/data/ui/nav/default.xml
+<br />$SPLUNK_HOME/etc/apps/dashboard_examples/default/savedsearches.conf
+</div>
+
+
+<h1>Source code</h1>
+<p>
+    View the <a target="_blank" href="/static/app/dashboard_examples/samples/custom_charting1_sample.html">commented source code for this view</a>. (Opens in a new window.)
+</p>
+<p>
+    See the <a target="_blank" href="/static/app/dashboard_examples//custom_charting1_layout.html">module implementation for this view</a>. (Opens in a new window.)
+</p>
+
+<h1>What's next?</h1>
+<p>
+  [<a href="/app/dashboard_examples/custom_css_export_button">Next: Custom CSS</a>]
+  <br />[<a href="/app/dashboard_examples/search_performance4">Prev: Search performance IV</a>]
+  <br /><br />[<a href="/app/dashboard_examples/advanced_intro1">Advanced XML Home</a>]
+  <br />[<a href="/app/dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+</p>
+
+</div></div>
+<p></p>

@@ -1,0 +1,33 @@
+#
+# SNAP_COUNTERS
+#   This configuration file is used to tell SNAP.PY what API data to collect from NetApp filers.
+#
+#  TYPE:
+#    perf - collects performance counter data
+#    conf - collects configuration sets
+#
+#  FORMAT:
+#    *  : collect all fields
+#    -  : collect only the listed fields
+#    x  : collect a second snapshot of listed fields (collects all fields)
+#    x- : collect a second snapshot of listed fields (collects only listed fields)
+#
+#  HEADER:
+#    type | counter | format | fields
+#
+#  COMMENT:
+#    Configuration file to pull standard counters from NetApp filers.
+#
+perf | ifnet | x | *
+perf | perf | x- | 'cp_rupt_usecs','cpu_disk_util_matrix','data_disk_util_percnt_histo','disk_cp_read_ops','disk_cp_reads_latency','disk_cp_reads_latency_histogram','disk_read_MB_per_sec_histo','disk_user_read_ops','disk_user_reads_latency','disk_user_reads_latency_histogram','disk_user_write_ops','disk_user_writes_latency','disk_user_writes_latency_histogram','disk_write_MB_per_sec_histo','domain_switches','domain_usecs','netin_per_sec_histo','netout_per_sec_histo','noncp_rupt_usecs','object','ops_per_sec_histo','parity_disk_util_percnt_histo','raid_reconstruct_perf_impact','raid_resync_perf_impact','raid_scrub_perf_impact','raid_verify_perf_impact','shared_domain_usecs'
+perf | cifs | x | *
+perf | ifnet | x | *
+perf | volume | x- | 'read_ops', 'write_ops', 'other_ops','read_latency','avg_latency','write_latency','total_ops'
+perf | vfiler | x | *
+perf | aggregate | x- | 'user_reads', 'user_writes', 'total_transfers','avg_latency'
+perf | system | x- | 'total_processor_busy', 'cpu_elapsed_time', 'sys_read_latency', 'sys_write_latency', 'sys_avg_latency', 'nfs_ops', 'cifs_ops', 'http_ops', 'fcp_ops', 'iscsi_ops', 'read_ops', 'write_ops', 'total_ops','system_model','ontap_version','hostname'
+perf | processor | x | 'cifs_ops','cpu_elapsed_time','domain_busy','fcp_ops','hard_switches','hostname	hostname_2	http_ops','iscsi_ops','nfs_ops','ontap_version','processor_busy	processor_elapsed_time','read_ops','sk_switches','sys_avg_latency','sys_read_latency','sys_write_latency','system_model','total_ops','total_processor_busy','write_ops'
+perf | wafl | x- | 'cp_count','avg_non_wafl_msg_latency','avg_wafl_msg_latency','buf_eject_time','buf_hash_hit','buf_hash_miss','buf_load_cnt','buf_miss_cnt','buf_pvbn_hash_hit','buf_pvbn_hash_miss','bufs_kmem','bufs_raid','inode_cache_hit','inode_cache_hit_nodes','inode_cache_hit_tohead','inode_cache_miss','inode_cache_miss_nodes','inode_eject_time','instance','markers_dyn_alloc','markers_freed','markers_mr_alloc','name_cache_hit','name_cache_miss','name_cache_miss_long','name_cache_miss_snapdir','non_wafl_msg_total'
+perf | lun | x- | 'display_name','read_ops','write_ops','other_ops','read_data','write_data','queue_full','avg_latency','total_ops','scsi_partner_ops','scsi_partner_data','read_align_histo','write_align_histo','read_partial_blocks','write_partial_blocks','queue_depth_lun'
+perf | iscsi | x | *
+conf | * | * | *

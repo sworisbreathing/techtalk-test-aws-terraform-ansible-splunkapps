@@ -1,0 +1,130 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Time-based charting</h1> 
+
+<textarea id="codeTextArea">
+
+<view autoCancelInterval="100"
+      isPersistable="true" isSticky="true" isVisible="true"
+      objectMode="viewconf" onunloadCancelJobs="false" template="search.html">
+  <label>Time based charting tool</label>
+
+  <!-- standard splunk chrome at the top -->
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+
+  <module name="ServerSideInclude" layoutPanel="viewHeader">
+    <param name="src">
+      custom_charting1.html
+    </param>
+  </module>  
+
+  <!--
+    SearchBar - user types in a search, or comes in on a permalink.
+    The search probably has transforming commands.
+  -->
+  <module name="SearchBar" layoutPanel="splSearchControls-inline">
+    <param name="useOwnSubmitButton">False</param>
+    <param name="useTypeahead">true</param>
+    <param name="useAssistant">true</param>
+    <module name="TimeRangePicker">
+      <param name="searchWhenChanged">True</param>
+      <param name="selected">Last 4 hours</param>
+      <module name="SubmitButton">
+        <param name="allowSoftSubmit">True</param>
+        <module name="Message" layoutPanel="graphArea">
+          <param name="filter">splunk.search.job</param>
+          <param name="clearOnJobDispatch">True</param>
+          <param name="maxSize">2</param>
+          <module name="JobStatus">
+            <param name="resultsLink">
+              <param name="popup">True</param>
+              <param name="viewTarget">report_builder_define_data</param>
+              <param name="transformedResultsViewTarget">report_builder_format_report</param>
+            </param>
+            <module name="FlashTimeline" layoutPanel="graphArea">
+              <param name="width">100%</param>
+              <param name="height">95px</param>
+              <module name="TitleBar" layoutPanel="viewHeader"/>
+              <module name="ResultsHeader">
+                <param name="entityLabel">events</param>
+                <param name="entityName">events</param>
+              </module> <!--  -->             
+              <!-- Some chart formatting settings to hardwire.  They're too marginal to expose to the user. -->
+              <module name="HiddenChartFormatter">
+                <param name="charting.chart.nullValueMode">zero</param>
+                <!-- Give the user the ability to change the chart type - line/column/bar/etc. -->
+                <module name="ChartTypeFormatter">
+                  <!-- Give the user the ability to change the stack mode - non/stacked/stacked100. -->
+                  <module name="StackModeFormatter">                  
+                    <!--
+                      Show the user the percent complete of the search they've run,
+                      whether they ran it by hitting return, clicking the SubmitButton
+                      or selecting a range on the timeline
+                    -->
+                    <module name="JobProgressIndicator"/>
+                    <module name="JSChart">
+                      <!--
+                        Generic module that converts <transformingSearch> + <usersClickOnChart>
+                        into a new drilldown search 
+                        It's this drilldown search that now gets run for the modules below this point.
+                      -->
+                      <module name="ConvertToDrilldownSearch">                        
+                        <!-- The rest is a relatively straightforward events pattern -->
+                        <module name="ResultsHeader" layoutPanel="resultsHeaderPanel">
+                          <param name="entityLabel">events</param>
+                          <param name="entityName">events</param>                          
+                          <module name="Paginator" layoutPanel="pageControls">
+                            <param name="entityName">events</param>
+                            <param name="maxPages">10</param>
+                            <module name="EventsViewer" layoutPanel="resultsAreaLeft">
+                              <param name="segmentation">full</param>
+                              <param name="reportFieldLink">report_builder_format_report</param>
+                              <module name="Paginator" layoutPanel="resultsAreaLeft">
+                                <param name="entityName">events</param>
+                                <param name="maxPages">10</param>
+                              </module> <!-- Paginator -->
+                            </module> <!-- EventsViewer -->
+                          </module> <!-- Paginator -->
+                        </module><!-- ResultsHeader -->
+                      </module> <!-- ConvertToDrilldownSearch -->
+                    </module><!-- JSChart -->
+                  </module> <!-- StackModeFormatter -->
+                </module> <!-- ChartTypeFormatter -->
+              </module><!-- HiddenChartFormatter -->
+            </module> <!-- FlashTimeline -->
+          </module> <!-- JobStatus -->
+        </module> <!-- Message -->
+      </module> <!-- SubmitButton -->
+    </module> <!-- TimeRangePicker -->
+  </module> <!-- SearchBar -->
+</view>
+
+</textarea>
+</div>
+

@@ -1,0 +1,73 @@
+.appLogo {
+    background-image:url(/static/app/dashboard_examples/custom_logo.gif);
+}
+
+.splView-other_trick .dashboard_examples_other_trick,
+.splView-embedding_other_views .dashboard_examples_embedding_other_views,
+.splView-static_content .dashboard_examples_static_content {
+    font-weight:bold;
+    color:#000;
+}
+
+.EventsViewer .default {
+    border-bottom:0px;
+    padding-bottom:0px;
+    padding-top:0px;
+}
+.EventsViewer em.time br {
+    display:none;
+}
+.EventsViewer em.time {
+    white-space:nowrap;
+}
+
+/* from coredocs stylesheet */
+.samplecode {
+    overflow: auto;
+    width: 648px;
+    padding: 15px;
+    background: #EEE;
+    border-radius: 6px;
+    display: block;
+    font-family: monospace;
+    margin: 1em 0px;
+    color:#333;
+    font-size:11px;
+}
+
+/* make docs a respectable width for reading */
+.content_width {
+    width: 700px;
+/*    margin-right:auto;*/
+}
+
+/* forms need a white background */
+.form_bg {
+    background-color:white;
+    padding-top:20px;
+    padding-bottom: 20px;
+    padding-left:10px
+}
+
+/* module layout */
+.white_bg_outer {
+    border-style:solid; 
+    border-width: 2px; 
+    padding: 6px; 
+    width: 50%;
+}
+
+.white_bg {
+    border-style:solid; 
+    border-width: 2px; 
+    padding: 6px;
+    background-color: #ffffff;
+ }
+
+.gray_bg  {
+    border-style:solid; 
+    border-width: 2px; 
+    padding: 6px; 
+    border-color: #88ccff;
+    background-color: #eeeeee;
+}

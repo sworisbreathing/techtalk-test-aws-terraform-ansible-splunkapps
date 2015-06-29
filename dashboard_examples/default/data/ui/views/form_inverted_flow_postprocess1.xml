@@ -1,0 +1,149 @@
+<form>
+  <label>Panel-defined search with post-process</label>
+
+  <fieldset>
+      <html>
+        <div class="form_bg"><div class="content_width">
+        <h1>Simple XML - Multi-panel form with one search and four post-process searches</h1>
+        <p>
+          Searches can be post-processed, which means you can use one search to drive the results of child panels.
+          Child panels can manipulate the results of the base search by post-processing them with commands like timechart, chart and stats.
+          Post-processing searches lets you conserve processing resources.
+        </p>
+        
+        <p>
+          In this example of post-processing, the actual search you are running ends with the following two unusual clauses: 
+        </p>
+          
+        <div class="samplecode">
+        | bin _time span=5min | stats count by eps, kb, kbps, _time
+        </div>
+        <p>
+          This form is nearly identical to the other post-process forms except it uses only one search,
+          with post-process searching and filtering to achieve the same effect. The primary search looks like:
+        </p>
+        <div class="samplecode">
+            &lt;searchTemplate&gt;
+            <br />&#160;&#160;index=_internal source=*metrics.log group="per_<b>$reportTypeToken$</b>_thruput"
+            <br />&#160;&#160;| bin _time span=1m | stats count by series, eps, kb, kbps, _time
+            <br />&lt;/searchTemplate&gt;
+        </div>
+        <p>                    
+          The input form replaces <code>$reportTypeToken$</code> with the value of the input form.
+        </p>
+        
+        <div class="samplecode">
+          <br />&lt;input type="dropdown" token="<b>reportTypeToken</b>"&gt;
+          <br />&#160;&#160;&lt;label&gt;Select name&lt;/label&gt;
+          <br />&#160;&#160;&lt;default&gt;Sourcetype&lt;/label&gt;
+          <br />&#160;&#160;&lt;choice value="index"&gt;Index&lt;/choice&gt;
+          <br />&#160;&#160;&lt;choice value="sourcetype"&gt;Sourcetype&lt;/choice&gt;
+          <br />&#160;&#160;&lt;choice value="host"&gt;Host&lt;/choice&gt;
+          <br />&lt;/input&gt;
+        </div>
+
+        <p>
+          The following post-process searches are applied to the search results individually:
+        </p>
+        
+        <div class="samplecode">
+            &lt;searchPostProcess&gt;
+            <br />&#160;&#160;timechart sum(kb) by series
+            <br />&lt;/searchPostProcess&gt;
+            <br /><br />&lt;searchPostProcess&gt;
+            <br />&#160;&#160;timechart sum(kb) by series
+            <br />&lt;/searchPostProcess&gt;
+            <br /><br />&lt;searchPostProcess&gt;
+            <br />&#160;&#160;chart sum(sumKB) over series | rename series as sourcetype | sort -sum(kb)
+            <br /><br />&lt;searchPostProcess&gt;
+            <br />&#160;&#160;chart avg(eps) over series | sort -avg(eps)
+            <br />&lt;/searchPostProcess&gt;
+          </div>
+        
+        <p>
+          For example, for the panel with a table:
+        </p>
+        
+        <div class="samplecode">
+            &lt;table&gt;
+              <br />&#160;&#160;&lt;title&gt;eps over time&lt;/title&gt;
+              <br />&#160;&#160;&lt;searchPostProcess&gt;timechart avg(eps) by series&lt;/searchPostProcess&gt;
+            <br />&lt;/table>            
+        </div>
+
+        <h1>Source code</h1>
+        <p>
+          View the <a target="_blank" href="/static/app/dashboard_examples/samples/form_inverted_flow_postprocess1_sample.html">source code to implement this form</a>. (Opens in a new window.)
+        </p>
+        
+        <h1>What's next?</h1>
+        <p>
+          [<a href="/app/dashboard_examples/form_inverted_flow_postprocess2">Next: Another form with post-process search</a>]
+          <br />[<a href="/app/dashboard_examples/form_inverted_flow_dropdown">Prev: Multi-panel defined form search driven by select dropdown</a>]
+        </p>
+        <p>
+          [<a href="../dashboard_examples/forms1">Simple XML Forms Home</a>]
+          <br />[<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+        </p>         
+         
+        </div></div>
+        
+        <p style="padding-top: 6px;"></p>
+        <hr />
+      </html>
+      
+      <input type="dropdown" token="reportTypeToken">
+            <label>Select name</label>
+            <default>Sourcetype</default>
+            <choice value="index">Index</choice>
+            <choice value="sourcetype">Sourcetype</choice>
+            <choice value="source">Source</choice>
+            <choice value="host">Host</choice>
+        </input>
+
+      <input type="time">
+        <default>Last 4 hours</default>
+      </input>
+
+  </fieldset>
+  
+   <!-- define a search that returns, in one result set, all of the data that is 
+    requested by the subsequent panels -->
+  <searchTemplate>
+    index=_internal source=*metrics.log group="per_$reportTypeToken$_thruput"
+    | bin _time span=1m | stats count by series, eps, kb, kbps, _time
+  </searchTemplate>
+  
+  <row>
+      <table>
+          <title>eps over time</title>
+          <searchPostProcess>timechart avg(eps) by series</searchPostProcess>
+      </table>
+      <chart>
+          <title>KB indexed over time</title>
+          <searchPostProcess>timechart sum(kb) by series</searchPostProcess>
+          <option name="height">300px</option>
+          <option name="charting.chart">area</option>
+          <option name="charting.chart.stackMode">stacked</option>
+      </chart>
+  </row>
+
+  <row>
+      <table>
+          <title>Top sourcetypes by volume</title>
+          <searchPostProcess>
+            chart sum(sumKB) over series | rename series as sourcetype | sort -sum(kb)
+          </searchPostProcess>
+          <fields>sourcetype, sum(kb)</fields>
+          <option name="count">20</option>
+      </table>
+      <chart>
+          <title>Top sourcetypes by eps</title>
+          <searchPostProcess>chart avg(eps) over series | sort -avg(eps)</searchPostProcess>
+          <option name="height">300px</option>
+          <option name="charting.chart">bar</option>
+          <option name="charting.legend.placement">none</option>
+      </chart>
+  </row>
+  
+</form>

@@ -1,0 +1,42 @@
+<div class="content_width">
+  <h1>A simple example: Three modules wired together</h1>
+
+<p>
+  Below is an example of three nested modules:
+</p>
+<blockquote>
+  <div class="white_bg_outer">
+    <p>HiddenSearch</p>
+    <div class="gray_bg"> 
+    <p>TimeRangePicker<br />(layers its intentions on top of the HiddenSearch)</p>
+      <div class="white_bg">
+      <p>SimpleResultsTable<br />(kicks off the search and displays the results).</p>
+      </div>
+    </div>
+  </div>
+</blockquote>
+
+<hr width="75%" style="margin-top: 24px; margin-bottom: 24px"/>
+
+<p>
+  <code>
+  <b>&lt;!-- parent module --&gt;</b>
+  <br />&lt;module name="HiddenSearch" layoutPanel="panel_row2_col1" group="3 modules wired together" autoRun="True"&gt;
+  <br />&nbsp;&nbsp;&lt;param name="search"&gt;index=_internal source=*metrics.log | chart sum(kb) by series | sort -sum(kb) | head 10&lt;/param&gt;
+  
+  <br /><br /><b>&nbsp;&nbsp;&lt;!-- Child module adding the timerange on top of the base search --&gt;</b>
+  <br />&nbsp;&nbsp;&lt;module name="TimeRangePicker"&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="selected"&gt;Last 15 minutes&lt;/param&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="searchWhenChanged"&gt;True&lt;/param&gt;
+  
+  <br /><br />&nbsp;&nbsp;&nbsp;&nbsp;<b>&lt;!-- This child module kicks off the search inherited from the parent modules --&gt;
+        <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- the table automatically displays the first ten results from the search. --&gt;</b>
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;module name="SimpleResultsTable"&gt;&lt;/module&gt;
+  <br />&nbsp;&nbsp;&lt;/module&gt;
+  <br />&lt;/module&gt;    
+  </code>
+</p>
+
+<h1>Source code</h1>
+<p>View the <a target="_blank" href="/static/app/dashboard_examples/samples/advanced_intro2_sample.html">complete source code for this view</a>. (Opens in a new window.)</p>
+</div>

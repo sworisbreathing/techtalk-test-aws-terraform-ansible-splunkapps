@@ -1,0 +1,71 @@
+<form>
+  <label>autoRun example without a submit button</label>
+  
+  <!--
+  * Set autoRun=true. This is what actually causes the prepopulated
+  * form to dispatch the search.
+  -->
+  <fieldset autoRun="true" submitButton="false">
+    <html>
+      <div class="form_bg"><div class="content_width">
+      <h1>Simple XML - Auto-dispatched form without submit button</h1>
+      <p>
+        This is similar to the <a href="auto_dispatch_form1">Basic auto-dispatched form</a> example,
+        except the submit button has been removed using the submitButton attribute to the &lt;fieldset&gt; tag.
+      </p>
+      <div class="samplecode">
+            &lt;fieldset autoRun="true" submitButton="false"&gt;
+            <br /> . . .
+      </div>
+    <h1>Source code</h1>
+    <p>
+      View the <a target="_blank" href="/static/app/dashboard_examples/samples/auto_dispatch_form3_sample.html">source code to implement this form</a>. (Opens in a new window.)
+    </p>
+    
+    <h1>What's next?</h1>
+      <p>
+        [<a href="/app/dashboard_examples/real_time_dashboard1">Next: Realtime dashboard</a>]
+        <br />[<a href="/app/dashboard_examples/auto_dispatch_form2">Prev: Auto-dispatched form using a dropdown for inputs</a>]
+      </p>
+      <p>
+        [<a href="../dashboard_examples/forms1">Simple XML Forms Home</a>]
+        <br />[<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+      </p>         
+   
+      </div></div>
+      
+      <p style="padding-top: 6px"></p>
+      
+      <hr />
+      
+    </html>
+
+    <!-- 
+    * Define a default value so that autoRun makes sense.
+    -->
+    <input token="sourcetype">
+      <seed>*</seed>
+    </input>
+    
+    <input type="time">
+      <default>Last 30 days</default>
+    </input>
+    
+  </fieldset>
+  
+  <searchTemplate>
+    index=_internal source=*metrics.log group=per_sourcetype_thruput series="$sourcetype$" | head 1000
+  </searchTemplate>
+  <earliestTime>-30d</earliestTime>
+  <latestTime>-0d</latestTime>
+
+  
+  <row>
+      <!-- Output the results as a 50 row events table -->
+    <table>
+      <title>Matching events</title>
+      <option name="count">50</option>
+    </table>
+  </row>
+  
+</form>

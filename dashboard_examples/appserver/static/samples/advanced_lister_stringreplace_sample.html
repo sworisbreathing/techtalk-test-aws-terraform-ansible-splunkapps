@@ -1,0 +1,262 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Lister and string replace intentions</h1> 
+
+<textarea id="codeTextArea">
+
+<view template="dashboard.html">
+  <label>Listers and stringreplace intentions</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+  
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1">
+    <param name="src">advanced_lister_stringreplace.html</param>
+  </module>
+
+  <module name="StaticContentSample" layoutPanel="panel_row2_col1">
+    <param name="text"><![CDATA[
+      <p><b>Select a group, and then a series from that group.</b></p>
+      <p><b>Click Search to view charts showing sum(kb), avg(kbps), median(eps), max(eps) and min(eps).</b></p>
+    ]]></param>
+  </module>
+  <module name="SearchSelectLister" layoutPanel="panel_row2_col1" group="View throughput statistics">
+    <param name="settingToCreate">group_setting</param>
+    <param name="search">
+      index=_internal source=*metrics.log group group="*" series="*" | stats count by group
+    </param>
+    <param name="earliest">-6h</param>
+    <param name="label">Group:</param>
+    <param name="searchFieldsToDisplay">
+      <list>
+        <param name="label">group</param>
+        <param name="value">group</param>
+      </list>
+    </param>
+    <module name="ConvertToIntention">
+      <param name="settingToConvert">group_setting</param>
+      <param name="intention">
+        <param name="name">stringreplace</param>
+        <param name="arg">
+          <param name="group">
+            <param name="value">$target$</param>
+          </param>
+        </param>
+      </param>
+  
+      <!-- Series selector -->
+      <module name="SearchSelectLister">
+        <param name="settingToCreate">series_setting</param>
+        <param name="search">
+          index=_internal source=*metrics.log group=$group$ | stats count by series
+        </param>
+        <param name="earliest">-6h</param>
+        <param name="label">Series:</param>
+        <param name="applyOuterIntentionsToInternalSearch">True</param>
+        <param name="searchFieldsToDisplay">
+          <list>
+            <param name="label">series</param>
+            <param name="value">series</param>
+          </list>
+        </param>
+        <module name="ConvertToIntention">
+          <param name="settingToConvert">series_setting</param>
+          <param name="intention">
+            <param name="name">stringreplace</param>
+            <param name="arg">
+              <param name="series">
+                <param name="value">$target$</param>
+              </param>
+            </param>
+          </param>
+
+          <module name="SubmitButton">
+            <param name="label">Search</param>
+
+            <!-- Chart for: index=_internal metrics NOT sendout group=<group> series=<series> | timechart sum(kb) -->
+            <module name="HiddenSearch">
+              <param name="search">
+                index=_internal source=*metrics.log group=$group$ series=$series$
+                | timechart sum(kb)
+              </param>
+              <param name="earliest">-6h</param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">column</param>
+                <param name="chart.stackMode">stacked</param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">sum(kb)</param>
+                <param name="legend.placement">None</param>
+                <module name="JSChart">
+                  <param name="width">100%</param>
+                  <param name="height">200px</param>
+                </module> <!-- JSChart -->
+              </module> <!-- HiddenChartFormatter -->
+            </module> <!-- HiddenSearch -->
+
+            <!-- Chart for: index=_internal metrics NOT sendout group=<group> series=<series> | timechart sum(kb) -->
+            <module name="HiddenSearch">
+              <param name="search">
+                index=_internal source=*metrics.log group=$group$ series=$series$
+                | timechart avg(kbps)
+              </param>
+              <param name="earliest">-6h</param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">line</param>
+                <param name="chart.stackMode">stacked</param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">avg(kbps)</param>
+                <param name="legend.placement">None</param>
+                <module name="JSChart">
+                  <param name="width">100%</param>
+                  <param name="height">200px</param>
+                </module> <!-- JSChart -->
+              </module> <!-- HiddenChartFormatter -->
+            </module> <!-- HiddenSearch -->
+
+            <!-- Chart for: index=_internal metrics NOT sendout group=<group> series=<series> | timechart sum(kb) -->
+            <module name="HiddenSearch">
+              <param name="search">
+                index=_internal source=*metrics.log group=$group$ series=$series$
+                | timechart median(eps) max(eps) min(eps)
+              </param>
+              <param name="earliest">-6h</param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">line</param>
+                <param name="chart.stackMode">stacked</param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">median(eps) max(eps) min(eps)</param>
+                <param name="legend.placement">None</param>
+                <module name="JSChart">
+                  <param name="width">100%</param>
+                  <param name="height">200px</param>
+                </module> <!-- JSChart -->
+              </module> <!-- HiddenChartFormatter -->
+            </module> <!-- HiddenSearch -->
+
+          </module> <!-- SubmitButton -->
+        </module> <!-- ConvertToIntention -->
+      </module> <!-- SearchSelectLister -->
+    </module> <!-- ConvertToIntention -->
+  </module> <!-- SearchSelectLister -->
+
+    
+  <module name="StaticContentSample" layoutPanel="panel_row2_col2">
+    <param name="text"><![CDATA[
+      <p><b>Select a Splunk pipeline, and then a processor for that pipeline.</p></b>
+      <p><b>Click Search to view a column chart showing sum(cpu_seconds).</p></b>
+    ]]></param>
+  </module>  
+  <module name="SearchSelectLister"  layoutPanel="panel_row2_col2" group="Search for cpu intensive processors in the last 24 hours.">    
+    <param name="settingToCreate">name_setting</param>
+    <param name="search">
+      index=_internal source=*metrics.log group=pipeline
+      | stats sum(cpu_seconds) as totalCPU by name
+      | where totalCPU > 0 | sort -totalCPU
+    </param>
+    <param name="earliest">-1d</param>
+    <param name="label">Name:</param>
+    <param name="searchFieldsToDisplay">
+      <list>
+        <param name="label">name</param>
+        <param name="value">name</param>
+      </list>
+    </param>
+    <module name="ConvertToIntention">
+      <param name="settingToConvert">name_setting</param>
+      <param name="intention">
+        <param name="name">stringreplace</param>
+        <param name="arg">
+          <param name="name">
+            <param name="value">$target$</param>
+          </param>
+        </param>
+      </param>
+
+      <!-- Add the processor -->
+      <module name="SearchSelectLister">
+        <param name="settingToCreate">processor_setting</param>
+        <param name="search">
+          index=_internal source=*metrics.log group=pipeline name=$name$
+          | stats sum(cpu_seconds) as totalCPU by processor
+          | where totalCPU > 0 | sort -totalCPU
+        </param>
+        <param name="earliest">-1d</param>
+        <param name="label">Processor</param>
+        <param name="applyOuterIntentionsToInternalSearch">True</param>
+        <param name="searchFieldsToDisplay">
+          <list>
+            <param name="label">processor</param>
+            <param name="value">processor</param>
+          </list>
+        </param>
+        <module name="ConvertToIntention">
+          <param name="settingToConvert">processor_setting</param>
+          <param name="intention">
+            <param name="name">stringreplace</param>
+            <param name="arg">
+              <param name="processor">
+                <param name="value">$target$</param>
+              </param>
+            </param>
+          </param>
+
+          <module name="SubmitButton">
+            <param name="label">Search</param>
+
+            <!-- Chart for: showing the sum cpu_seconds for a given name and processor -->
+            <module name="HiddenSearch">
+              <param name="search">
+                index=_internal source=*metrics.log group=pipeline name=$name$ processor=$processor$
+                | timechart sum(cpu_seconds)
+              </param>
+              <param name="earliest">-1d</param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">column</param>
+                <param name="chart.stackMode">stacked</param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">sum(kb)</param>
+                <param name="legend.placement">None</param>
+                <module name="JSChart">
+                  <param name="width">100%</param>
+                  <param name="height">200px</param>
+                </module> <!-- JSChart -->
+              </module> <!-- HiddenChartFormatter -->
+            </module> <!-- HiddenSearch -->
+          </module> <!-- SubmitButton -->
+        </module> <!-- ConvertToIntention -->
+      </module> <!-- SearchSelectLister -->
+    </module> <!-- ConvertToIntention -->
+  </module> <!-- SearchSelectLister -->
+
+</view>
+
+</textarea>
+</div>
+

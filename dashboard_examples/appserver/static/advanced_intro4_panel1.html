@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Chart the results of a saved search</title>
+  
+    <link rel="stylesheet" href="/en-US/static/@136169/css/view.css" />             
+    <link rel="stylesheet" href="/en-US/static/@136169/css/skins/default/default.css" />             
+    <link rel="stylesheet" href="/en-US/static/@136169/css/print.css" />             
+    <link rel="stylesheet" href="/en-US/static/@136169/css/tipTip.css" />             
+    <link rel="stylesheet" href="/en-US/static/@136169/css/jquery.iphone-style-checkboxes.css" />             
+    <link rel="stylesheet" href="/en-US/modules/@136169/modules-fccc1c7ce70bb9c47a52586c8d8d9275.min.css" />                 
+    <link rel="stylesheet" href="/en-US/static/@136169/css/dashboard.css" />             
+    <link rel="stylesheet" href="/en-US/static/@136169:0/app/dashboard_examples/application.css" />             
+
+</head>
+<body style="padding:24px">
+    
+<h2>Charting the results of a saved search</h2>
+
+<pre>
+<module name="ServerSideInclude" layoutPanel="panel_row2_col1">
+  <param name="src">advanced_intro4_a.html</param>
+</module>
+<module name="HiddenSearch" layoutPanel="panel_row2_col1" group="Charting the results of a saved search" autoRun="True">
+  <param name="search">index=_internal source=*metrics.log group=per_sourcetype_thruput | chart sum(kb) by series | sort -sum(kb) | head 10</param>
+  <param name="earliest">-1h</param>
+  <module name="HiddenChartFormatter">
+    <param name="chart">bar</param>
+    <param name="primaryAxisTitle.text">Sourcetype</param>
+    <param name="secondaryAxisTitle.text">KB Indexed</param>
+    <param name="legend.placement">none</param>
+    <module name="JobProgressIndicator"/>
+    <module name="JSChart">
+      <param name="width">100%</param>
+      <param name="height">300px</param>
+    </module>
+  </module>
+</module>    
+</pre>
+
+</body>
+</html>

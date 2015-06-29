@@ -1,0 +1,36 @@
+<div class="form_bg"><div class="content_width">
+<h1>Advanced XML: Search performance 4</h1>
+<p>
+    This is the fourth example on search performance. This example does not use a field picker.
+    However, that doesn't mean fields are absent entirely. Splunk still does summarization on:
+</p>
+<ol>
+    <li><p>host, sourcetype, host, splunk_server</p></li>
+    <li>
+        <p>
+            Fields that the parser sees in the search commands themselves.
+        </p>
+        <p>
+            For example if you have <code>chart avg(bytes) over clientip</code>
+            Splunk collects sufficient statistics for bytes and clientip and
+            those fields appear in the sidebar
+        </p>
+    </li>
+</ol>
+<p>
+    Technically, the searches are no longer submitted with a required field list argument.</p>
+<h1>Source code</h1>
+<p>
+    View the <a target="_blank" href="/static/app/dashboard_examples/samples/search_performance4_sample.html">commented source code for this view</a>. (Opens in a new window.)
+</p>
+
+<h1>What's next?</h1>
+<p>
+  [<a href="/app/dashboard_examples/custom_charting1">Next: Time-based charting</a>]
+  <br />[<a href="/app/dashboard_examples/search_performance3">Prev: Search performance III</a>]
+  <br /><br />[<a href="/app/dashboard_examples/advanced_intro1">Advanced XML Home</a>]
+  <br />[<a href="/app/dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+</p>
+
+</div></div>
+<p></p>

@@ -1,0 +1,62 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Basic autoRun form</h1> 
+
+<textarea id="codeTextArea">
+
+<form>
+  <label>autoRun example 1: Basic autoRun form</label>
+    
+  <!--
+  * Set autoRun=true to automatically dispatch the search and prepoulate the form.
+  -->
+  <fieldset autoRun="true">
+        
+    <searchTemplate>
+      index=_internal source=*metrics.log group=per_sourcetype_thruput series="$sourcetype$"
+      | head 1000
+    </searchTemplate>
+    <earliestTime>-30d</earliestTime>
+    <latestTime>-0d</latestTime>
+  
+  
+    <!-- 
+      * Define a default value so that the autoRun makes sense.
+    -->
+    <input token="sourcetype">
+        <seed>*</seed>
+    </input>
+  </fieldset>
+  
+  <row>
+      <!-- output the results as a 50 row events table -->
+      <table>
+        <title>Matching events</title>
+        <option name="count">50</option>
+      </table>
+  </row>
+  
+</form>
+</textarea>
+</div>
+

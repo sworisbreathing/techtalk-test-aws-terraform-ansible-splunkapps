@@ -1,0 +1,64 @@
+<view template="dashboard.html" isVisible="false">
+  <label>Advanced real time dashboards 3</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+
+
+  <module name="HiddenSearch" layoutPanel="panel_row2_col1" group="Real time indexing status" autoRun="True">
+    <param name="search">index=_internal group=per_sourcetype_thruput source=*metrics.log series!=splunkd series!=splunk_web_service series!=splunk_web_access series!=searches series!=scheduler series!=audittrail series!=access_combined series!=splunklogger series!=intentions-too_small | chart sum(kb) as totalKB by series | eval MB=totalKB/1024 | fields - totalKB</param>
+    <param name="earliest">rt-5m</param>
+    <param name="latest">rt</param>
+
+      
+    <!-- show the data coming into index=main, by sourcetype, with drilldown enabled -->
+    <module name="HiddenChartFormatter">
+      <param name="charting.chart">bar</param>
+      <param name="charting.chart.stackMode">stacked</param>
+      <param name="charting.primaryAxisTitle.text">Sourcetype</param>
+      <param name="charting.secondaryAxisTitle.text">Total MB Indexed</param>
+      <param name="charting.legend.placement">None</param>
+      <param name="charting.axisX.integerUnits">false</param>
+       
+      <!-- TODO - remove this when SPL-29581 is fixed -->
+      <module name="EnablePreview">
+        <param name="enable">True</param>
+        <param name="display">False</param>
+      </module>
+
+      <module name="FlashChart">
+        <param name="width">100%</param>
+        <param name="height">400px</param>
+        <module name="ConvertToDrilldownSearch">
+          <module name="ViewRedirector">
+            <param name="viewTarget">flashtimeline</param>
+          </module>
+        </module>
+      </module>
+    </module>
+  
+    <!-- Similar but different.  Show the metrics log status by sourcetype, and we go to some lengths to suppress the _internal sourcetypes-->
+    <module name="HiddenSearch" autoRun="True">
+      <param name="search">index=_internal group=per_sourcetype_thruput series!=splunkd series!=splunk_web_service series!=splunk_web_access series!=searches series!=scheduler series!=audittrail series!=access_combined series!=splunklogger series!=intentions-too_small | chart sum(kb) by series | rename sum(kb) as totalKB | eval MB=totalKB/1024</param>
+      <!-- #1A - show the data coming into index=main, by sourcetype, with drilldown enabled -->
+      <module name="HiddenChartFormatter">
+        <param name="chart">column</param>
+        <param name="primaryAxisTitle.text">Sourcetype</param>
+        <param name="secondaryAxisTitle.text">total MB indexed (since this page loaded)</param>
+        <param name="legend.placement">None</param>
+        <module name="FlashChart">
+          <param name="width">100%</param>
+          <param name="height">200px</param>
+        </module>
+      </module>
+    </module>
+
+  </module>
+</view>

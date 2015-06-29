@@ -1,0 +1,84 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Simple XML dashboards - Dynamic drilldown</h1> 
+
+<textarea id="codeTextArea">
+
+<dashboard>
+  
+  <label>Simple XML dashboards - Dynamic drilldown</label>
+ <row>
+  <html>
+   <!-- documentation panel -->
+  </html>
+ </row>
+  
+  <!-- Second row of 2 panels -->
+
+ <row>
+    <table>
+      <title>High CPU processors (Dynamic drilldown to a form)</title>
+      <searchString>
+          index="_internal" source="*metrics.log" group="pipeline"
+          | chart sum(cpu_seconds) over processor | sort -sum(cpu_seconds) 
+          | rename sum(cpu_seconds) as "Total CPU Seconds"
+      </searchString>
+      <earliestTime>-60m</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="count">15</option>
+      <option name="displayRowNumbers">false</option>
+      <option name="showPager">true</option>
+      
+     <drilldown>
+       	   <link>
+              /app/dashboard_examples/form_table2?form.sourcetype=$row.processor$
+          </link>
+     </drilldown>      
+    </table>
+   
+    <table>
+     <title>High CPU processors (Dynamic drilldown to a web page)</title>
+      <searchString>
+          index="_internal" source="*metrics.log" group="pipeline"
+          | chart sum(cpu_seconds) over processor | sort -sum(cpu_seconds) 
+          | rename sum(cpu_seconds) as "Total CPU Seconds"
+      </searchString>
+       <earliestTime>-60m</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="count">15</option>
+      <option name="displayRowNumbers">false</option>
+      <option name="showPager">true</option>
+      
+     <drilldown>
+        <link>
+              http://splunk-base.splunk.com/integrated_search/?q=$click.value$
+        </link>
+     </drilldown>      
+    </table>
+
+  </row>
+
+</dashboard>
+</textarea>
+</div>
+

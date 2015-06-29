@@ -1,0 +1,29 @@
+<form>
+    <label>NA: Aggregation</label>
+
+    <fieldset>
+        <input type="dropdown" token="host">
+            <label>Select Host</label>
+            <populatingSearch fieldForValue="host" fieldForLabel="host"><![CDATA[| metadata index=netapp* type=hosts | fields host]]></populatingSearch>
+            <default>ALL</default>
+            <choice value="*">ALL</choice>
+        </input>
+        <input type="time" />
+    </fieldset>
+
+    <row>
+        <chart>
+            <title>Index Rate by Host</title>
+            <searchTemplate>index=_internal (source=*/metrics.log* OR source=*\\metrics.log*) group=per_host_thruput | join series [| metadata type=hosts index=netapp* | fields host | search host="$host$" | eval series=host] | timechart span=10m per_second(kb) by series</searchTemplate>
+            <option name="charting.axisTitleY.text">KB/s</option>
+            <option name="charting.axisTitleX.text"></option>
+            <option name="charting.chart">line</option>
+        </chart>
+        <table>
+            <title>Top Hosts by Volume</title>
+            <searchTemplate>index=_internal (source=*/metrics.log* OR source=*\\metrics.log*) group=per_host_thruput | join series [| metadata type=hosts index=netapp* | fields host | search host="$host$" | eval series=host] | stats sum(kb) AS KB by series | eval KB=round(KB, 2) | sort - KB | rename series AS host</searchTemplate>
+            <option name="showPager">true</option>
+        </table>
+    </row>
+
+</form>

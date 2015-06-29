@@ -1,0 +1,29 @@
+<nav>
+    <view name="summary" default="true"/>
+  <collection label="Performance">
+  <collection label="Filer">
+    <view name="filer_perf_overview" />
+    <view name="filer_perf" />
+    </collection>
+  <collection label="Volume">
+    <view name="volume_perf_overview" />
+    <view name="volume_perf" />
+    </collection>
+    </collection>
+    <view name="flashtimeline" />
+    <view name="about" />
+  <collection label="Reports &amp; Dashboards">
+    <view name="charting" />
+    <divider />
+          <collection label="Dashboards">
+            <view source="unclassified"  />
+        </collection>
+          <collection label="Reports">
+            <saved source="unclassified"  />
+        </collection>
+    <divider />
+    <a href="/manager/search/data/ui/views">Manage Views</a>
+    <divider />
+    <a href="javascript:Splunk.Globals.Viewmaster.openDashCreateForm();">Create dashboard...</a>
+  </collection>
+</nav>

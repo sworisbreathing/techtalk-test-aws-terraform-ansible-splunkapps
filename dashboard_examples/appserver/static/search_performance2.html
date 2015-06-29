@@ -1,0 +1,30 @@
+<div class="form_bg"><div class="content_width">
+<h1>Advanced XML: Search performance 2</h1>
+<p>
+    This is the second example on search performance. In this example we take away the FlashTimeline module and replace it with a HiddenFieldPicker module.
+</p>
+<p>
+    The fields of interest in the module are coded into the HiddenFieldPicker: host, index, source, sourcetype, clientip, status, and bytes. The user cannot
+    change which fields to display.   
+</p>
+<p>
+    However, searches in this view are about 10 times faster.
+</p>
+<p>
+    Technically, the searches are no longer submitted with <code>required_field_list=*</code>, but rather with the specified fields in HiddenFieldPicker. 
+</p>
+<h1>Source code</h1>
+<p>
+    View the <a target="_blank" href="/static/app/dashboard_examples/samples/search_performance1_sample.html">commented source code for this view</a>. (Opens in a new window.)
+</p>
+
+<h1>What's next?</h1>
+<p>
+  [<a href="/app/dashboard_examples/search_performance3">Next: Search performance III</a>]
+  <br />[<a href="/app/dashboard_examples/search_performance1">Prev: Search performance base</a>]
+  <br /><br />[<a href="/app/dashboard_examples/advanced_intro1">Advanced XML Home</a>]
+  <br />[<a href="/app/dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+</p>
+
+</div></div>
+<p></p> 

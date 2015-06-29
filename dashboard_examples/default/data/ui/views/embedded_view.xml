@@ -1,0 +1,21 @@
+<view template="dashboard.html" stylesheet="custom_css.css" isVisible="False">
+  <label>Example of an embedded view</label>
+
+  <module name="HiddenSavedSearch" autoRun="true" layoutPanel="viewHeader">
+    <param name="savedSearch">Sample scheduled search</param>
+    <param name="useHistory">Auto</param>
+    <module name="HiddenChartFormatter">
+      <param name="chart">bar</param>
+      
+      <param name="primaryAxisTitle.text">sum(kb)</param>
+      <param name="secondaryAxisTitle.text">sourcetype</param>
+      <param name="legend.placement">none</param>
+      <module name="JobProgressIndicator"/>
+      <module name="FlashChart">
+        <param name="height">350px</param>
+      </module>
+    </module>
+  </module>
+
+    
+</view>

@@ -1,0 +1,127 @@
+<view>
+  <label>ExtendedFieldSearch, HiddenIntention with addterm</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+  <module name="StaticContentSample" layoutPanel="mainSearchControls">
+    <param name="text">This example takes a detour and shows how to use the simpler addterm intention with ExtendedFieldSearch. 
+    &lt;p&gt;ExtendedFieldSearch is a simple text field module.  You will see two of them below.   &lt;p&gt;The first ExtendedFieldSearch is configured to insert 'series="foo"'  when you type in 'foo',  and the second is configured to just insert 'foo'  when you type 'foo'.   &lt;p&gt;Not visible but also present are two HiddenIntention modules showing how you can hardwire a search view in the same two ways.  &lt;p&gt;NOTE: This page uses the intentions model backwards from from how you normally see it. Instead of having a base search that you layer intentions on,   first we set a bunch of intentions that are shared, and then down further into the page, we fork and specify various DIFFERENT base search strings,  that those intentions then get added to.  Check out the source in manager to learn more.</param>
+  </module>
+  
+  <!-- sample HiddenIntention that inserts the search term 'metrics'.    -->
+  <module name="HiddenIntention" layoutPanel="mainSearchControls">
+    <param name="intention">
+      <param name="name">addterm</param>
+      <param name="arg">metrics</param>
+    </param>
+    
+    <!-- sample HiddenIntention that inserts group="per_sourcetype_thruput"  -->
+    <module name="HiddenIntention">
+      <param name="intention">
+        <param name="name">addterm</param>
+        <param name="arg">
+          <param name="group">per_sourcetype_thruput</param>
+        </param>
+      </param>
+     
+      <!-- ExtendedFieldSearch that inserts series="foo" when the user types in foo. -->
+      <module name="ExtendedFieldSearch">
+        <param name="intention">
+          <param name="name">addterm</param>
+          <param name="arg">
+            <param name="series"></param>
+          </param>
+        </param>
+        <param name="replacementMap">
+          <param name="arg">
+            <param name="series"></param>
+          </param>
+        </param>
+        <param name="default">splunkd</param>
+        <!--  since in this example the group is always per_sourcetype_thruput, the 'series' field is effectively 'sourcetype'.  -->
+        <param name="field">Sourcetype</param>
+
+        <!-- ExtendedFieldSearch that just inserts 'foo' when the user types in foo. -->
+        <module name="ExtendedFieldSearch">
+          <param name="intention">
+            <param name="name">addterm</param>
+            <param name="arg"></param>
+          </param>
+          <param name="replacementMap">
+            <param name="arg"></param>
+          </param>
+          <param name="field">random search term(s):</param>
+
+  
+          <module name="SubmitButton">
+            <param name="allowSoftSubmit">True</param>
+            <param name="label">Search</param>
+
+            <!-- Chart for: index=_internal metrics NOT sendout group=<group> series=<series> | timechart sum(kb) -->
+            <module name="HiddenSearch">
+              <param name="search">index=_internal source=*metrics.log  | timechart sum(kb)</param>
+              <param name="earliest">-6h</param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">column</param>
+                <param name="chart.stackMode">stacked</param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">sum(kb)</param>
+                <param name="legend.placement">None</param>
+                <module name="FlashChart" layoutPanel="resultsAreaLeft">
+                  <param name="width">100%</param>
+                  <param name="height">200px</param>
+                </module>
+              </module>
+            </module>
+
+            <!-- Chart for: index=_internal metrics NOT sendout group=<group> series=<series> | timechart sum(kb) -->
+            <module name="HiddenSearch">
+              <param name="search">index=_internal source=*metrics.log  | timechart avg(kbps)</param>
+              <param name="earliest">-6h</param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">line</param>
+                <param name="chart.stackMode">stacked</param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">avg(kbps)</param>
+                <param name="legend.placement">None</param>
+                <module name="FlashChart" layoutPanel="resultsAreaLeft">
+                  <param name="width">100%</param>
+                  <param name="height">200px</param>
+                </module>
+              </module>
+            </module>
+
+            <!-- Chart for: index=_internal metrics NOT sendout group=<group> series=<series> | timechart sum(kb) -->
+            <module name="HiddenSearch">
+              <param name="search">index=_internal source=*metrics.log | timechart median(eps) max(eps) min(eps)</param>
+              <param name="earliest">-6h</param>
+              <module name="HiddenChartFormatter">
+                <param name="chart">line</param>
+                <param name="chart.stackMode">stacked</param>
+                <param name="primaryAxisTitle.text">Time</param>
+                <param name="secondaryAxisTitle.text">median(eps) max(eps) min(eps)</param>
+                <param name="legend.placement">None</param>
+                <module name="FlashChart" layoutPanel="resultsAreaRight">
+                  <param name="width">100%</param>
+                  <param name="height">200px</param>
+                </module>
+              </module>
+            </module>
+
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+
+
+
+
+</view>

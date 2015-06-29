@@ -1,0 +1,192 @@
+<view autoCancelInterval="90" isVisible="true" objectMode="SimpleForm" onunloadCancelJobs="true" template="dashboard.html">
+  <label>Volume</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">splunk.search.job</param>
+    <param name="clearOnJobDispatch">True</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+  
+  
+
+
+
+  
+
+
+<!--	 START -->
+
+
+
+
+
+	<module name="HiddenSearch" group="Volume Statistics"  layoutPanel="panel_row2_col1"  >
+	<param name="search">index=netapp_perf object=volume $instance$  | `real_write_lat` | `real_read_lat` | `real_avg_lat` | `real_write_ops` | `real_read_ops` | `real_total_ops`| `real_other_ops` | stats avg(real_avg_latency) AS avg_latency avg(real_write_latency) AS write_latency avg(real_read_latency) AS read_latency avg(real_write_ops) AS write_ops avg(real_read_ops) AS read_ops avg(real_other_ops) AS other_ops avg(real_total_ops) AS total_ops  by instance _time</param>
+
+     <module name="HiddenPostProcess" layoutPanel="panel_row2_col1_grp1" group="Volume Statistics">
+              <param name="search">|stats  first(instance) as Volume</param>
+              <module name="SingleValue">
+                <param name="format">count</param>
+                <param name="beforeLabel">Stats for Volume: </param>
+              </module>
+            </module>
+   <module name="ViewRedirectorLink" layoutPanel="panel_row2_col1_grp2">
+              <param name="viewTarget">flashtimeline</param>
+              <param name="label">View Full Report</param>
+            </module>
+
+
+          <module name="HiddenPostProcess" layoutPanel="panel_row4_col1_grp1" group="Latency Info">
+              <param name="search">|stats  median("write_latency") as "Write Latency"</param>
+              <module name="SingleValue">
+                <param name="format">count</param>
+                <param name="beforeLabel">Write Latency: </param>
+                <param name="afterLabel">ms</param>
+              </module>
+            </module>
+
+          <module name="HiddenPostProcess" layoutPanel="panel_row4_col1_grp2" group="Latency Info">
+              <param name="search">|stats  median("read_latency") as "Read Latency"</param>
+              <module name="SingleValue">
+                <param name="format">count</param>
+                <param name="beforeLabel">Read Latency: </param>
+                <param name="afterLabel">ms</param>
+              </module>
+            </module>
+
+          <module name="HiddenPostProcess" layoutPanel="panel_row4_col1_grp3" group="Latency Info">
+              <param name="search">|stats  median("avg_latency") as "Total Latency"</param>
+              <module name="SingleValue">
+                <param name="format">count</param>
+                <param name="beforeLabel">Total Latency: </param>
+                <param name="afterLabel">ms</param>
+              </module>
+            </module>
+
+         
+	<module name="HiddenPostProcess" group="Latency Info" layoutPanel="panel_row4_col1"  >
+                    <param name="search">|timechart median("write_latency") as "Write Latency" median("read_latency") as "Read Latency"</param>
+                    <module name="HiddenChartFormatter">
+                      <param name="chart">area</param>
+                      <option name="charting.chart.stackMode">stacked100</option>
+                      <param name="chart.nullValueMode">connect</param>
+                      <param name="legend.placement">bottom</param>
+                      <param name="primaryAxisTitle.text">Latency Statistics</param>
+                      <module name="JSChart"></module>
+                    </module>
+                  </module>
+
+
+
+       <module name="HiddenPostProcess" layoutPanel="panel_row5_col1_grp1" group="Disk Operations">
+              <param name="search">|stats  median("write_ops") as "Write Operations"</param>
+              <module name="SingleValue">
+                <param name="format">count</param>
+                <param name="beforeLabel">Write Operations: </param>
+
+              </module>
+            </module>
+
+          <module name="HiddenPostProcess" layoutPanel="panel_row5_col1_grp2" group="Disk Operations">
+              <param name="search">|stats  median("read_ops") as "Read Operations"</param>
+              <module name="SingleValue">
+                <param name="format">count</param>
+                <param name="beforeLabel">Read Operations: </param>
+
+              </module>
+            </module>
+
+          <module name="HiddenPostProcess" layoutPanel="panel_row5_col1_grp3" group="Disk Operations">
+              <param name="search">|stats  median("total_ops") as "Total Operations"</param>
+              <module name="SingleValue">
+                <param name="format">count</param>
+                <param name="beforeLabel">Total Operations: </param>
+
+              </module>
+            </module>
+
+         
+	<module name="HiddenPostProcess" group="Disk Operations" layoutPanel="panel_row5_col1"  >
+                    <param name="search">|timechart median("write_ops") as "Write Ops" median("read_ops") as "Read Ops" median("total_ops") as "Total Ops"</param>
+                    <module name="HiddenChartFormatter">
+                      <param name="chart">area</param>
+                      <option name="charting.chart.stackMode">stacked100</option>
+                      <param name="chart.nullValueMode">connect</param>
+                      <param name="legend.placement">bottom</param>
+                      <param name="primaryAxisTitle.text">Disk Operations</param>
+                      <module name="JSChart"></module>
+                    </module>
+                  </module>
+
+
+
+
+<!--
+
+
+          <module name="HiddenPostProcess" layoutPanel="panel_row5_col1_grp1" group="Ops Info">
+              <param name="search">|stats  median("write_ops") as "Write Operations"</param>
+              <module name="SingleValue">
+                <param name="format">count</param>
+                <param name="beforeLabel">Write Operations: </param>
+                <param name="afterLabel">ms</param>
+              </module>
+            </module>
+
+          <module name="HiddenPostProcess" layoutPanel="panel_row5_col1_grp2" group="Ops Info">
+              <param name="search">|stats  median("read_ops") as "Read Operations"</param>
+              <module name="SingleValue">
+                <param name="format">count</param>
+                <param name="beforeLabel">Read Operations: </param>
+                <param name="afterLabel">ms</param>
+              </module>
+            </module>
+
+          <module name="HiddenPostProcess" layoutPanel="panel_row4_col1_grp3" group="Ops Info">
+              <param name="search">|stats  median("other_ops") as "Other Ops"</param>
+              <module name="SingleValue">
+                <param name="format">count</param>
+                <param name="beforeLabel">Other Operations: </param>
+                <param name="afterLabel">ms</param>
+              </module>
+            </module>
+
+         
+	<module name="HiddenPostProcess" group="Volume Statistics" layoutPanel="panel_row4_col1"  >
+                    <param name="search">|timechart median("write_latency") as "Write Latency" median("read_latency") as "Read Latency"</param>
+                    <module name="HiddenChartFormatter">
+                      <param name="chart">area</param>
+                      <param name="chart.nullValueMode">connect</param>
+                      <param name="legend.placement">bottom</param>
+                      <param name="primaryAxisTitle.text">Latency Statistics</param>
+                      <module name="JSChart"></module>
+                    </module>
+                  </module>
+-->
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+        </module>
+
+
+</view>

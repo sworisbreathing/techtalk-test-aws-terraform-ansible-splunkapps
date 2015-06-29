@@ -1,0 +1,66 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Advanced XML: How modules work</h1> 
+
+<textarea id="codeTextArea">
+
+<view template="dashboard.html">
+  <label>Advanced XML: Modules</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1">
+    <param name="src">advanced_intro2.html</param>
+  </module>
+
+  <module name="ServerSideInclude" layoutPanel="panel_row2_col1">
+    <param name="src">advanced_intro2_source.html</param>
+  </module>
+
+  <!-- parent module -->
+  <module name="HiddenSearch" layoutPanel="panel_row3_col1" group="Three modules wired together" autoRun="True">
+    <param name="search">index=_internal source=*metrics.log | chart sum(kb) by series | sort -sum(kb) | head 10</param>
+
+    <!-- Child module adding the timerange on top of the base search -->
+    <module name="TimeRangePicker">
+      <param name="selected">Last 15 minutes</param>
+      <param name="searchWhenChanged">True</param>
+      
+      <!-- This child module kicks off the search inherited from the parent modules --> 
+      <!-- the table automatically displays the first ten results from the search. --> 
+      <module name="SimpleResultsTable"></module>
+    </module>
+  </module>
+
+</view>
+
+
+
+</textarea>
+</div>
+

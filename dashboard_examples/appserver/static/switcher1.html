@@ -1,0 +1,46 @@
+<div class="content_width">
+<h1>Switcher modules</h1>
+<p>
+    Switchers are a way to create tabs or pulldown elements that users can use to switch the content or UI controls displayed.
+    They may seem similar to lister modules, but they are qualitatively different. Switchers create a fork between arbitrarily
+    different config branches underneath. The choice doesn't influence any individual search in the child branches. Listers, on the other hand,
+    allow the user to insert input that affects the searches underneath &ndash; they do not switch one set of modules out and replace it with another set of modules. 
+</p>
+<p>
+    Switcher classes available are:
+</p>
+    <ul>
+        <li><p>PulldownSwitcher</p></li>
+        <li><p>TabSwitcher</p></li>
+        <li><p>LinkSwitcher</p></li>
+        <li><p>ButtonSwitcher</p></li>
+    </ul>
+<p>
+    <b>Note:</b> ButtonSwitcher is a little misnamed (it actually displays square icons) and is a bit complex to implement.
+    You need to create custom images for ButtonSwitcher and it usage within the Splunk timeline is a special case.
+ </p>
+<p>
+    The example in this view uses a LinkSwitcher with 4 children.
+    <blockquote>
+        <p>The first child uses a HiddenSavedSearch plus HiddenChartFormatter plus JobProgressIndicator plus JSChart pattern</p>
+        <p>The next two use two different HiddenSearch plus HiddenChartFormatter plus JobProgressIndicator plus JSChart patterns</p>
+        <p>The last one also uses the same pattern as the previous two, but it also uses a TimeRangePicker and results in a litle <i>dbinspect tool</i></p>
+    </blockquote>
+</p>
+
+<h1>Source code for this view</h1>
+<p>
+    View the <a target="_blank" href="/static/app/dashboard_examples/samples/switcher1_sample.html">commented source code for this view</a>. (Opens in a new window.)
+</p>
+<p>
+    Scroll down in this view to see the module layout.
+    
+</p>
+<h1>What's next?</h1>
+<p>
+  [<a href="/app/dashboard_examples/switcher_compare">Next: Switcher module comparison</a>]
+  <br />[<a href="/app/dashboard_examples/advanced_lister_with_searchbar">Prev: Lister with a form search</a>]
+  <br /><br />[<a href="/app/dashboard_examples/advanced_intro1">Advanced XML Home</a>]
+  <br />[<a href="/app/dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+</p>
+</div>

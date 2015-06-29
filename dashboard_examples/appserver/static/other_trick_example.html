@@ -1,0 +1,24 @@
+<p>
+    The <i>other trick</i> can be found in the Menu for this Dasboard Examples app.
+</p>
+<p>
+    The menu item <b>Advanced XML > Static content and other tricks > Insert your own links</b> navigates outside of this Dasboard Examples app to a separate web page.
+</p>
+<p>
+    This link is implemented directy from the nav menu, which you can find at:
+</p>
+<div class="samplecode">
+    $SPLUNK_HOME/etc/apps/dashboard_examples/default/data/ui/nav/default.xml
+</div>
+<p>
+    Here is the code snippet to implement the link:
+</p>
+<div class="samplecode"><pre>&lt;collection label="Static content and other tricks"&gt;
+  &lt;view name="static_content"/&gt;
+  &lt;view name="embedding_other_views"/&gt;
+  &lt;view name="other_trick"/&gt;
+  &lt;a href="http://google.com?q=yep you can put any external url into the nav"&gt;
+    Insert your own links
+  &lt;/a&gt;
+&lt;/collection&gt;</pre></div>
+    

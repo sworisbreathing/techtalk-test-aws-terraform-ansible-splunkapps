@@ -1,0 +1,71 @@
+<div class="content_width">
+<h1>A simple layout example</h1>
+ <p>
+   This example illustrates the layout of this view. It contains the following:
+ </p>
+<blockquote>
+  <p>Chrome modules</p>
+  <p>ServerSideInclude modules (for linking to HTML documentation for the view)</p>
+  <p>Two HiddenSearch modules, each containing simpleResultsTable modules (for the left and right panels)</p>
+</blockquote>
+
+<div style="overflow: auto;
+    width: 648px;
+    padding: 15px;
+    background: #EEE;
+    border-radius: 6px;
+    display: block;
+    font-family: monospace;
+    margin: 1em 0px;
+    color:#333;
+    font-size:11px;">
+  &lt;view template="dashboard.html"&gt;
+  <br />
+  <br /><b>&nbsp;&nbsp;&lt;!-- use dashboard Mako template --&gt;
+  <br />&nbsp;&nbsp;&lt;!-- chrome modules follow --&gt;</b>
+  <br />&nbsp;&nbsp;&lt;label&gt;Advanced XML: Layout&lt;/label&gt;
+  <br />&nbsp;&nbsp;&lt;module name="AccountBar" layoutPanel="appHeader"/&gt;
+  <br />&nbsp;&nbsp;&lt;module name="AppBar" layoutPanel="navigationHeader"/&gt;
+  <br />&nbsp;&nbsp;&lt;module name="Message" layoutPanel="messaging"&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="filter"&gt;*&lt;/param&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="clearOnJobDispatch"&gt;False&lt;/param&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="maxSize"&gt;1&lt;/param&gt;
+  <br />&nbsp;&nbsp;&lt;/module&gt;
+  <br />  
+  <br /><b>&nbsp;&nbsp;&lt;!-- import documentation into panels --&gt;</b>
+  <br />&nbsp;&nbsp;&lt;module name="ServerSideInclude" layoutPanel="panel_row1_col1"&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="src"&gt;advanced_intro3.html&lt;/param&gt;
+  <br />&nbsp;&nbsp;&lt;/module&gt;
+  <br />
+  <br />&nbsp;&nbsp;&lt;module name="ServerSideInclude" layoutPanel="panel_row2_col1"&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="src"&gt;advanced_intro3_source.html&lt;/param&gt;
+  <br />&nbsp;&nbsp;&lt;/module&gt;
+  <br />  
+  <br /><b>&nbsp;&nbsp;&lt;!-- Left and right panels --&gt;</b>
+  <br />&nbsp;&nbsp;&lt;module name="HiddenSearch" layoutPanel="panel_row3_col1"
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;group="Left panel (Row 3, Column 1)" autoRun="True"&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="search"&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index=_internal source=*metrics.log group=per_sourcetype_thruput
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| chart sum(kb) by series | sort -sum(kb) | head 10
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/param&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="earliest"&gt;-1h&lt;/param&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;module name="SimpleResultsTable"&gt;&lt;/module&gt;
+  <br />&nbsp;&nbsp;&lt;/module&gt;
+  <br />
+  <br />&nbsp;&nbsp;&lt;module name="HiddenSearch" layoutPanel="panel_row3_col2" group="Right panel (Row 3, Column 2)" autoRun="True"&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="search"&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index=_internal source=*metrics.log group=per_sourcetype_thruput
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| chart sum(kb) by series | sort -sum(kb) | head 10
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/param&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="earliest"&gt;-1h&lt;/param&gt;
+  <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;module name="SimpleResultsTable"&gt;&lt;/module&gt;
+  <br />&nbsp;&nbsp;&lt;/module&gt;
+  <br />
+  <br />&lt;/view&gt;
+  <br />
+  <br />
+</div>
+<h1>Source code</h1>
+<p>View the <a target="_blank" href="/static/app/dashboard_examples/samples/advanced_intro3_sample.html">complete source code for this view</a>. (Opens in a new window.)</p>
+<p>Scroll down to see the module layout for this example.</p>
+</div>

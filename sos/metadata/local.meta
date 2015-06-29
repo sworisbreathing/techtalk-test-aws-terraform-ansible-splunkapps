@@ -1,0 +1,20 @@
+[]
+access = read : [ * ], write : [ * ]
+export = none
+version = 6.1.3
+modtime = 1409184601.186852600
+import = search
+
+[lookups/splunk_servers_cache.csv]
+access = read : [ * ], write : [ * ]
+export = system
+owner = nobody
+version = 6.1.3
+modtime = 1412207562.633975400
+
+[transforms/splunk_servers_cache]
+access = read : [ * ], write : [ admin, power, splunk-system-role ]
+export = system
+owner = nobody
+version = 6.1.3
+modtime = 1412207717.003047400

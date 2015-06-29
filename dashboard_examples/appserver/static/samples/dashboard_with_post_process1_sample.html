@@ -1,0 +1,135 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Using postProcess on dashboards</h1> 
+
+<textarea id="codeTextArea">
+
+<view template="dashboard.html">
+  <label>Using postProcess on dashboards</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1">
+    <param name="src">dashboard_with_post_process1.html</param>
+  </module>
+
+  <!-- This one HiddenSearch 'contains' several whole panels of UI -->
+  <!-- If you don't want to have an inline search and you'd rather have a  -->
+  <!-- saved search here, (possibly scheduled), replace this module with 'HiddenSavedSearch' -->
+  <!-- Then give it a 'savedSearch' param, and the name of the savedSearch. -->
+  <!-- Other dashboard example views illustrate this -->
+  <module name="HiddenSearch" layoutPanel="panel_row2_col1" autoRun="True">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput
+      | bin _time span=5min | stats count by series, eps, kb, kbps, _time
+    </param>
+    <param name="earliest">-6h</param>
+
+    <!-- The next three HiddenPostProcess modules use "_grpN" in layoutPanel -->
+    <!-- To group the SingleValue results in a single row -->
+    <module name="HiddenPostProcess" layoutPanel="panel_row2_col1_grp1">
+      <param name="search">
+        dedup series | stats count
+        | rangemap field=count low=0-29 elevated=30-99 high=100-500 severe=501-10000 default=low
+      </param>
+      <module name="SingleValue">
+        <param name="field">count</param>
+        <param name="afterLabel"> sourcetypes</param>
+        <param name="classField">range</param>
+      </module> <!-- SingleValue -->
+    </module> <!-- HiddenPostProcess -->
+
+    <module name="HiddenPostProcess" layoutPanel="panel_row2_col1_grp2">
+      <param name="search">
+        stats avg(eps)
+        | rangemap field=avg(eps) low=0-999 elevated=1000-10000 high=10000-100000 severe=100000-10000000
+      </param>
+      <module name="SingleValue">
+        <param name="field">avg(eps)</param>
+        <param name="afterLabel">avg eps</param>
+        <param name="classField">range</param>
+        <param name="format">decimal</param>
+      </module> <!-- SingleValue -->
+    </module> <!-- HiddenPostProcess -->
+
+    <module name="HiddenPostProcess" layoutPanel="panel_row2_col1_grp3">
+      <param name="search">
+        stats sum(kb) | rename sum(kb) as K | eval MB=K/1024
+        | rangemap field=MB low=0-99.99 elevated=100-499.99 high=500-4999.99 severe=5000-100000
+      </param>
+      <module name="SingleValue">
+        <param name="field">MB</param>
+        <param name="afterLabel">MB</param>
+        <param name="classField">range</param>
+      </module> <!-- SingleValue -->
+    </module> <!-- HiddenPostProcess -->
+
+    <module name="HiddenPostProcess" layoutPanel="panel_row3_col1">
+      <param name="search">timechart avg(eps)</param>
+      <module name="HiddenChartFormatter">
+        <param name="chart">line</param>
+        <param name="primaryAxisTitle.text">time</param>
+        <param name="secondaryAxisTitle.text">overall eps</param>
+        <param name="legend.placement">none</param>
+        <module name="JSChart">
+          <param name="width">100%</param>
+          <param name="height">400px</param>
+        </module> <!--JSChart -->
+      </module><!-- HiddenChartFormatter -->
+    </module> <!-- HiddenPostProcess -->
+
+    <module name="HiddenPostProcess" layoutPanel="panel_row3_col2">
+      <param name="search">
+        chart sum(kb) over series | rename sum(kb) as k | eval MB=k/1024
+      </param>
+      <module name="HiddenChartFormatter">
+        <param name="chart">bar</param>
+        <param name="primaryAxisTitle.text">sourcetype</param>
+        <param name="secondaryAxisTitle.text">MB</param>
+        <param name="legend.placement">none</param>
+        <module name="JSChart">
+          <param name="width">100%</param>
+          <param name="height">400px</param>
+        </module> <!--JSChart -->
+      </module> <!-- HiddenChartFormatter -->
+    </module> <!-- HiddenPostProcess -->
+
+  </module>  <!-- HiddenSearch -->
+
+  <module name="ServerSideInclude" layoutPanel="panel_row4_col1">
+    <param name="src">dashboard_with_post_process1_layout.html</param>
+  </module>
+
+ </view>
+
+</textarea>
+</div>
+

@@ -1,0 +1,90 @@
+
+<form>
+    <label>Select drop down</label>
+
+    <fieldset>
+        <html>
+         <div class="form_bg"><div class="content_width">
+         <h1>Simple XML - Form search with select dropdown</h1>
+         <p>
+           This form search provides a dropdown list from which to select search terms.
+           Search results display in a table.
+         </p>
+         <p>
+           The search is specified using the following tags:
+         </p>
+         <div class="samplecode"><pre><![CDATA[
+<searchTemplate> 
+   index=_internal source=*metrics.log group="per_sourcetype_thruput" series=$series$ 
+   | fields eps, kb, kbps 
+</searchTemplate> 
+
+<earliestTime>-30d</earliestTime> 
+<latestTime>-0d</latestTime>]]></pre></div>
+         
+         <p>
+           In the &lt;fieldset&gt; tags, specify the type as dropdown using series for a token.
+           Specify a &lt;label&gt; for the input and the &lt;populatingSeries&gt;
+           for the dropdown. &lt;choice&gt; specifies the label and value for the default selection.
+         </p>
+         <div class="samplecode">
+           &lt;fieldset&gt;
+           <br />&#160; &#160;&lt;input type="dropdown" token="series"&gt;
+           <br />&#160; &#160;&#160; &#160;&lt;label&gt;Select series&lt;/label&gt;
+           <br />&#160; &#160;&#160; &#160;&lt;populatingSearch fieldForValue="series" fieldForLabel="series"&gt;
+           <br />&#160; &#160;&#160; &#160;&#160;&#160;&lt;![CDATA[index=_internal source=*metrics.log group="per_sourcetype_thruput"
+           <br />&#160; &#160;&#160; &#160;&#160;&#160;&#160;&#160;| top series]]&gt;
+           <br />&#160; &#160;&#160; &#160;&lt;/populatingSearch&gt;
+           <br />&#160; &#160;&#160; &#160;&lt;choice value="*"&gt;Any&lt;/choice&gt;
+           <br />&#160; &#160;&lt;/input&gt;
+           <br />&lt;/fieldset&gt;
+        </div>
+         
+        <h1>Source code</h1>
+            <p>
+              View the <a target="_blank" href="/static/app/dashboard_examples/samples/form_dropdown_sample.html">source code to implement this form</a>. (Opens in a new window.)
+            </p>
+        <h1>What's next?</h1>    
+         <p>
+           [<a href="/app/dashboard_examples/form_multiple_inputs">Next: Simple XML forms - Multiple inputs</a>]
+           <br />[<a href="/app/dashboard_examples/form_table">Prev: Simple XML forms - Basic table</a>]
+         </p>
+        <p>
+            [<a href="../dashboard_examples/forms1">Simple XML Forms Home</a>]
+            <br />[<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+        </p>
+
+     
+         </div></div>
+         
+         <p style="padding-top: 6px"></p>
+         <hr />
+         <p style="padding-top: 20px">
+           Select a series from the dropdown to return information about the selection.
+         </p>
+       </html>
+        
+        <!-- Define a simple dropdown form driven by a search -->
+        <input type="dropdown" token="series">
+            <label>Select series</label>
+            <populatingSearch fieldForValue="series" fieldForLabel="series">
+                <![CDATA[index=_internal source=*metrics.log group="per_sourcetype_thruput" | top series]]>
+            </populatingSearch>
+            <choice value="*">Any</choice>
+        </input>
+    </fieldset>
+    
+        <!-- define master search template, with replacement tokens delimited with $ -->
+    <searchTemplate>
+        index=_internal source=*metrics.log group="per_sourcetype_thruput" series=$series$ | fields eps, kb, kbps
+    </searchTemplate>
+    <earliestTime>-30d</earliestTime>
+    <latestTime>-0d</latestTime>
+    <row>
+        <!-- output the results as a 50 row events table -->
+        <table>
+            <title>Matching events</title>
+            <option name="count">50</option>
+        </table>
+    </row>
+</form>

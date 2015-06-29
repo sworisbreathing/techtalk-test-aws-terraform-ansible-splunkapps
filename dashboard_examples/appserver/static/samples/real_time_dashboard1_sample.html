@@ -1,0 +1,50 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Real-time dashboards using simple XML</h1> 
+
+<textarea id="codeTextArea">
+
+<?xml version='1.0' encoding='utf-8'?>
+<dashboard>
+  
+  <label>Real-time dashboards intro</label>
+  <row>
+    <html>
+      <!-- documentation panel -->
+    </html>
+  </row>
+  <row>
+    <chart>
+      <searchString>index=_internal * | top sourcetype | fields - percent</searchString>
+      <title>live events, last 30 seconds, by sourcetype</title>
+      <earliestTime>rt-30s</earliestTime>
+      <latestTime>rt</latestTime>
+      <option name="drilldown">none</option>
+      <option name="charting.chart">bar</option>
+    </chart>
+  </row>
+</dashboard>
+
+</textarea>
+</div>
+

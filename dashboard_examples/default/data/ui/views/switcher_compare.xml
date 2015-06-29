@@ -1,0 +1,332 @@
+<view template="dashboard.html">
+  <label>Switcher module comparison</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+ 
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1">
+    <param name="src">switcher_compare.html</param>
+  </module>
+ 
+  <module name="PulldownSwitcher" layoutPanel="panel_row2_col1" group="Switchers">
+    <param name="mode">independent</param>
+    <param name="label"> Select a switcher:</param>
+  
+    <module name="LinkSwitcher" layoutPanel="panel_row2_col1" group="Link Switcher">
+      <param name="mode">independent</param>
+      <param name="label"> </param>
+  
+      <!-- First switcher-->
+      <!--
+        The group attribute specifies the label for the switcher.
+        For a LinkSwitcher, this becomes the text of the corresponding link element.
+      -->
+      <module name="HiddenSavedSearch" group="CPU time by processor" autoRun="True">
+        <param name="savedSearch">Pipeline processors with most processor time</param>
+        <!-- It doesn't matter where in the hierarchy static content goes.  It ends up above the JSChart.  -->
+        <module name="StaticContentSample">
+          <param name="text"><![CDATA[
+            Use a HiddenSavedSearch with a scheduled saved search to show data from a previously scheduled job.
+          ]]></param>
+        </module> <!-- StaticContentSample -->
+        <module name="HiddenChartFormatter">
+          <param name="chart">line</param>
+          <param name="primaryAxisTitle.text">CPU seconds</param>
+          <param name="secondaryAxisTitle.text">Pipeline processors</param>
+          <param name="legend.placement">right</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">300px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSavedSearch -->
+  
+      <!-- Second switcher -->
+      <module name="HiddenSearch" group="KB Indexed by sourcetype" autoRun="True">
+        <param name="search">
+          index=_internal source=*metrics.log group=per_sourcetype_thruput
+          | chart sum(kb) by series | sort -sum(kb) | head 10
+        </param>
+        <param name="earliest">-1h</param>
+        <module name="StaticContentSample">
+          <param name="text"><![CDATA[
+          This example is using the StaticContentSample module to provide these labels above the JSChart.
+          ]]></param>
+        </module> <!-- StaticContentSample -->
+        <module name="HiddenChartFormatter">
+          <param name="chart">bar</param>
+          <param name="primaryAxisTitle.text">Sourcetype</param>
+          <param name="secondaryAxisTitle.text">KB Indexed</param>
+          <param name="legend.placement">none</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">300px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSearch -->
+      
+      <!--  Third switcher -->
+      <module name="HiddenSearch" group="eps Indexed over time" autoRun="True">
+        <param name="search">
+          index=_internal source=*metrics.log group=per_sourcetype_thruput
+          | timechart avg(eps) by series
+        </param>
+        <param name="earliest">-1h</param>
+        <module name="HiddenChartFormatter">
+          <param name="chart">line</param>
+          <param name="primaryAxisTitle.text">Sourcetype</param>
+          <param name="secondaryAxisTitle.text">events per second</param>
+          <param name="legend.placement">right</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">300px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSearch -->
+    
+      <!-- Fourth switcher -->
+      <!-- Again, it doesn't matter where static elements go. This one is at the top. -->
+      <!-- Again, the immediate switcher children must all have group attributes -->
+      <module name="StaticContentSample" group="Index health tool">
+        <param name="text"><![CDATA[
+          <p>This switcher displays a dbinspect tool.</p>
+          <p>This isn't related to the other tabs, but illustrates that the distinct
+          branches of switchers are fully independent. You can put whatever you like in each.</p>
+          ]]>
+        </param>
+        <module name="TimeRangePicker">
+          <param name="searchWhenChanged">True</param>
+          <param name="selected">All time</param>
+          <module name="HiddenSearch" autoRun="True">
+            <param name="search">| dbinspect bins=400</param>
+            <module name="HiddenChartFormatter">
+              <param name="chart">line</param>
+              <param name="primaryAxisTitle.text">Time</param>
+              <param name="chartTitle">Distribution of index buckets over time</param>
+              <module name="JobProgressIndicator"/>
+              <module name="JSChart"/>
+            </module> <!-- HiddenChartFormatter -->
+          </module> <!-- HiddenSearch -->
+        </module> <!-- TimeRangePicker -->
+      </module> <!-- StaticContentSample -->
+    </module> <!-- LinkSwitcher -->
+
+
+    <module name="PulldownSwitcher" layoutPanel="panel_row2_col1" group="Pulldown Switcher">
+      <param name="mode">independent</param>
+      <param name="label"> </param>
+  
+      <!-- First switcher-->
+      <!--
+        The group attribute specifies the label for the switcher.
+        For a LinkSwitcher, this becomes the text of the corresponding link element.
+      -->
+      <module name="HiddenSavedSearch" group="CPU time by processor" autoRun="True">
+        <param name="savedSearch">Pipeline processors with most processor time</param>
+        <!-- It doesn't matter where in the hierarchy static content goes.  It ends up above the JSChart.  -->
+        <module name="StaticContentSample">
+          <param name="text"><![CDATA[
+            Use a HiddenSavedSearch with a scheduled saved search to show data from a previously scheduled job.
+          ]]></param>
+        </module> <!-- StaticContentSample -->
+        <module name="HiddenChartFormatter">
+          <param name="chart">line</param>
+          <param name="primaryAxisTitle.text">CPU seconds</param>
+          <param name="secondaryAxisTitle.text">Pipeline processors</param>
+          <param name="legend.placement">right</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">300px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSavedSearch -->
+  
+      <!-- Second switcher -->
+      <module name="HiddenSearch" group="KB Indexed by sourcetype" autoRun="True">
+        <param name="search">
+          index=_internal source=*metrics.log group=per_sourcetype_thruput
+          | chart sum(kb) by series | sort -sum(kb) | head 10
+        </param>
+        <param name="earliest">-1h</param>
+        <module name="StaticContentSample">
+          <param name="text"><![CDATA[
+          This example is using the StaticContentSample module to provide these labels above the JSChart.
+          ]]></param>
+        </module> <!-- StaticContentSample -->
+        <module name="HiddenChartFormatter">
+          <param name="chart">bar</param>
+          <param name="primaryAxisTitle.text">Sourcetype</param>
+          <param name="secondaryAxisTitle.text">KB Indexed</param>
+          <param name="legend.placement">none</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">300px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSearch -->
+      
+      <!--  Third switcher -->
+      <module name="HiddenSearch" group="eps Indexed over time" autoRun="True">
+        <param name="search">
+          index=_internal source=*metrics.log group=per_sourcetype_thruput
+          | timechart avg(eps) by series
+        </param>
+        <param name="earliest">-1h</param>
+        <module name="HiddenChartFormatter">
+          <param name="chart">line</param>
+          <param name="primaryAxisTitle.text">Sourcetype</param>
+          <param name="secondaryAxisTitle.text">events per second</param>
+          <param name="legend.placement">right</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">300px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSearch -->
+    
+      <!-- Fourth switcher -->
+      <!-- Again, it doesn't matter where static elements go. This one is at the top. -->
+      <!-- Again, the immediate switcher children must all have group attributes -->
+      <module name="StaticContentSample" group="Index health tool">
+        <param name="text"><![CDATA[
+          <p>This switcher displays a dbinspect tool.</p>
+          <p>This isn't related to the other tabs, but illustrates that the distinct
+          branches of switchers are fully independent. You can put whatever you like in each.</p>
+          ]]>
+        </param>
+        <module name="TimeRangePicker">
+          <param name="searchWhenChanged">True</param>
+          <param name="selected">All time</param>
+          <module name="HiddenSearch" autoRun="True">
+            <param name="search">| dbinspect bins=400</param>
+            <module name="HiddenChartFormatter">
+              <param name="chart">line</param>
+              <param name="primaryAxisTitle.text">Time</param>
+              <param name="chartTitle">Distribution of index buckets over time</param>
+              <module name="JobProgressIndicator"/>
+              <module name="JSChart"/>
+            </module> <!-- HiddenChartFormatter -->
+          </module> <!-- HiddenSearch -->
+        </module> <!-- TimeRangePicker -->
+      </module> <!-- StaticContentSample -->
+    </module> <!-- LinkSwitcher -->
+
+
+
+    <module name="TabSwitcher" layoutPanel="panel_row2_col1" group="Tab Switcher">
+      <param name="mode">independent</param>
+  
+      <!-- First switcher-->
+      <!--
+        The group attribute specifies the label for the switcher.
+        For a LinkSwitcher, this becomes the text of the corresponding link element.
+      -->
+      <module name="HiddenSavedSearch" group="CPU time by processor" autoRun="True">
+        <param name="savedSearch">Pipeline processors with most processor time</param>
+        <!-- It doesn't matter where in the hierarchy static content goes.  It ends up above the JSChart.  -->
+        <module name="StaticContentSample">
+          <param name="text"><![CDATA[
+            Use a HiddenSavedSearch with a scheduled saved search to show data from a previously scheduled job.
+          ]]></param>
+        </module> <!-- StaticContentSample -->
+        <module name="HiddenChartFormatter">
+          <param name="chart">line</param>
+          <param name="primaryAxisTitle.text">CPU seconds</param>
+          <param name="secondaryAxisTitle.text">Pipeline processors</param>
+          <param name="legend.placement">right</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">300px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSavedSearch -->
+  
+      <!-- Second switcher -->
+      <module name="HiddenSearch" group="KB Indexed by sourcetype" autoRun="True">
+        <param name="search">
+          index=_internal source=*metrics.log group=per_sourcetype_thruput
+          | chart sum(kb) by series | sort -sum(kb) | head 10
+        </param>
+        <param name="earliest">-1h</param>
+        <module name="StaticContentSample">
+          <param name="text"><![CDATA[
+          This example is using the StaticContentSample module to provide these labels above the JSChart.
+          ]]></param>
+        </module> <!-- StaticContentSample -->
+        <module name="HiddenChartFormatter">
+          <param name="chart">bar</param>
+          <param name="primaryAxisTitle.text">Sourcetype</param>
+          <param name="secondaryAxisTitle.text">KB Indexed</param>
+          <param name="legend.placement">none</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">300px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSearch -->
+      
+      <!--  Third switcher -->
+      <module name="HiddenSearch" group="eps Indexed over time" autoRun="True">
+        <param name="search">
+          index=_internal source=*metrics.log group=per_sourcetype_thruput
+          | timechart avg(eps) by series
+        </param>
+        <param name="earliest">-1h</param>
+        <module name="HiddenChartFormatter">
+          <param name="chart">line</param>
+          <param name="primaryAxisTitle.text">Sourcetype</param>
+          <param name="secondaryAxisTitle.text">events per second</param>
+          <param name="legend.placement">right</param>
+          <module name="JobProgressIndicator"/>
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">300px</param>
+          </module> <!-- JSChart -->
+        </module> <!-- HiddenChartFormatter -->
+      </module> <!-- HiddenSearch -->
+    
+      <!-- Fourth switcher -->
+      <!-- Again, it doesn't matter where static elements go. This one is at the top. -->
+      <!-- Again, the immediate switcher children must all have group attributes -->
+      <module name="StaticContentSample" group="Index health tool">
+        <param name="text"><![CDATA[
+          <p>This switcher displays a dbinspect tool.</p>
+          <p>This isn't related to the other tabs, but illustrates that the distinct
+          branches of switchers are fully independent. You can put whatever you like in each.</p>
+          ]]>
+        </param>
+        <module name="TimeRangePicker">
+          <param name="searchWhenChanged">True</param>
+          <param name="selected">All time</param>
+          <module name="HiddenSearch" autoRun="True">
+            <param name="search">| dbinspect bins=400</param>
+            <module name="HiddenChartFormatter">
+              <param name="chart">line</param>
+              <param name="primaryAxisTitle.text">Time</param>
+              <param name="chartTitle">Distribution of index buckets over time</param>
+              <module name="JobProgressIndicator"/>
+              <module name="JSChart"/>
+            </module> <!-- HiddenChartFormatter -->
+          </module> <!-- HiddenSearch -->
+        </module> <!-- TimeRangePicker -->
+      </module> <!-- StaticContentSample -->
+    </module> <!-- LinkSwitcher -->
+
+  </module> <!-- LinkSwitcher -->
+
+ </view>

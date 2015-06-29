@@ -1,0 +1,71 @@
+<form>
+  <label>autoRun example 1: Basic autoRun form</label>
+    
+  <!--
+  * Set autoRun=true to automatically dispatch the search and prepoulate the form.
+  -->
+  <fieldset autoRun="true">
+    
+    <html>
+      <div class="form_bg"><div class="content_width">
+      <h1>Simple XML - Basic auto-dispatched form</h1>
+      <p>
+        This is the same basic form used for the <a href="../form_table">Basic form search</a> example, except that it specifes a default value for the input field and runs the search when the form loads.
+        Enter a sourcetype in the field below and this form returns the most recent 1000 events from the metrics log concerning that sourcetype.
+      </p>
+      <p>
+        Use the autoRun attribute to the &lt;fieldset&gt; tab to enable auto-run for the form.
+      </p>
+      <div class="samplecode">
+          &lt;fieldset autoRun="true"&gt;
+          <br />. . .
+      </div>
+      
+    <h1>Source code</h1>
+    <p>
+      View the <a target="_blank" href="/static/app/dashboard_examples/samples/auto_dispatch_form1_sample.html">source code to implement this form</a>. (Opens in a new window.)
+    </p>
+    
+    <h1>What's next?</h1>
+      <p>
+        [<a href="/app/dashboard_examples/auto_dispatch_form2">Next: Auto dispatched form using dropdown inputs</a>]
+        <br />[<a href="/app/dashboard_examples/auto_dispatch_form1">Prev: Basic auto-dispatched form</a>]
+        <br />
+      </p>
+      <p>
+        [<a href="../dashboard_examples/forms1">Simple XML Forms Home</a>]
+        <br />[<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+      </p>         
+      
+      </div></div>
+      
+      <p style="padding-top: 6px"></p>
+      <hr />
+    </html>
+    
+    <searchTemplate>
+      index=_internal source=*metrics.log group=per_sourcetype_thruput series="$sourcetype$"
+      | head 1000
+    </searchTemplate>
+    <earliestTime>-30d</earliestTime>
+    <latestTime>-0d</latestTime>
+  
+  
+    <!-- 
+      * Define a default value so that the autoRun makes sense.
+    -->
+      <input token="sourcetype">
+        <seed>splunkd</seed>
+      </input>
+
+  </fieldset>
+  
+  <row>
+      <!-- output the results as a 50 row events table -->
+      <table>
+        <title>Matching events</title>
+        <option name="count">50</option>
+      </table>
+  </row>
+  
+</form>

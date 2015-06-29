@@ -1,0 +1,65 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Form search with select dropdown</h1> 
+
+<textarea id="codeTextArea">
+
+
+<form>
+    <label>Select drop down</label>
+
+    <fieldset>
+        <html>
+         <p style="padding-top: 20px">
+           Select a series from the dropdown to return information about the selection.
+         </p>
+       </html>
+        
+        <!-- Define a simple dropdown form driven by a search -->
+        <input type="dropdown" token="series">
+            <label>Select series</label>
+            <populatingSearch fieldForValue="series" fieldForLabel="series">
+                <![CDATA[index=_internal source=*metrics.log group="per_sourcetype_thruput" | top series]]>
+            </populatingSearch>
+            <choice value="*">Any</choice>
+        </input>
+    </fieldset>
+    
+        <!-- define master search template, with replacement tokens delimited with $ -->
+    <searchTemplate>
+        index=_internal source=*metrics.log group="per_sourcetype_thruput" series=$series$ | fields eps, kb, kbps
+    </searchTemplate>
+    <earliestTime>-30d</earliestTime>
+    <latestTime>-0d</latestTime>
+    <row>
+        <!-- output the results as a 50 row events table -->
+        <table>
+            <title>Matching events</title>
+            <option name="count">50</option>
+        </table>
+    </row>
+</form>
+
+</textarea>
+</div>
+

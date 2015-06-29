@@ -1,0 +1,115 @@
+<dashboard>
+  
+  <label>Simple XML dashboards - Dynamic drilldown</label>
+<row>
+  <html>
+		<div class="content_width">
+    <h1>Simple XML dashboards - Dynamic drilldown</h1>
+    <p>
+      With dynamic drilldown you can define custom destinations to link to when a user clicks on fields in a dashboard or form.
+      The value captured by the click is passed to the destination. The destination can be another dashboard, form, or view within
+      your Splunk installation or an external web page.
+    </p>
+    <p>
+      The following panels list sourcetype throughput as a table. You can define destinations that open another form, passing in the sourcetype clicked.
+      You can also pass the value of what is clicked to a web page, such as the web page for Splunk Answers.
+    </p>
+    <p>
+      Use a &lt;link&gt; tag within a &lt;drilldown&gt; tag to specify a custom destination.
+    </p>
+    <ul>
+      <li>
+        <p>
+          Use a relative path to connect to a dashboard:
+        </p>
+				<div class="samplecode"><![CDATA[
+					<link>path/viewname</link>
+				]]></div>
+      </li>
+      <li>
+        <p>
+          Use a relative path to connect to a form, passing in a token to populate the form:
+        </p>
+				<div class="samplecode"><![CDATA[
+					<link>path/viewname?form.token=$dest_value$</link>
+				]]></div>
+      </li>
+      <li>
+        <p>
+          Use a URL and query argument to pass a value to the destination page:
+        </p>
+				<div class="samplecode"><![CDATA[
+					<link>URL?q=$dest_value$</link>
+				]]></div>
+      </li>
+    </ul>
+    <p>
+      There are various ways to capture a value from a dashboard (or form) and pass the value to the destination.
+      Use the <code>field</code> or <code>series</code> attribute to the &lt;link&gt; tag to specify which values to capture.
+      For more information on capturing values and other dynamic drilldown features, refer to the Splunk documentation: 
+    </p>
+    <h1>Source code</h1>
+    <p>
+      View the <a target="_blank" href="/static/app/dashboard_examples/samples/dashboard6_sample.html">source code to implement this dashboard</a>. (Opens in a new window.)
+    </p>
+    
+    <h1>What's next?</h1>  
+    <p>
+      [<a href="/app/dashboard_examples/forms1">Next: Forms using simple XML</a>]
+      <br />[<a href="/app/dashboard_examples/dashboard4">Prev: Simple XML dashboards - Chart drilldown</a>]
+    </p>
+    <p>
+      [<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+    </p>
+		</div>
+    </html>
+</row>
+  
+  <!-- Second row of 2 panels -->
+
+
+
+ <row>	
+    <table>
+      <title>High CPU processors (Dynamic drilldown to a form)</title>
+      <searchString>
+          index="_internal" source="*metrics.log" group="pipeline"
+          | chart sum(cpu_seconds) over processor | sort -sum(cpu_seconds) 
+          | rename sum(cpu_seconds) as "Total CPU Seconds"
+      </searchString>
+      <earliestTime>-60m</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="count">15</option>
+      <option name="displayRowNumbers">false</option>
+      <option name="showPager">true</option>
+      
+     <drilldown>
+       	   <link>
+              /app/dashboard_examples/form_table2?form.sourcetype=$row.processor$
+          </link>
+     </drilldown>      
+    </table>
+  
+    <table>
+     <title>High CPU processors (Dynamic drilldown to a web page)</title>
+      <searchString>
+          index="_internal" source="*metrics.log" group="pipeline"
+          | chart sum(cpu_seconds) over processor | sort -sum(cpu_seconds) 
+          | rename sum(cpu_seconds) as "Total CPU Seconds"
+      </searchString>
+       <earliestTime>-60m</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="count">15</option>
+      <option name="displayRowNumbers">false</option>
+      <option name="showPager">true</option>
+     
+     <drilldown>
+        <link>
+              http://splunk-base.splunk.com/integrated_search/?q=$click.value$
+        </link>
+     </drilldown>      
+    </table>
+
+  </row>
+
+</dashboard>

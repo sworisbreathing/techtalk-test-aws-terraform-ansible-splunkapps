@@ -1,0 +1,46 @@
+<div class="form_bg"><div class="content_width">
+    <h1>Static and dynamic listers</h1>
+    <p>
+        This view introduces static and dynamic listers. 
+    </p>
+    <p>
+        The parent module in this view is a <b>HiddenSearch</b> module configured with the following search:
+    </p>
+    <div class="samplecode">
+    index=_internal source="*metrics.log" metrics
+    </div>
+    <p>
+        The parent module contains a <b>StaticSelect plus ConvertToIntention</b> pattern. The <b>StaticSelect</b> lister is configured explictly using module parameters.
+    </p>
+    <p>
+        Nested within these modules is a <b>SearchSelectLister plus ConvertToIntention</b> pattern. The <b>SearchSelectLister</b> contains a search that populates its selections.
+    </p>
+    <p>
+        The <b>SubmitButton</b> kicks off a search specified by the listers and a timerange picker. This search is passed on to two nested <b>HiddenSearch</b> modules.
+    </p>
+    <p>
+        The first <b>HiddenSearch</b> module modifies the search string and then pipes it to a timechart of sum(kb).
+        It then displays result in a column chart, using <b>HiddenchartFormatter</b>.
+    </p>
+    <p>
+        The second <b>HiddenSearch</b> module does the same thing, but pipes it to a timechart to show the max(eps), min(eps) and avg(eps) over time,
+        displaying the result in a line chart.
+    </p>
+    <h1>Source code</h1>
+    <p>
+        View the <a target="_blank" href="/static/app/dashboard_examples/samples/advanced_lister_static_and_dynamic_sample.html">commented source code for this view</a>. (Opens in a new window.)
+    </p>
+    <p>
+        View the <a target="_blank" href="/static/app/dashboard_examples/advanced_lister_static_and_dynamic_layout.html">module layout for this example</a>. (Opens in a new window.)
+    </p>
+    
+    <h1>What's next?</h1>
+    <p>
+      [<a href="/app/dashboard_examples/advanced_lister_stringreplace">Next: Listers and stringreplace intentions</a>]
+      <br />[<a href="/app/dashboard_examples/advanced_lister_redirects">Prev: Two listers using charts and redirects</a>]
+      <br /><br />[<a href="/app/dashboard_examples/advanced_intro1">Advanced XML Home</a>]
+      <br />[<a href="/app/dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+    </p>
+
+   
+</div></div>

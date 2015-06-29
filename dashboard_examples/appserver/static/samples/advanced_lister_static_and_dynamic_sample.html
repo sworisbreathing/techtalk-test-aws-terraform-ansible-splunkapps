@@ -1,0 +1,185 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Static and dynamic listers</h1> 
+
+<textarea id="codeTextArea">
+
+<?xml version="1.0"?>
+<view onunloadCancelJobs="False" autoCancelInterval="100">
+  <!--  autoCancelInterval is set here to 100  -->
+  <label>Static and dynamic listers</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+		<param name="filter">*</param>
+		<param name="clearOnJobDispatch">False</param>
+		<param name="maxSize">1</param>
+	</module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+
+  <module name="ServerSideInclude" layoutPanel="mainSearchControls">
+    <param name="src">advanced_lister_static_and_dynamic.html</param>
+  </module>
+
+  <module name="HiddenSearch" layoutPanel="mainSearchControls" autoRun="True">
+    <param name="search">index=_internal source="*metrics.log" metrics</param>  
+    <module name="StaticSelect">
+      <param name="settingToCreate">group</param>
+      <param name="label">Field:</param>
+      <param name="staticFieldsToDisplay">
+        <list>
+          <param name="label">Index</param>
+          <param name="value">per_index_thruput</param>
+        </list>
+        <list>
+          <param name="label">Source</param>
+          <param name="value">per_source_thruput</param>
+        </list>
+        <list>
+          <param name="label">Sourcetype</param>
+          <param name="value">per_sourcetype_thruput</param>
+        </list>
+        <list>
+          <param name="label">Host</param>
+          <param name="value">per_host_thruput</param>
+        </list>
+      </param>
+      <module name="ConvertToIntention">
+        <param name="settingToConvert">group</param>
+        <param name="intention">
+          <param name="name">addterm</param>
+          <param name="arg">
+            <param name="group">$target$</param>
+          </param>
+          <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+          <param name="flags"><list>indexed</list></param>
+        </param>
+        
+        <module name="SearchSelectLister">
+          <param name="settingToCreate">series_setting</param>
+          <param name="label">Value:</param>
+          <param name="applyOuterIntentionsToInternalSearch">True</param>
+          <param name="search">
+            index=_internal source="*metrics.log" metrics group series
+            | head 5000 | top limit=200 series | sort series
+         </param>
+          <param name="searchFieldsToDisplay">
+            <list>
+              <param name="label">series</param>
+              <param name="value">series</param>
+            </list>
+          </param>
+          <module name="ConvertToIntention">
+            <param name="settingToConvert">series_setting</param>
+            <param name="intention">
+              <param name="name">addterm</param>
+              <param name="arg">
+                <param name="series">$target$</param>
+              </param>
+              <!-- Tell the addterm intention to put the term in the first search clause no matter what. -->
+              <param name="flags"><list>indexed</list></param>
+            </param>
+
+            <module name="TimeRangePicker">
+              <param name="label">Time range:</param>
+              <param name="selected">Last 4 hours</param>
+              <param name="searchWhenChanged">True</param>
+              <module name="SubmitButton">
+                <param name="allowSoftSubmit">False</param>
+                <param name="label">Search</param>
+                
+                <module name="Message" layoutPanel="graphArea">
+                  <param name="filter">splunk.search.job</param>
+                  <param name="clearOnJobDispatch">True</param>
+                  <param name="maxSize">2</param>
+                  
+                  <!--
+                     Now use a HiddenSearch module to reset the base search string to be a timechart of sum(kb).
+                     Because HiddenSearch is downstream of the SubmitButton module,
+                     it still picks up all the stuff the user picked above.
+                     Use a HiddenChartFormatter to display results as a column chart,
+                     suppress the legend and specify the correct axis titles
+                  -->
+                  <module name="GenericHeader" layoutPanel="resultsAreaLeft"> 
+                    <param name="label">KB Indexed over time</param> 
+                  </module> 
+                  <module name="HiddenSearch" layoutPanel="resultsAreaLeft">
+                    <param name="search">
+			index=_internal metrics NOT source="*web_service.log"
+			NOT source="*access.log" NOT source="*/searches.log"
+			NOT source="*intentions.log" NOT source="*splunkd.log" | timechart sum(kb)
+		     </param>
+                    <module name="HiddenChartFormatter">
+                      <param name="chart">column</param>
+                      <param name="primaryAxisTitle.text">(Selected Series)</param>
+                      <param name="secondaryAxisTitle.text">KB Indexed</param>
+                      <param name="legend.placement">none</param>
+                      <module name="JobProgressIndicator"/>
+                      <module name="JSChart">
+                        <param name="width">100%</param>
+                        <param name="height">200px</param>
+                      </module> <!-- JSChart -->
+                    </module> <!-- HiddenChartFormatter -->
+                  </module> <!-- HiddenSearch -->
+                  
+		<!--
+                  Here do the same thing, also living directly underneath the SubmitButton module,
+                  but instead reset everything to show the max(eps), min(eps) and avg(eps) over time.
+		-->
+		<module name="GenericHeader" layoutPanel="resultsAreaRight"> 
+                    <param name="label">Event throughput over time</param> 
+                  </module> 
+                  <module name="HiddenSearch" layoutPanel="resultsAreaRight">
+                    <param name="search">
+			index=_internal metrics NOT source="*web_service.log"
+			NOT source="*access.log" NOT source="*/searches.log"
+			NOT source="*intentions.log" NOT source="*splunkd.log"
+			| timechart min(eps) avg(eps) max(eps)
+		     </param>
+                    <module name="HiddenChartFormatter">
+                      <param name="chart">line</param>
+                      <param name="primaryAxisTitle.text">(Selected Series)</param>
+                      <param name="secondaryAxisTitle.text">Event throughput</param>
+                      <param name="legend.placement">bottom</param>
+                      <module name="JobProgressIndicator"/>
+                      <module name="JSChart">
+                        <param name="width">100%</param>
+                        <param name="height">200px</param>
+                      </module> <!-- JSChart -->
+                    </module> <!-- HiddenChartFormatter -->
+                  </module> <!-- HiddenSearch -->
+                </module> <!-- Message -->
+              </module> <!-- Submitbutton -->
+            </module> <!-- TimeRangePicker -->
+          </module> <!-- ConvertToIntention -->
+        </module> <!-- SearchSelectLister -->
+      </module> <!-- cCnvertToIntention -->
+    </module> <!-- StaticSelect -->
+  </module> <!-- HiddenSearch -->
+</view>
+
+</textarea>
+</div>
+

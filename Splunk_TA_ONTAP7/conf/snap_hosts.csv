@@ -1,0 +1,11 @@
+#
+#  SNAP_HOSTS
+#    This configuration file is used to tell SNAP.PY from which filers to collect API data. 
+#
+#  HEADER:
+#    filer (hostname or IP), NetApp user, password
+#
+#    See README for information on required permissions for API access to NetApp filers.
+#
+10.225.189.11, svc_splunk, splunk1234
+10.225.189.12, svc_splunk, splunk1234

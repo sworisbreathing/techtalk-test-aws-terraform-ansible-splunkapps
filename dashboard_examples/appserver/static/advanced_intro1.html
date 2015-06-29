@@ -1,0 +1,133 @@
+<div class="content_width">
+  <h1>Advanced XML examples</h1>
+  <p></p>
+  <table cellpadding="12" bgcolor="#efefef">
+    <tr valign="top">
+    <td>
+    <p><b>Introduction</b>
+      <br /><b><a href="/app/dashboard_examples/advanced_hello">Hello world</a></b>
+      <br /><b><a href="/app/dashboard_examples/advanced_intro2">Modules</a></b>
+      <br /><b><a href="/app/dashboard_examples/advanced_intro3">Layout</a></b>
+      <br /><b><a href="/app/dashboard_examples/advanced_intro4">Patterns</a></b>
+    </p>
+    <p><b>Listers</b>
+      <br /><b><a href="/app/dashboard_examples/advanced_lister_intro">Intro to listers</a></b>
+      <br /><b><a href="/app/dashboard_examples/advanced_lister_chart">Lister with JSChart</a></b>
+      <br /><b><a href="/app/dashboard_examples/advanced_lister_multiple_elements">Lister driving multiple elements</a></b>
+      <br /><b><a href="/app/dashboard_examples/advanced_lister_redirects">Two listers using charts and redirects</a></b>
+      <br /><b><a href="/app/dashboard_examples/advanced_lister_static_and_dynamic">Static and dynamic listers</a></b>
+      <br /><b><a href="/app/dashboard_examples/advanced_lister_stringreplace">Listers and stringreplace intentions</a></b>
+      <br /><b><a href="/app/dashboard_examples/advanced_lister_with_searchbar">Lister with a form search</a></b>
+    </p>
+  </td>
+    <td>
+    <p><b>Switchers</b>
+      <br /><b><a href="/app/dashboard_examples/switcher1">Switcher modules</a></b>
+      <br /><b><a href="/app/dashboard_examples/switcher_compare">Switcher module comparison</a></b>
+      <br /><b><a href="/app/dashboard_examples/switcher_time_ui_with_scheduled_jobs">Switcher with time controls</a></b>
+    </p>
+    <p><b>Drilldown</b>
+      <br /><b><a href="/app/dashboard_examples/drilldown_intro">Drilldown views</a></b>
+      <br /><b><a href="/app/dashboard_examples/drilldown_table1">Drilldown from tables</a></b>
+      <br /><b><a href="/app/dashboard_examples/drilldown_chart1">Drilldown from charts</a></b>
+      <br /><b><a href="/app/dashboard_examples/drilldown_chart2">Custom drilldown actions</a></b>
+    </p>
+  </td>
+  <td>
+    <p><b>Search Performance</b>
+      <br /><b><a href="/app/dashboard_examples/search_performance1">Search performance base</a></b>
+      <br /><b><a href="/app/dashboard_examples/search_performance2">Search performance II</a></b>
+      <br /><b><a href="/app/dashboard_examples/search_performance3">Search performance III</a></b>
+      <br /><b><a href="/app/dashboard_examples/search_performance4">Search performance IV</a></b>
+    </p>
+    <p><b>Miscellany</b>
+      <br /><b><a href="/app/dashboard_examples/dashboard_with_post_process1">Using postProcess on dashboards</a></b>
+      <br /><b><a href="/app/dashboard_examples/custom_charting1">Time-based charting tool</a></b>
+      <br /><b><a href="/app/dashboard_examples/custom_css_export_button">Custom CSS</a></b>
+      <br /><b><a href="/app/dashboard_examples/extended_field_search1">Hidden intention with addterm</a></b>
+      <br /><b><a href="/app/dashboard_examples/extended_field_search2">Hidden intention with stringreplace</a></b>
+      <br /><b><a href="/app/dashboard_examples/static_content">Static content</a></b>
+      <br /><b><a href="/app/dashboard_examples/embedding_other_views">Embedding other views</a></b>
+      <br /><b><a href="/app/dashboard_examples/basic_charting">Basic charting</a></b>
+    </p>          
+  </td>   
+  </tr>
+  </table>
+
+<h1 style="padding-top:12px">Advanced XML: An introduction</h1>
+  <p>  
+    Splunk highly recommends starting with simple XML - only move to advanced XML if you cannot achieve what you want with simple XML.
+    Review the <a href="/app/dashboard_examples/dashboard0">simple XML examples</a> to see how to build various types of dashboards and forms
+    using simple XML.
+  </p>
+  <p>
+    Advanced XML is useful for specifying the functional wiring of the modules in the view.
+    In other words, advanced XML is really dealing with how the data flows between modules. Advanced XML also determines
+    the visual layout through layoutPanel attributes, but layout is really a secondary function of advanced XML.
+  </p>
+
+  <h2>Learning advanced XML</h2>
+  <p>
+    There are over a hundred modules in Splunk's advanced XML. From Splunk Web, you can navigate to a full specification here: 
+  </p>
+  <div class="samplecode">
+    <a href="../../../modules">http://localhost:8000//modules</a>
+  </div>
+  <p>
+    You can also access the module reference from Splunk core documentation here:
+    <a href="#">Module Reference</a>.
+  </p>
+
+  <h2 style="padding-top: 12px">Viewing source files</h2>
+  <p>
+    All but a few of the examples in this app contain links to the XML code for the example.
+    However, you can also view the XML source of any view by specifying the showsource REST parameter (<code>?showsource=1</code>) to any view URL.
+    For example:
+  </p>
+  <div class="samplecode">
+    &nbsp;&nbsp;http://localhost:8000/en-US/app/dashboard_examples/advanced_intro1<b>?showsource=1</b>
+  </div>
+
+  <p>
+      This provides a treeview of the modules in your view plus the actual XML source.
+  </p>
+  </p>
+      <b>Note:</b> The XML source strips whitespace and comments, so it might be better to view the XML source from the links in the apps or in the actual source files.
+  </p>
+
+  <h2 style="padding-top: 12px">Editing the source for the examples</h2>
+  <p>  
+      You can make a clone of any view by going to manager &gt; User interface &gt; Views,
+      and then clicking <b>clone</b> on the view you want to copy, and then modify.
+  </p>
+  <p>
+      Splunk suggests you copy examples to the <code>local</code> directory before making any edits.
+      Use the <code>local</code> directory to make sure updates to the Dashboard Examples app do not over write your edits.
+      Navigate to:
+  </p>
+  <div class="samplecode">
+    $SPLUNK_HOME/etc/apps/dashboard_examples/<b>default</b>/data/ui/views
+  </div>
+  <p>
+    Copy the example you want to modify and place it in the local directory. Edit the view in an XML editor of your choice.
+  </p>
+  <div class="samplecode">
+    $SPLUNK_HOME/etc/apps/dashboard_examples/<b>local</b>/data/ui/views
+  </div>
+  <p>
+    After editing files on disk,
+    refresh the modules to view your changes. For example:
+  </p>
+  <div class="samplecode">
+    http://localhost:8000/en-US/debug/refresh
+  </div>
+  <p>
+      When editing nested modules, keep your indentation accurate. Use an XML aware editor to help you track opening and closing tags.
+      On Linux platforms you may find <code>tidy</code> a useful timesaver:
+  </p>
+  
+  <div class="samplecode">
+    &nbsp;&nbsp;tidy -xml -q -i -wrap 0 my_view.xml > pretty_view.xml
+  </div>
+
+</div>

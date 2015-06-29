@@ -1,0 +1,123 @@
+<view template="dashboard.html" onunloadCancelJobs="False" autoCancelInterval="100" isVisible="False">
+  <!--  autoCancelInterval is set here to 100  -->
+  <label>Series Viewer</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="SearchBar" layoutPanel="splSearchControls-inline">
+    <param name="useAssistant">true</param>
+    <param name="useTypeahead">true</param>
+    <param name="useOwnSubmitButton">False</param>
+    <module name="TimeRangePicker">
+      <param name="selected">All time</param>
+      <param name="searchWhenChanged">True</param>
+      <module name="FieldSearch" layoutPanel="mainSearchControls">
+        <param name="field">group</param>
+        <module name="FieldSearch">
+          <param name="field">series</param>
+          
+          <module name="SubmitButton">
+            <param name="allowSoftSubmit">True</param>
+            <param name="label">Search</param>
+            <module name="Message" layoutPanel="messaging">
+              <param name="filter">splunk.search.job</param>
+              <param name="clearOnJobDispatch">True</param>
+              <param name="maxSize">2</param>
+              <module name="StaticContentSample">
+                <param name="text">This view is designed to be linked to from another page. Note that instead of operating merely on the search in the link,  this view uses that search only as a starting point and then runs 3 seperate searches. This view uses HiddenIntention modules to achieve that effect. Each HiddenIntention module adds one 'plot' intention onto the base search, and then this gets dispatched and graphed.</param>
+              </module>
+              <module name="StaticContentSample">
+                <param name="text">NOTE: Prior to 4.0.4, there is a bug with this configuration. Specifically, views such as this will only load one chart initially.  To see the others you would have to submit the search again from this page itself.</param>
+              </module>
+              <module name="GenericHeader" layoutPanel="panel_row1_col1">
+                <param name="label">Total kb indexed over time</param>
+                <module name="HiddenIntention">
+                  <param name="intention">
+                    <param name="name">plot</param>
+                    <param name="arg">
+                      <param name="mode">timechart</param>
+                      <param name="fields">
+                        <list>
+                          <list>sum</list>
+                          <list>kb</list>
+                        </list>
+                      </param>
+                    </param>
+                  </param>
+                  <module name="HiddenChartFormatter">
+                    <param name="chart">column</param>
+                    <module name="JobProgressIndicator"></module>
+                    <module name="FlashChart"></module>
+                  </module>
+                </module>   
+              </module>
+
+              <module name="GenericHeader" layoutPanel="panel_row1_col1">
+                <param name="label">Avg kbps indexed over time</param>
+                <module name="HiddenIntention">
+                  <param name="intention">
+                    <param name="name">plot</param>
+                    <param name="arg">
+                      <param name="mode">timechart</param>
+                      <param name="fields">
+                        <list>
+                          <list>avg</list>
+                          <list>kbps</list>
+                        </list>
+                      </param>
+                    </param>
+                  </param>
+                  <module name="HiddenChartFormatter">
+                    <param name="chart">line</param>
+                    <param name="chart.nullValueMode">zero</param>
+                    <module name="JobProgressIndicator"></module>
+                    <module name="FlashChart"></module>
+                  </module>
+                </module>   
+              </module>
+              
+              <module name="GenericHeader" layoutPanel="panel_row1_col2">
+                <param name="label">eps over time</param>
+                <module name="HiddenIntention">
+                  <param name="intention">
+                    <param name="name">plot</param>
+                    <param name="arg">
+                      <param name="mode">timechart</param>
+                      <param name="fields">
+                        <list>
+                          <list>max</list>
+                          <list>eps</list>
+                        </list>
+                        <list>
+                          <list>min</list>
+                          <list>eps</list>
+                        </list>
+                        <list>
+                          <list>avg</list>
+                          <list>eps</list>
+                        </list>
+                      </param>
+                    </param>
+                  </param>
+                  <module name="HiddenChartFormatter">
+                    <param name="chart">line</param>
+                    <param name="chart.nullValueMode">zero</param>
+                    <module name="JobProgressIndicator"></module>
+                    <module name="FlashChart"></module>
+                  </module>
+                </module>
+              </module>
+
+            </module>
+          </module>
+        </module>
+      </module>
+    </module>
+  </module>
+</view>            
+
+

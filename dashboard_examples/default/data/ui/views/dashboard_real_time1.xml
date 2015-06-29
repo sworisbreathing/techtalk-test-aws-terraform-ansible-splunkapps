@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<dashboard>
+  <label>Real-time dashboard</label>
+  <row>
+    <html>
+      <div class="content_width">
+      <h1>Real-time dashboard (created interactively)</h1>
+      <p>
+        The panel below in this dashboard was created using the interactive Splunk Dashboard Editor and corresponding Search and Visualization Editors.
+      </p>
+      <p>
+        Select the <b>Edit: On</b> button at the upper right of this dashboard to view the Splunk interactive editors.
+      </p>
+      <h1>Source code</h1>
+      <p>
+        View the <a target="_blank" href="/static/app/dashboard_examples/samples/dashboard_real_time1_sample.html">source code to implement this dashboard</a>. (Opens in a new window.)
+      </p>
+    
+    <h1>What's next?</h1>  
+      <p>
+        [<a href="/app/dashboard_examples/real_time_dashboard2">Next: Real-time dashboards with clickable charts</a>]
+        <br />[<a href="/app/dashboard_examples/real_time_dashboard1">Prev: Real-time dashboards using simple XML</a>]
+      </p>
+      <p>
+        [<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+      </p>         
+      </div>
+    </html>
+  </row>
+  <row>
+    <chart>
+      <searchString>index=_internal * | top sourcetype</searchString>
+      <title>Real-time indexing</title>
+      <earliestTime>rt</earliestTime>
+      <latestTime>rt</latestTime>
+      <option name="charting.chart">column</option>
+      <option name="drilldown">all</option>
+    </chart>
+  </row>
+</dashboard>

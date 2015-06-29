@@ -1,0 +1,67 @@
+<view template="dashboard.html" isVisible="false">
+  <label>Advanced real time dashboards intro</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+
+  <!-- NOTE: we're only using StaticContentSample so that the views are more easily copy-and-pastable.   --> 
+  <!-- using the ServerSideInclude module is a more scalable and recommended way to put in your content, -->
+  <!-- and you dont have to escape your HTML like this -->
+  <module name="StaticContentSample" layoutPanel="panel_row1_col1">
+    <param name="text">This is a living guide for how to create real time dashboards in the advanced XML.  We're going to assume that you've already used the real time search features of 4.1. (if you havent, go to your 4.1 UI and change the time picker to one of the 'real time' options.) &lt;br&gt;
+    &lt;br&gt;
+    We'll start things off simple and lets just run a real time search for "* | top sourcetype" and graph the results.  
+    &lt;br&gt;
+    &lt;br&gt;
+    The only difference between a real time search and a historical search, is that the earliest and latest API arguments are either both 'rt', or one or both of them begin with 'rt'. 
+    &lt;br&gt;
+    &lt;br&gt;
+    If both are simply 'rt', then data will keep on filling into the chart as long as the page is open.  Old data will never leave. &lt;br&gt;
+    On the other hand, with a search where earliest is 'rt-30s',  and latest is 'rt',   the chart will only ever show date from the most recent 30 seconds.  This is what we've done below.
+
+    </param>
+  </module>
+
+  <!-- EXAMPLE BEGINS -->
+  <module name="HiddenSearch" layoutPanel="panel_row2_col1" group="live events, last 30 seconds, by sourcetype" autoRun="True">
+    <param name="search">* | top sourcetype | fields - percent</param>
+    <param name="earliest">rt-30s</param>
+    <param name="latest">rt</param>
+    
+    <module name="HiddenChartFormatter">
+      <param name="charting.chart">bar</param>
+      <param name="charting.primaryAxisTitle.text">Sourcetype</param>
+      <param name="charting.secondaryAxisTitle.text">## of events</param>
+      <param name="charting.legend.placement">None</param>
+      
+      <!-- TODO - remove this when SPL-29581 is fixed -->
+      <module name="EnablePreview">
+        <param name="enable">True</param>
+        <param name="display">False</param>
+      </module>
+      
+      <module name="FlashChart">
+        <param name="width">100%</param>
+        <param name="height">400px</param>
+      </module>
+
+    </module>
+
+  </module>
+  
+  <!-- NOTE: we're only using StaticContentSample so that the views are more easily copy-and-pastable.   --> 
+  <!-- using the ServerSideInclude module is a more scalable and recommended way to put in your content, -->
+  <!-- and you dont have to escape your HTML like this -->
+  <module name="StaticContentSample" layoutPanel="panel_row3_col1">
+    <param name="text">Next lets make our chart clickable, so users can go see a real time event search for just that sourcetype.
+    &lt;a href="advanced_real_time_dashboard2"&gt;Next&lt;/a&gt;
+    </param>
+  </module>
+</view>

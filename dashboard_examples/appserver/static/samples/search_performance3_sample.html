@@ -1,0 +1,78 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Search performance 3</h1> 
+
+<textarea id="codeTextArea">
+
+<view template="search.html">
+  <label>Affecting search performance 3</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  
+  <module name="ServerSideInclude" layoutPanel="viewHeader">
+    <param name="src">
+      search_performance3.html
+    </param>
+  </module>  
+
+  <module name="SearchBar" layoutPanel="splSearchControls-inline">
+    <param name="useAssistant">true</param>
+    <param name="useTypeahead">true</param>
+    <param name="useOwnSubmitButton">False</param>
+    <module name="TimeRangePicker">
+      <param name="selected">Last 24 hours</param>
+      <param name="searchWhenChanged">True</param>
+      <module name="SubmitButton">
+        <param name="allowSoftSubmit">True</param>
+        
+        <module name="SimpleResultsHeader" layoutPanel="resultsAreaLeft">
+          <param name="entityName">events</param>
+          <param name="headerFormat">events (%(count)s)</param>
+        </module> <!-- SimpleResultsHeader -->
+        <module name="FlashTimeline" layoutPanel="graphArea">
+          <param name="height">120px</param>
+          <param name="width">100%</param>
+          <module name="HiddenFieldPicker" layoutPanel="sidebar">
+            <param name="fields">host index source sourcetype clientip status bytes</param>
+            <module name="MultiFieldViewer">
+              <!-- Another way to do the same thing is to omit HiddenFieldPicker -->
+              <!-- Instead set the fields params directly -->
+              <!-- <param name="fields">host index source sourcetype clientip status bytes</param> -->
+            </module> <!-- MultiFieldViewer -->
+            <module name="SimpleResultsTable" layoutPanel="resultsAreaLeft"></module>
+          </module> <!-- HiddenFieldPicker -->
+        </module> <!-- FlashTimeline -->
+      </module> <!-- SubmitButton -->
+    </module> <!-- TimeRangePicker -->
+  </module> <!-- SearchBar -->
+  
+</view>
+
+</textarea>
+</div>
+

@@ -1,0 +1,94 @@
+
+<form>
+    <label>Static select drop down and radio buttons</label>
+    
+    <fieldset>
+        <html>
+        <div class="form_bg"><div class="content_width">
+        <h1>Simple XML - Form search with static select dropdown and radio buttons</h1>
+        <p>
+          In this form search, the search defined with the &lt;searchTemplate&gt; tag defines the selections for the drop down list and radio buttons.
+          The &lt;searchWhenChanged&gt; property allows the change to immediately propogate after selecting the Search button.
+        </p>
+        <div class="samplecode"><pre><![CDATA[
+<searchTemplate>index=sample from="$from$" $size$</searchTemplate>
+        ]]></pre></div>
+        
+        <p>
+          The radio buttons are populated from the &lt;populatingSearch&gt;. The &lt;searchWhenChanged&gt; tag propagates any change in selection immediately to the results.
+          Because the form uses a time picker, it does not specify the time range.
+        </p>
+        <div class="samplecode"><pre><![CDATA[
+<input type="dropdown" token="from"> 
+  <label>Select from address</label> 
+  <choice value="*">Any</choice> 
+  <choice value="*splunk.com">splunk.com</choice> 
+  <choice value="*spam*">spam</choice> 
+</input> 
+
+<input type="radio" token="size" searchWhenChanged="True"> 
+  <label>Select size</label> 
+  <prefix>size</prefix> 
+  <default>*</default> 
+  <choice value="=*">Any</choice> 
+  <choice value="=0">0</choice> 
+  <choice value=">100">greater than 100</choice> 
+</input>]]></pre></div>
+         <p>
+          For more information on forms, refer to the [Splunk documentation].
+        </p>
+        
+        <h1>Source code</h1>
+        <p>
+          View the <a target="_blank" href="/static/app/dashboard_examples/samples/form_static_definitions_sample.html">source code to implement this form</a>. (Opens in a new window.)
+        </p>
+        
+        <h1>What's next?</h1>
+        <p>
+          [<a href="/app/dashboard_examples/form_inverted_flow_search">Next: Multi-panel linked form search</a>]
+          <br />[<a href="/app/dashboard_examples/form_multiple_inputs">Prev: Forms with text field and dynamic radio buttons</a>]
+        </p>
+        <p>
+          [<a href="../dashboard_examples/forms1">Simple XML Forms Home</a>]
+          <br />[<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+        </p>
+    
+        </div></div>
+        <p style="padding-top"></p>
+        <hr />
+      </html> 
+        
+        <!-- Define a simple dropdown form driven by a search -->
+        <input type="dropdown" token="from">
+            <label>Select from address</label>
+            <choice value="*">Any</choice>
+            <choice value="*splunk.com">splunk.com</choice>
+            <choice value="*spam*">spam</choice>
+        </input>
+    
+        <!--
+            searchWhenChanged allows the change to immediately propagate to the results,
+            and does not force the clicking of the submit button
+        -->
+        <input type="radio" token="size" searchWhenChanged="True">
+            <label>Select size</label>
+            <prefix>size</prefix>
+            <default>*</default>
+            <choice value="=*">Any</choice>
+            <choice value="=0">0</choice>
+            <choice value=">100">greater than 100</choice>
+        </input>
+    </fieldset>
+    
+    <!-- define master search template, with replacement tokens delimited with $ -->
+    <searchTemplate>index=sample from="$from$" $size$</searchTemplate>
+    
+    
+    <row>
+        <!-- output the results as a 50 row events table -->
+        <table>
+            <title>Matching events</title>
+            <option name="count">50</option>
+        </table>
+    </row>
+</form>

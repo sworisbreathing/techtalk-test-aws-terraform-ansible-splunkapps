@@ -1,0 +1,78 @@
+<form>
+  <label>Basic table</label>
+
+  <fieldset>
+   <html>
+    <div class="form_bg"><div class="content_width">
+    <h1>Simple XML - Basic form search</h1>
+    <p>
+      This basic form search provides a text box to enter terms to search for, returning the results in a table.
+    </p>
+    <p>
+      The search is specified using the following tags:
+    </p>
+    <div class="samplecode"><pre><![CDATA[
+<searchTemplate> 
+ index=_internal source=*metrics.log group=per_sourcetype_thruput series="$sourcetype$" 
+ | head 1000 
+</searchTemplate> 
+
+<earliestTime>-30d</earliestTime> 
+<latestTime>-0d</latestTime>]]></pre></div>
+    
+    <p>
+      The default input type for &lt;fieldset&gt; is a text box. Within &lt;fieldset&gt; you also specify the search token:
+    </p>
+    <div class="samplecode"><pre><![CDATA[
+<fieldset> 
+   <input token="sourcetype" /> 
+</fieldset>]]></pre></div>
+    <p>
+      Use &lt;html&gt; tags within the &lt;fieldset&gt; tag to display introductory text before the input field.
+    </p>
+    
+    <p>
+      For more information on basic forms, refer to the [Splunk documentation].
+    </p>
+    <h1>Source code</h1>
+    <p>
+      View the <a target="_blank" href="/static/app/dashboard_examples/samples/form_table_sample.html">source code to implement this form</a>. (Opens in a new window.)
+    </p>
+    
+    <h1>What's next?</h1>
+    <p>
+      [<a href="/app/dashboard_examples/form_dropdown">Next: Form search with select dropdown</a>]
+      <br />[<a href="/app/dashboard_examples/forms1">Prev: Forms using simple XML</a>]
+    </p>
+    <p>
+      [<a href="../dashboard_examples/forms1">Simple XML Forms Home</a>]
+      <br />[<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+    </p>
+
+    </div></div>
+    <p style="padding-top: 6px"></p>
+    <hr />
+    <p style="padding-top: 20px">
+      Enter a sourcetype in the field below to return the most recent 1000 events from the metrics log concerning that sourcetype.
+    </p>
+  </html>
+   
+     <!-- the default is a text box, with no seed value; if user does not input
+          a value, then the $username$ token in searchTemplate will be removed -->
+      <input token="sourcetype" />
+  </fieldset>
+
+  <!-- define master search template, with replacement tokens delimited with $ -->
+  <searchTemplate>index=_internal source=*metrics.log group=per_sourcetype_thruput series="$sourcetype$" | head 1000</searchTemplate>
+  <earliestTime>-30d</earliestTime>
+  <latestTime>-0d</latestTime>
+  
+  <row>
+      <!-- output the results as a 50 row events table -->
+      <table>
+        <title>Matching events</title>
+        <option name="count">50</option>
+      </table>
+  </row>
+
+</form>

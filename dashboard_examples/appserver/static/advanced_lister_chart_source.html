@@ -1,0 +1,54 @@
+<h1>Lister and JSChart example</h1>
+<p>
+    <code>
+&nbsp;&nbsp;&lt;!-- Group selector --&gt;
+<br />&nbsp;&nbsp;&lt;module name="SearchSelectLister" layoutPanel="panel_row3_col1"&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="settingToCreate"&gt;group_setting&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="search"&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index=_internal source=*metrics.log group="per_*_thruput"
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| chart count over group
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="earliest"&gt;-1h&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="label"&gt;Group&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="searchFieldsToDisplay"&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!--
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TODO use list lookups and the lookup command to get another field
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that is a pretty label here. 'Sourcetypes' vs 'Sources' vs 'Indexes'
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;list&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="label"&gt;group&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="value"&gt;group&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/list&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;module name="ConvertToIntention"&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="settingToConvert"&gt;group_setting&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="intention"&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="name"&gt;addterm&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="arg"&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="group"&gt;$target$&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- Tell the addterm intention to put the term in the first search clause no matter what. --&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="flags"&gt;&lt;list&gt;indexed&lt;/list&gt;&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;module name="HiddenSearch"&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="search"&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index=_internal source=*metrics.log | chart sum(kb) over series | sort -sum(kb) | head 10
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="earliest"&gt;-1h&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;module name="HiddenChartFormatter"&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="chart"&gt;bar&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="primaryAxisTitle.text"&gt;Sourcetype&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="secondaryAxisTitle.text"&gt;KB Indexed&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="legend.placement"&gt;none&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;module name="JobProgressIndicator"/&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;module name="JSChart"&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="width"&gt;100%&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="height"&gt;320px&lt;/param&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/module&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/module&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/module&gt;
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/module&gt;
+<br />&nbsp;&nbsp;&lt;/module&gt;
+<br />
+    </code>
+</p>

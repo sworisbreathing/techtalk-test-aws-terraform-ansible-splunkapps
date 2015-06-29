@@ -1,0 +1,87 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Simple XML dashboards - Table drilldown</h1> 
+
+<textarea id="codeTextArea">
+
+<dashboard>
+  
+  <label>Simple XML dashboards - Table drilldown</label>
+<row>
+  <html>
+   <!-- documentation panel -->
+   </html>
+</row>
+  
+  <!-- Second row of 2 panels -->
+  <row>
+    
+    <table>
+      <title>Table: default drilldown (same as explicit row)</title>
+      <searchString>index=_internal group=per_sourcetype_thruput | chart sum(kbps) over series</searchString>
+      <earliestTime>-1h</earliestTime>
+      <latestTime>now</latestTime>
+    </table>
+
+    <table>
+      <title>Table: explicit row drilldown (same as default drilldown)</title>
+      <searchString>index=_internal group=per_sourcetype_thruput | chart sum(kbps) over series</searchString>
+      <earliestTime>-1h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="drilldown">row</option>
+    </table>
+  </row>
+  
+  <row>
+
+    <table>
+      <title>Table: explicit off drilldown</title>
+      <searchString>index=_internal group=per_sourcetype_thruput | chart sum(kbps) by series</searchString>
+      <earliestTime>-1h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="drilldown">off</option>
+    </table>    
+
+    <table>
+      <title>Table: explicit no drilldown</title>
+      <searchString>index=_internal group=per_sourcetype_thruput | chart sum(kbps) by series</searchString>
+      <earliestTime>-1h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="drilldown">none</option>
+    </table>    
+  </row>
+
+  <row>
+    <table>
+      <title>Table: explicit cell drilldown</title>
+      <searchString>index=_internal source="*metrics.log" group=per_sourcetype_thruput | timechart sum(kb) by series</searchString>
+      <earliestTime>-1h</earliestTime>
+      <latestTime>now</latestTime>
+      <option name="drilldown">all</option>
+    </table> 
+  </row>
+
+</dashboard>
+</textarea>
+</div>
+

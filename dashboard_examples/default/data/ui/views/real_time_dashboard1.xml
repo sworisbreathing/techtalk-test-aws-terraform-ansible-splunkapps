@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<dashboard>
+  
+  <label>Real-time dashboards intro</label>
+  <row>
+    <html>
+      <div class="content_width">
+      <h1>Real-time dashboards using simple XML</h1>
+      <p>
+      This example, as well as the next two examples, show how to use Simple XML to create real-time dashboards.
+      </p>
+      <p>
+        The difference between a real-time search and a historical search is that both the earliest and latest API arguments
+        specify a real-time search using either <code>rt</code> or <code>rt</code> with a time modifier, such as <code>rt-30s</code>.
+        
+        If both are <code>rt</code> then data continues to fill a chart with search results as long as the page is open.  Old data never leaves.
+      </p>
+      <p>
+        On the other hand, with a search where earliest is <code>rt-30s</code> and latest is <code>rt</code>,
+        the chart shows only the date from the most recent 30 seconds. The basic example in this dashboard provides an example for this last scenario: 
+      </p>
+      <div class="samplecode">
+        &lt;chart&gt;
+        <br />&#160;&#160;&lt;searchString&gt;* | top sourcetype | fields - percent&lt;/searchString&gt;
+        <br />&#160;&#160;&lt;title&gt;live events, last 30 seconds, by sourcetype&lt;/title&gt;
+        <br />&#160;&#160;&lt;earliestTime&gt;rt-30s&lt;/earliestTime&gt;
+        <br />&#160;&#160;&lt;latestTime&gt;rt&lt;/latestTime&gt;
+        <br />&#160;&#160;&lt;option name="drilldown"&gt;none&lt;/option&gt;
+        <br />&#160;&#160;&lt;option name="charting.chart"&gt;bar&lt;/option&gt;
+        <br />&lt;/chart&gt;
+      </div>
+      <h1>Source code</h1>
+      <p>
+        View the <a target="_blank" href="/static/app/dashboard_examples/samples/real_time_dashboard1_sample.html">source code to implement this dashboard</a>. (Opens in a new window.)
+      </p>
+    
+    <h1>What's next?</h1>  
+      <p>
+        [<a href="/app/dashboard_examples/dashboard_real_time1">Next: Real-time dashboard (created interactively)</a>]
+        <br />[<a href="/app/dashboard_examples/auto_dispatch_form3">Prev: Auto-dispatched form without a Submit button</a>]
+      </p>
+      <p>
+        [<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+      </p>         
+      </div>
+    </html>
+  </row>
+  <row>
+    <chart>
+      <searchString>index=_internal * | top sourcetype | fields - percent</searchString>
+      <title>live events, last 30 seconds, by sourcetype</title>
+      <earliestTime>rt-30s</earliestTime>
+      <latestTime>rt</latestTime>
+      <option name="drilldown">none</option>
+      <option name="charting.chart">bar</option>
+    </chart>
+  </row>
+</dashboard>

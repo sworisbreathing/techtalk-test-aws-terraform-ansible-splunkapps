@@ -1,0 +1,121 @@
+<dashboard>
+  
+  <label>Forms using simple XML</label>
+  
+  <row>
+    <html>
+      <div class="content_width">
+      <h1>Simple XML form examples</h1>
+      <p></p>
+      <table cellpadding="12" bgcolor="#efefef">
+        <tr valign="top">
+          <td>
+          <b><a href="/app/dashboard_examples/forms1">Forms using simple XML</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_table">Basic table</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_dropdown">Select dropdown</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_multiple_inputs">Multiple inputs</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_text_and_radio">Text filed with dynamic radio buttons</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_static_definitions">Static select dropdown with static definitions</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_inverted_flow_search">Panel-defined search</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_inverted_flow_dropdown">Panel-defined search driven by select dropdown</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_inverted_flow_postprocess1">Panel-defined search with post process</a></b>
+          <br /><b><a href="/app/dashboard_examples/form_inverted_flow_postprocess2">Panel-defined search with post process 2</a></b>
+          <br /><b><a href="/app/dashboard_examples/auto_dispatch_form1">Basic autoRun form</a></b>
+          <br /><b><a href="/app/dashboard_examples/auto_dispatch_form2">autoRun form using a dropdown for inputs</a></b>
+          <br /><b><a href="/app/dashboard_examples/auto_dispatch_form3">autoRun form without a Submit button</a></b>
+          </td>
+        </tr>
+      </table>
+      <p style="padding-top: 6px;"></p>
+      <h1>Forms using simple XML</h1>
+      <p>
+        Form searches are built on fields or other identifiable parts of your data. Typically, you first build a search that fits your data and use case.
+        Then, identify the parts of this search that can be specified by the user. Finally, build a form search view (or embed your form search in a dashboard).
+      </p>
+      <p>
+        Form searches use tokens for search fields that accept user data. When a user types in a search term of a form, the token is replaced with the user input.
+      </p>
+      <p>
+      In simple XML forms are similar to dashboards but have significant differences:
+      </p>
+      <ul>
+        <li><p><b>
+          &lt;form&gt; is the top-level tag
+          </b><br />Dashboards, on the other hand, use the &lt;dashboard&gt; tag as the top-level tag.
+        </p></li>
+        <li><p><b>&lt;fieldset&gt; defines tokens to replace in the form search</b></p></li>
+        <li><p><b>
+          &lt;fieldset&gt; also defines the way to accept user input.
+          </b><br />For example, text box, dropdown list, or radio buttons. You can also specify a timepicker to specify a time range for the form search.
+        </p></li>
+        <li><p><b>&lt;searchTemplate&gt; defines the search for the form.
+          </b><br />The search uses <b>$<i>token</i>$</b> to delimit tokens to be replaced with user input.
+        </p></li>
+        <li><p><b>
+          Within &lt;row&gt; tags, specify the visualization to display results.
+          </b><br />For example table, chart, and so forth. A &lt;row&gt; in a form is much like a &lt;row&gt; in a dashboard, defining panels for the view.
+        </p></li>
+      </ul>
+      <p>
+        Here is the simple XML code to implement the form search in the first <a href="/app/dashboard_examples/form_table">form example</a>.
+      </p>
+      <div class="samplecode"><pre><![CDATA[
+<form> 
+  <label>Basic table</label> 
+ 
+  <fieldset> 
+   <html> 
+    <p> 
+      Enter a sourcetype in the field below. 
+    </p> 
+   </html> 
+   
+   <!-- the default input type is a text box --> 
+   <input token="sourcetype" /> 
+ 
+   <!-- include a timepicker --> 
+   <input type="time"/> 
+ 
+  </fieldset> 
+ 
+  <!-- search with replacement token delimited with $ --> 
+  <searchTemplate> 
+   index=_internal source=*metrics.log 
+     group=per_sourcetype_thruput series="$sourcetype$" 
+     | head 1000 
+  </searchTemplate> 
+   
+  <row> 
+    <!-- output the results as a 50 row events table --> 
+    <table> 
+     <title>Matching events</title> 
+     <option name="count">50</option> 
+    </table> 
+  </row> 
+ 
+</form>]]></pre></div>
+      <h1>XML Editors</h1>
+      <p>
+        Splunk 5+ does not provide an interactive editor for creating or editing forms using simple XML. Instead, use a third pary tool to edit simple XML forms.
+        It is a good idea to use an editor that understands XML formatting, such as Komodo.
+      </p>
+      
+      <p>
+        Splunk recommends that you design your form first as a dashboard, using Splunk's interactive editors.
+        Add charts or other visualizations with the interactive editors.
+        Then, modify the dashboard in an XML editor of your choice to create the form. For example, replace the &lt;dashboard&gt; tags with &lt;form&gt; tags.
+        Also modify the search to use tokens and create the &lt;fieldset&gt; tags for the form.
+      </p>
+       
+      <h1>What's next?</h1>      
+      <p>
+        [<a href="/app/dashboard_examples/form_table">Next: Simple XML forms - Basic form search</a>]
+        <br />[<a href="/app/dashboard_examples/dashboard6">Prev: Simple XML dashboards - Dynamic drilldown</a>]
+      </p>
+      <p>
+        [<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+      </p>
+      </div>
+    </html>
+  </row>
+</dashboard>

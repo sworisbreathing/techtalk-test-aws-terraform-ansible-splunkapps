@@ -1,0 +1,95 @@
+[app/ui]
+owner = admin
+version = 4.2
+
+[app/launcher]
+owner = admin
+version = 4.2
+
+[inputs/monitor%3A%2F%2F%2FVolumes%2Fvol0%2Fetc%2Flog]
+owner = admin
+version = 4.2
+
+[views/summary]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = admin
+version = 4.3.2
+modtime = 1347315967.551981000
+
+[nav/default]
+owner = admin
+version = 4.2
+
+[commands/naxmlkv]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+version = 4.2
+
+[inputs/monitor%3A%2F%2F%24SPLUNK_HOME%2Fetc%2Fapps%2Fnetapp%2Flog]
+owner = admin
+version = 4.2
+
+[macros/snap_avg%283%29]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = admin
+version = 4.2
+
+[views/snap_audit_index]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = admin
+version = 4.2
+
+[views/na_test2]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = admin
+version = 4.2
+
+[views/na_test]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = admin
+version = 4.2
+
+[macros/snap_ctime%281%29]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = admin
+version = 4.2
+
+[macros/snap_avgx%283%29]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = admin
+version = 4.2
+
+[macros/snap_perx%283%29]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = admin
+version = 4.2
+
+[inputs/script%3A%2F%2F%24SPLUNK_HOME%2Fetc%2Fapps%2Fnetapp%2Fbin%2FSNap.py]
+owner = admin
+version = 4.2.4
+modtime = 1320187894.360767000
+
+[commands/snaprt]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+version = 4.2
+
+[commands/snapxml]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+version = 4.2
+
+[views/performance]
+version = 4.3.2
+modtime = 1347316326.628088000

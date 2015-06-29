@@ -1,0 +1,67 @@
+<dashboard>
+  
+  <label>Simple XML dashboards - Inline search options</label>
+
+
+  <!-- First row of a single comment -->
+  <row>
+
+    <html>
+      <div class="content_width">
+      <h1>Simple XML dashboards - inline search options</h1>
+      <p>The two panels in this page are table visualizations that use inline search strings.  The tables specify the following options:</p>
+      <ul>
+        <li><strong>title:</strong> Optional. The title that appears in the panel.</li>
+        <li><strong>searchString:</strong> Required. The search that is dispatched every time this view loads. Cannot be combined with 'searchName'.</li>
+        <li><strong>earliestTime:</strong> Optional. The earliest time bound to place on the search. Cannot be used with 'searchName'.</li>
+        <li><strong>latestTime:</strong> Optional. The latest time bound to place on the search. Cannot be used with 'searchName'.</li>
+        <li><strong>fields:</strong> Optional. The field list to apply to results.  This is generally used with either 'table', 'event', or 'chart' panels.</li>
+      </ul>
+      
+    <h1>Source code</h1>
+    <p>
+      View the <a target="_blank" href="/static/app/dashboard_examples/samples/dashboard2_sample.html">source code to implement this dashboard</a>. (Opens in a new window.)
+    </p>
+    
+    <h1>What's next?</h1>  
+      <p>
+        [<a href="/app/dashboard_examples/dashboard3">Next: Simple XML - Chart options</a>]
+        <br />[<a href="/app/dashboard_examples/dashboard1">Prev: Dashboard using simple XML</a>]
+      </p>
+      <p>
+        [<a href="../dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+      </p>
+      </div>
+    </html>
+
+  </row>
+  
+  
+  <!-- Second row of 2 panels -->
+  <row>
+    
+    <!-- execute as an inline search, from -25h to now, display as a table -->
+    <table>
+      <title>Top five sourcetypes (by total KB indexed) in the last 24 hours</title>
+      <searchString>index=_internal group=per_sourcetype_thruput | chart sum(kb) by series | sort -sum(kb) | head 5</searchString>
+      <earliestTime>-25h</earliestTime>
+      <latestTime>now</latestTime>
+    </table>
+
+    <!-- execute as saved search, display as a table -->
+    <table>
+      <title>Contingency tabel of metrics groups vs series</title>
+      <searchString>index=_internal group=per_sourcetype_thruput | ctable group series</searchString>
+      <earliestTime>-2d</earliestTime>
+      <latestTime>now</latestTime>
+      <fields>group, splunk*, audittrail, TOTAL</fields>
+      <!-- the table drilldown feature does not work with ctable and 
+           contingency commands in this release so we turn it off. -->
+      <option name="drilldown">none</option>
+
+    </table>
+    
+  </row>
+
+
+</dashboard>

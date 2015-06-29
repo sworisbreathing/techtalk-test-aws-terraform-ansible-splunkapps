@@ -1,0 +1,36 @@
+<form>
+  <label>Landing page for dynamic drilldown example</label>
+
+  <fieldset>
+   <html>
+    <div class="form_bg"><div class="content_width">
+    <p><b>This form illustrates dynamic drilldown.</b></p>
+    <p><b>You probably got here from <a href="/app/dashboard_examples/dashboard6">Simple XML dashboards - dynamic drilldown</a>.</b></p>
+    </div></div>
+
+    <p style="padding-top: 6px"></p>
+    <hr />
+    <p style="padding-top: 20px">
+      Enter a sourcetype in the field below to return the most recent 1000 events from the metrics log concerning that sourcetype.
+    </p>
+  </html>
+   
+     <!-- the default is a text box, with no seed value; if user does not input
+          a value, then the $username$ token in searchTemplate will be removed -->
+      <input token="sourcetype" />
+  </fieldset>
+
+  <!-- define master search template, with replacement tokens delimited with $ -->
+  <searchTemplate>index=_internal source=*metrics.log group=per_sourcetype_thruput series="$sourcetype$" | head 1000</searchTemplate>
+  <earliestTime>-30d</earliestTime>
+  <latestTime>-0d</latestTime>
+  
+  <row>
+      <!-- output the results as a 50 row events table -->
+      <table>
+        <title>Matching events</title>
+        <option name="count">50</option>
+      </table>
+  </row>
+
+</form>

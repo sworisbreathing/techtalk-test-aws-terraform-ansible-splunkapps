@@ -1,0 +1,61 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Form with basic table</h1> 
+
+<textarea id="codeTextArea">
+
+<form>
+  <label>Basic table</label>
+
+  <fieldset>
+   <html>
+      <p>
+         Enter a sourcetype in the field below to return the most recent 1000 events from the metrics log concerning that sourcetype.
+      </p>
+   </html>
+   
+   <!-- the default is a text box, with no seed value; if user does not input
+      a value, then the $username$ token in searchTemplate will be removed -->
+   <input token="sourcetype" />
+  </fieldset>
+
+  <!-- define master search template, with replacement tokens delimited with $ -->
+  <searchTemplate>
+    index=_internal source=*metrics.log group=per_sourcetype_thruput series="$sourcetype$" | head 1000
+  </searchTemplate>
+  <earliestTime>-30d</earliestTime>
+  <latestTime>-0d</latestTime>
+  
+  <row>
+      <!-- output the results as a 50 row events table -->
+      <table>
+        <title>Matching events</title>
+        <option name="count">50</option>
+      </table>
+  </row>
+
+</form>
+
+</textarea>
+</div>
+

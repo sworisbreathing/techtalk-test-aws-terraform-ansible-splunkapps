@@ -1,0 +1,80 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Form search with multiple inputs</h1> 
+
+<textarea id="codeTextArea">
+
+<form>
+  <label>Multiple inputs</label>
+  
+  <fieldset>
+ 
+   <html>
+   <p style="padding-top: 20px">
+      Enter a sourcetype, a value for eps, and a time range for the search.
+    </p>
+   </html>
+      
+  <!-- create a text box; upon first load, the box will be populated with 'splunkd'; 
+      if user leaves the box empty, then search will use '*'; 
+      all tokens
+      will be followed by a * -->
+  <input type="text" token="series">
+    <label>sourcetype</label>
+    <default></default>
+    <seed>splunkd</seed>
+    <suffix>*</suffix>
+  </input>
+
+  <!-- always prepend the token 'otherFilter' with 'eps>'; if no value
+      is entered, then 'eps>-1' will be inserted -->
+  <input type="text" token="otherFilter">
+    <label>events per second greater than:</label>
+    <prefix>eps&gt;</prefix>
+    <default>-1</default>
+    <seed>0</seed>
+  </input>
+  
+  <!-- add default TimePicker -->
+  <input type="time" />
+      
+  </fieldset>
+
+  <!-- define master search template; leave time unbounded so that the time input can be used -->
+  <searchTemplate>
+   index=_internal source=*metrics.log group="per_sourcetype_thruput" series=$series$ $otherFilter$
+   | fields eps, kb, kbps
+  </searchTemplate>
+  
+  <row>   
+      <!-- show results as a table -->
+      <table>
+        <option name="showPager">true</option>
+        <option name="count">20</option>
+      </table>      
+  </row>
+  
+</form>
+</textarea>
+</div>
+

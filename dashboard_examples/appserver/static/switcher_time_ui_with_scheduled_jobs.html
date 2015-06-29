@@ -1,0 +1,38 @@
+<div class="content_width">
+<h1>Switcher with time controls</h1>
+<p>
+    This example shows how to use a switcher to display a scheduled search for different time intervals.
+</p>
+<p>
+    The default module for the switcher automatically displays a column chart for a scheduled saved search.
+    The scheduled saved search displays the last 15 minutes of results, so no time specification is needed for the default module.
+    You can view details for the scheduled saved search by going to:
+</p>
+<blockquote>
+    <b>Manager > Searches and reports > Sample scheduled search</b>
+</blockquote>
+<p>
+    Subsequent modules explicitly run the same scheduled search, but specify the time range within their HiddenSearch modules.
+    Here is the saved search run by all switcher modules.
+</p>
+
+<div class="samplecode">
+    index="_internal" source="*metrics.log" group="per_sourcetype_thruput"
+    <br />| chart sum(kb) over series
+</div>
+
+<h1>Source code</h1>
+<p>
+    View the <a target="_blank" href="/static/app/dashboard_examples/samples/switcher_time_ui_with_scheduled_jobs_sample.html">commented source code for this view</a>. (Opens in a new window.)
+</p>
+
+<p>Scroll down to see the module layout.</p>
+
+<h1>What's next?</h1>
+<p>
+  [<a href="/app/dashboard_examples/dashboard_with_post_process1">Next: Dashboard with post process</a>]
+  <br />[<a href="/app/dashboard_examples/switcher_compare">Prev: Switcher module comparisons</a>]
+  <br /><br />[<a href="/app/dashboard_examples/advanced_intro1">Advanced XML Home</a>]
+  <br />[<a href="/app/dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+</p>
+</div>

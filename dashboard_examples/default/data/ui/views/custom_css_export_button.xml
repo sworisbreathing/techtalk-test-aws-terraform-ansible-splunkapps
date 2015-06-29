@@ -1,0 +1,87 @@
+<!-- Note the custom stylesheet referenced in this first line
+-->
+<view template="dashboard.html" stylesheet="export_button.css">
+  <label>Custom CSS - export button</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+ 
+ <!--  NOTE: for portability we are using StaticContent although this is not recommended generally. 
+  Instead you should use ServerSideInclude here, which offers a a cleaner way to have HTML content in your app. 
+  We're only doing it this way so the view can be copy-and-pasted around as a single file.
+  -->
+  <module name="StaticContentSample" layoutPanel="viewHeader">
+    <param name="text">
+      In this advanced example view we use &lt;a href="http://www.splunk.com/base/Documentation/latest/Developer/UseCSS"&gt;Custom CSS&lt;/a&gt;
+      to customize the ResultsActionButtons module. Specifically we use CSS to hide the controls to save, print, send as link and view events.
+      This view references a custom CSS file located at
+      &lt;a href="../../static/app/dashboard_examples/export_button.css"&gt;/etc/apps/ui_examples/appserver/static/export_button.css&lt;/a&gt;
+      See XML comments for more details.
+    </param>
+  </module>
+  
+  
+
+  <!-- Group selector -->
+  <module name="SearchSelectLister" layoutPanel="panel_row1_col1">
+    <param name="settingToCreate">group_setting</param>
+    <param name="search">index=_internal source=*metrics.log group="per_*_thruput"| chart count over group</param>
+    <param name="earliest">-1h</param>
+    <param name="label">Group</param>
+    <param name="searchFieldsToDisplay">
+      <list>
+        <param name="label">group</param>
+        <param name="value">group</param>
+      </list>
+    </param>
+    <module name="ConvertToIntention">
+      <param name="settingToConvert">group_setting</param>
+      <param name="intention">
+        <param name="name">addterm</param>
+        <param name="arg">
+          <param name="group">$target$</param>
+        </param>
+      </param>
+      <module name="HiddenSearch">
+        <param name="search">index=_internal source=*metrics.log | chart sum(kb) over series | sort -sum(kb) | head 10</param>
+        <param name="earliest">-1h</param>
+
+        
+        <module name="HiddenChartFormatter">
+          <param name="chart">bar</param>
+          <param name="primaryAxisTitle.text">Sourcetype</param>
+          <param name="secondaryAxisTitle.text">KB Indexed</param>
+          <param name="legend.placement">none</param>
+          
+          
+          <module name="JobProgressIndicator"/>
+
+          <module name="JSChart">
+            <param name="width">100%</param>
+            <param name="height">320px</param>
+          </module>
+
+          <!-- here is the module we'll use to get an Export button.  This 
+          module comes with all kinds of other buttons as well that we 
+          dont want to show the user.  Although we use a config params 
+          to hide the editButton element, most of the work is done by the 
+          custom CSS, courtesy of the stylesheet="export_button.css" at the top.   
+          -->
+          <module name="ResultsActionButtons">
+            <param name="editView">False</param>
+          </module>
+
+
+        </module>
+      </module>
+    </module>
+  </module>
+  
+ </view>

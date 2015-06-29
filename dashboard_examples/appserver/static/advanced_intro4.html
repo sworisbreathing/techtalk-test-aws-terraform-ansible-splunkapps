@@ -1,0 +1,61 @@
+<h1>Advanced XML: Dashboard patterns</h1>
+<p>
+  If you are curious to see complex real-world examples, take a look at the various dashboards that ship by default with Splunk's Search app.
+  These dashboards use advanced XML (rather than simple XML).
+</p>
+<p>
+  <b>Note:</b> You can translate any simple XML view to advanced XML by adding the REST parameter, <code>?showsource=true</code> to the view's URI.
+</p>
+<p>
+  The examples in this Splunk Dashboard Examples app slowly increase the level of complexity of dasboards used within Splunk's default views.
+  Here are a few links to some dashboards in the Splunk Search app:
+</p>
+<ul>
+  <li><a href="../search/search_status">Search status</a></li>
+  <li><a href="../search/index_status">Index status</a></li>
+  <li><a href="../search/inputs_status">Inputs status</a></li>
+</ul>
+
+<h1>Pattern examples</h1>
+<p>
+  This example shows how to use the StaticContentSample module to add text to a panel.
+</p>
+<p>
+  By specifying the same value for row and column in the layoutPanlel attribute,
+  the text specified in the StaticContentExample module appears in the HiddenSearch module.
+</p>
+<p>
+ <code>
+ &nbsp;&nbsp;&lt;module name="StaticContentSample" <b>layoutPanel="panel_row2_col1"</b>&gt;
+ <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;param name="text"&gt;
+ <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This example uses HiddenSearch, HiddenChartFormatter, and JSChart modules to display a bar chart created from a saved search.
+ <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/param&gt;
+ <br />&nbsp;&nbsp;&lt;/module&gt; 
+ <br />&nbsp;&nbsp;&lt;module name="HiddenSearch" <b>layoutPanel="panel_row2_col1"</b> group="Charting the results of a saved search" autoRun="True"&gt;
+ <br />
+ </code>
+</p>
+
+<p>
+  TO DO: Catalog common module patterns.
+</p>
+
+<p>
+  View the <a target="_blank" href="/static/app/dashboard_examples/samples/advanced_intro4_sample.html">complete source code for this view</a>. (Opens in a new window.)
+</p>
+<p>
+  Scroll down to see the module implementation for this view.
+</p>
+
+
+
+<h1>What's next?</h1>
+<p>
+  [<a href="/app/dashboard_examples/advanced_lister_intro">Next: Introduction to listers</a>]
+  <br />[<a href="/app/dashboard_examples/advanced_intro4">Prev:Advanced XML patterns</a>]
+  <br /><br />[<a href="/app/dashboard_examples/advanced_intro3">Advanced XML Home</a>]
+  <br />[<a href="/app/dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+</p>
+
+
+

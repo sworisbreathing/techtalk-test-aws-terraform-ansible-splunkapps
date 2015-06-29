@@ -1,0 +1,63 @@
+<div class="content_width">
+<h1>Advanced XML: Using postProcess on dashboards</h1>
+<p>
+    At times you might want to design a dashboard with several searches that are remarkably similar, but display different results.
+    Running these multiple searches can be resource intensive and also difficult to maintain if you make a change that affects all searches.
+</p>
+<p>
+    However, you can run a single search and then use <i>postProcess</i> to capture different results and display them in different charts.
+</p>
+<blockquote>
+    <p><b>Caution: </b>Be careful when setting up postProcess. If implemented improperly your results can be misleading.</p>
+</blockquote>
+<p>
+    It's tempting to have the base search just be the <i>events</i> part of the search,
+    and then have the postProcess modules each display different reports.
+    For example:.
+</p>
+<div class="samplecode">
+  <i>wrong for postProcess</i>
+  <br /><br />timechart sum(kb) by series
+  <br /><i>or</i>
+  <br />chart avg(eps) over series  
+</div>
+<p>
+    However that can create problems. Splunk doesn't do unnecessary work &ndash; if the search contains no indication
+    that a downstream module wants statistics for a given field, it doesn't collect them. Or what's almost worse, it might collect incomplete statistics.
+    In the end you might find that the postProcess always seems to return zero results, or returns results that on close inspection are not correct.
+</p>
+<p>
+    When using postProcess, use the stats command in the base search. The stats command does all the work and gets what Sorkin
+    (aka the Sorkinator) calls the <i>sufficient statistics</i>. Later the postProcess searches have all the raw materials they need.
+    Specifically, the search has these clauses at the end of the search:
+</p>
+<div class="samplecode">
+    | bin _time span=5min | stats count by series, eps, kb, kbps, _time</code>
+ </div>
+<ul>
+    <li><p>The stats count with the various group-by clauses is the important part. </p></li>
+    <li><p>The bin command further optimizes the base search so there is not one row per timestamp, but one aggregate row per 5 minute bucket.</p></li>
+</ul>
+
+<p>
+    This view illustrates various ways you can post process the results from a single search.
+    Study the source code and module layout to see how this view implements postProcess.
+</p>
+
+<h1>Source code</h1>
+<p>
+    View the <a target="_blank" href="/static/app/dashboard_examples/samples/dashboard_with_post_process1_sample.html">complete commented source code for this view</a>. (Opens in a new window.)
+</p>
+<p>
+    Scroll down to see the module layout.
+</p>
+
+<h1>What's next?</h1>
+
+<p>
+  [<a href="/app/dashboard_examples/drilldown_intro">Next: Introduction to drilldown</a>]
+  <br />[<a href="/app/dashboard_examples/switcher_time_ui_with_scheduled_jobs">Prev: Use a switcher to control dispatch of scheduled searches</a>]
+  <br /><br />[<a href="/app/dashboard_examples/advanced_intro1">Advanced XML Home</a>]
+  <br />[<a href="/app/dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+</p>
+</div>

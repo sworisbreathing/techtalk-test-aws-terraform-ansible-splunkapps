@@ -1,0 +1,49 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Real-time dashboard (created interactively)</h1> 
+
+<textarea id="codeTextArea">
+
+<?xml version='1.0' encoding='utf-8'?>
+<dashboard>
+  <label>Real-time dashboard</label>
+  <row>
+    <html>
+      <!-- documentation panel -->
+    </html>
+  </row>
+  <row>
+    <chart>
+      <searchString>index=_internal * | top sourcetype</searchString>
+      <title>Real-time indexing</title>
+      <earliestTime>rt</earliestTime>
+      <latestTime>rt</latestTime>
+      <option name="charting.chart">column</option>
+      <option name="drilldown">all</option>
+    </chart>
+  </row>
+</dashboard>
+
+</textarea>
+</div>
+

@@ -1,0 +1,82 @@
+<html>
+
+<body>
+
+
+
+<h1>Get Data In</h1>
+
+
+
+
+
+<h2>Configure your NetApp</h2>
+<br>
+<p>Create a user account for Splunk to use when collecting NetApp data.  The
+account requires the following rights:</p>
+
+	<p>login-http-admin</p>
+	<p>api-*</p>
+	
+You can perform the following commands to create the role, group, and user:<p>
+
+	<ul>
+	<li>useradmin role add role_api -a login-http-admin,api-*
+	<li>useradmin group add group_api -r role_api
+	<li>useradmin user add user_api -g group_api
+	<li>snap_counters.map
+	</ul>
+<i>Special thanks to Jim Crumpler for his magnificent work in developing
+py-ontapi.  The library is included in the SNap package, and it is used
+by SNap for API calls.
+</i>
+<BR><BR>
+<h2>Configure the Collector</h2>
+
+<h3>SNAP_HOSTS</h3>
+Edit or create a snap_hosts.csv in the SplunkforNetApp/conf directory.  This configuration file is used to tell SNAP.PY from which filers to collect API data. 
+<br>
+<br>
+<b>Header:</b>
+<p>filer (hostname or IP), NetApp user, password</p>
+<p>10.1.10.52, na_user, na_pass</p>
+
+<I>More instructions available in the README including counter modifications and multiple hosts files.</I>
+<BR>
+<h1>Using OnTap Counters </h1>
+<p >The NetApp Counters pulled from the OnTap API can be found here:<a href="https://communities.netapp.com/docs/DOC-1044">NetApp&#174; Unified Storage Performance Management Guide</a></p>
+<br>
+
+<h2>Calculating Latency</h2>
+<p>
+
+<ul>
+Search:
+	<ul>
+	</li>
+<i>
+| eval real_write_latency = (write_latency_2-write_latency)/(write_ops_2-write_ops)
+</i>
+	</ul>
+
+<br>
+Example Event:
+	<ul>
+	</li>
+<i>
+11-20-2012 00:57:45 PST object="volume" instance="webx_wsdlcache" api_time_2=1353401865 api_time=1353401859 avg_latency=13437777 total_ops=1750097 read_latency=840452 read_ops=74 write_latency=28727 write_ops=124 other_ops=1749899 avg_latency_2=13437777 total_ops_2=1750097 read_latency_2=840452 read_ops_2=74 write_latency_2=28727 write_ops_2=124 other_ops_2=1749899
+</i>
+	</ul>
+</p>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<div class="content_width">
+<h1>Advanced XML: How modules work</h1>
+
+<p>  
+  As mentioned in the <a href="advanced_hello">Advanced XML: Hello World</a>, when a module contains another module,
+  the contained module (child module) inherits whatever <i>changes</i> are affected by the first module (the parent module).
+  There are several kinds of modules, but you can think of them as falling into two major types:
+</p>
+<blockquote>
+
+  <p>Modules that build a search</p>
+  <p>Modules that don't build a search</p>
+
+</blockquote>
+<h2>Modules that build a search</h2>  
+<p> 
+  You can tie together several modules to build a search that is kicked off as a job.
+  To build a search, you need a base search string from a search module. For example:
+</p>
+<blockquote>
+  <p>SearchBar</p>
+  <p>HiddenSearch</p>
+  <p>HiddenSavedSearch</p>
+  <p>other search module</p>
+</blockquote>
+<p>
+  Then, you can add an optional start time argument and an optional end time argument.
+</p>
+<p>
+  Then add <i>intentions</i>. Intentions are layers added to the base search, typically by interactive elements in the interface,
+  that affect the eventual search that is run.
+</p>
+
+<h3>Intentions</h3>  
+<p>
+  Most views contain a <i>base search string</i> &ndash; if you don't explicitly set one, it is implicitly "*".
+</p>
+<p>
+  SearchBar, HiddenSearch, and HiddenSavedSearch are the most common modules that specify the base search.
+</p>
+<p>
+  On top of that base search, other modules can layer intentions such as
+  <code>addterm</code>, <code>stringreplace</code>, <code>plot</code>, <code>negateterm</code>, <code>addtermgt</code> and others.
+</p>
+
+<p>
+  Each of those intentions can be added on top of <b>any base search string</b>, affecting the search that gets run.
+</p>
+
+<p>
+  Eventually, the base search and all the intentions layered on top of it reach a module
+  that requires that kicks off the search (for example, JobStatus, EventsViewer, FlashTimeline, and others).
+  The base search plus the intentions becomes flattened into the search that runs.
+</p>
+
+<p>
+  <b>Note:</b> The stringreplace intention is a bit of an outlier because it requires the base search string to contain embedded tokens ($foo$, for example).
+</p>
+
+<h2>Modules that don't build a search</h2>  
+
+<p>  
+  This covers a huge set of diverse modules &ndash; everything from setting the type of chart (for example, pie chart, line chart, and others)
+  to setting the number of results per page, to changing sort order,
+  to specific information about objects the user clicked since the view loaded.
+</p>
+
+<h1>What's next?</h1>
+<p>
+  [<a href="/app/dashboard_examples/advanced_intro3">Next: Layout</a>]
+  <br />[<a href="/app/dashboard_examples/advanced_hello">Prev: Hello Advanced XML</a>]
+  <br /><br />[<a href="/app/dashboard_examples/advanced_intro1">Advanced XML Home</a>]
+  <br />[<a href="/app/dashboard_examples/dashboard0">Dashboard Examples Home</a>]
+</p>
+</div>

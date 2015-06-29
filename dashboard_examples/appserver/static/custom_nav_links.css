@@ -1,0 +1,22 @@
+
+/*
+    custom CSS that, when present on a page, can hide unwanted elements. 
+    In this example (see the custom_css_export_button view), we want to 
+    only show the export button.
+*/
+
+.ResultsActionButtons .saveButton,
+.ResultsActionButtons .printButton,
+.ResultsActionButtons .linkButton,
+.ResultsActionButtons .editButton,
+.ResultsActionButtons .splViewEvents {
+    display:none;
+}
+
+/*
+    And as a bonus, we'd like the export button to be green. 
+    (Normally it is grey in this module)
+*/
+.ResultsActionButtons .exportButton {
+    background-color:#73A550;
+}

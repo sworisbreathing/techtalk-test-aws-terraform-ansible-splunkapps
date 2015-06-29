@@ -1,0 +1,134 @@
+<view template="dashboard.html">
+  <label>Advanced XML: Patterns</label>
+  <module name="AccountBar" layoutPanel="appHeader"/>
+  <module name="AppBar" layoutPanel="navigationHeader"/>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+  <module name="TitleBar" layoutPanel="viewHeader">
+    <param name="actionsMenuFilter">dashboard</param>
+  </module>
+ 
+  <module name="ServerSideInclude" layoutPanel="panel_row1_col1">
+    <param name="src">advanced_intro4.html</param>
+  </module>
+   
+  <module name="StaticContentSample" layoutPanel="panel_row2_col1">
+    <param name="text">
+      This example uses HiddenSearch, HiddenChartFormatter, and JSChart modules to display a bar chart created from a saved search.
+    </param>
+  </module> <!-- StaticContentSample --> 
+   <module name="HiddenSearch" layoutPanel="panel_row2_col1" group="Chart results of a saved search" autoRun="True">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput
+      | chart sum(kb) by series | sort -sum(kb) | head 10
+    </param>
+    <param name="earliest">-1h</param>
+    <module name="HiddenChartFormatter">
+      <param name="chart">bar</param>
+      <param name="primaryAxisTitle.text">Sourcetype</param>
+      <param name="secondaryAxisTitle.text">KB Indexed</param>
+      <param name="legend.placement">none</param>
+      <module name="JobProgressIndicator"/>
+      <module name="JSChart">
+        <param name="width">100%</param>
+        <param name="height">300px</param>
+      </module> <!-- JSChart -->
+    </module> <!-- HiddenChartFormatter -->
+  </module> <!-- HiddenSearch -->
+  
+  <module name="StaticContentSample" layoutPanel="panel_row2_col2" group="Allow the user to change the time range">
+    <param name="text">
+      This example uses HiddenSearch and includes a TimeRangePicker module
+      to allow the user to change the time range.
+    </param>
+  </module> <!-- StaticContentSample --> 
+  <module name="TimeRangePicker" layoutPanel="panel_row2_col2">
+    <param name="searchWhenChanged">True</param>
+    <param name="selected">All time</param>
+    <module name="HiddenSearch" autoRun="True">
+      <param name="search">| dbinspect bins=400</param>
+      <module name="HiddenChartFormatter">
+        <param name="chart">line</param>
+        <param name="primaryAxisTitle.text">Time</param>
+        <param name="chartTitle">Distribution of index buckets over time</param>
+        <module name="JobProgressIndicator"/>
+        <module name="JSChart"/>
+      </module> <!-- HiddenChartFormatter -->
+    </module> <!-- HiddenSearch -->
+  </module> <!-- TimeRangePicker -->
+
+
+  <module name="StaticContentSample" layoutPanel="panel_row3_col1">
+    <param name="text">
+      This example redirects the user to see the same graph in the
+      charting view using the ViewRedirectorLink module.
+    </param>
+  </module> <!-- StaticContentSample -->
+  <module name="HiddenSearch" layoutPanel="panel_row3_col1" group="Simple Redirects I" autoRun="True">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput
+      | timechart sum(kb)
+    </param>
+    <param name="earliest">-1h</param>
+    <module name="HiddenChartFormatter">
+      <param name="chart">line</param>
+      <param name="primaryAxisTitle.text">time</param>
+      <param name="secondaryAxisTitle.text">KB Indexed</param>
+      <param name="legend.placement">right</param>
+      <module name="JobProgressIndicator"/>
+      <module name="JSChart">
+        <param name="width">100%</param>
+        <param name="height">200px</param>
+      </module> <!-- JSChart -->
+      <module name="ViewRedirectorLink" layoutPanel="panel_row3_col1">
+        <param name="viewTarget">charting</param>
+        <param name="label">Redirect 1</param>
+      </module> <!-- ViewRedirectorLink -->
+    </module> <!-- HiddenChartFormatter -->
+  </module> <!-- HiddenSearch -->
+  
+  <module name="StaticContentSample" layoutPanel="panel_row3_col2">
+    <param name="text">
+      This example redirects the user to see the same graph in the
+      charting view using a pair of modules: SubmitButton + ViewRedirector.
+      Just for fun, we added a TimeRangePicker above the SubmitButton
+      that allows the user to change the time range before the redirect.
+    </param>
+  </module> <!-- StaticContentSample -->
+  <module name="HiddenSearch" layoutPanel="panel_row3_col2" group="Simple Redirects II" autoRun="True">
+    <param name="search">
+      index=_internal source=*metrics.log group=per_sourcetype_thruput
+      | timechart sum(kb)
+    </param>
+    <param name="earliest">-1h</param>
+    <module name="HiddenChartFormatter">
+      <param name="chart">line</param>
+      <param name="primaryAxisTitle.text">time</param>
+      <param name="secondaryAxisTitle.text">KB Indexed</param>
+      <param name="legend.placement">right</param>
+      <module name="JobProgressIndicator"/>
+      <module name="JSChart">
+        <param name="width">100%</param>
+        <param name="height">200px</param>
+      </module> <!-- JSChart -->
+      <module name="TimeRangePicker">
+        <param name="searchWhenChanged">True</param>
+        <param name="selected">Today</param>
+        <module name="SubmitButton">
+          <param name="label">Redirect 2</param>
+          <module name="ViewRedirector">
+            <param name="viewTarget">charting</param>
+          </module> <!-- ViewRedirector -->
+        </module> <!-- SubmitButton -->
+      </module> <!-- TimeRangePicker -->
+    </module> <!-- HiddenChartFormatter -->
+  </module> <!-- HiddenSearch -->
+
+  <module name="ServerSideInclude" layoutPanel="panel_row4_col1">
+    <param name="src">advanced_intro4_layout.html</param>
+  </module>
+
+ </view>

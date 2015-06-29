@@ -1,0 +1,75 @@
+<link type="text/css" rel="stylesheet" href="/static/app/dashboard_examples/css/codemirror1.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/view.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/skins/default/default.css" />
+
+<script type="text/javascript" src="/static/js/contrib/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/contrib/jquery-1.6.2.min.js"></script>
+
+
+<script type="text/javascript">
+$(function(){
+   
+   var textarea = $('#codeTextArea');
+   
+   CodeMirror.fromTextArea(textarea[0], {
+        mode:'xml',
+        readOnly: 'nocursor'
+    });
+    
+});
+</script>
+
+<div style="background-color:white; padding-top:20px; padding-bottom: 20px; padding-left:10px">
+<h1>Source code: Form search with text field and dynamic radio buttons</h1> 
+
+<textarea id="codeTextArea">
+
+<form>
+  <label>Text field with dynamic radio buttons</label>
+  
+  <!-- define master search template; leave time unbounded so that the time input can be used -->
+    <searchTemplate>index=sample from="$from$" $otherFilter$</searchTemplate>
+
+  <fieldset>
+    <html>
+    <p style="padding-top: 20px">
+      Specify a value for from to populate the radio buttons.
+    </p>    
+    </html>
+    
+  <!-- Define a radio button list, populated from a search.
+       searchWhenChanged propagates any change in selection immediately to the results.
+  -->
+  <input type="radio" token="from" searchWhenChanged="true">
+    <label>Select from address</label>
+    <choice value="*">Any</choice>
+    <populatingSearch fieldForValue="from" fieldForLabel="from">
+      <![CDATA[index=sample | top from | stats count by from]]>
+    </populatingSearch>
+  </input>
+  
+  <input type="text" token="otherFilter">
+    <label>other search</label>
+    <seed>*</seed>
+  </input>
+  
+  <!-- add default TimePicker -->
+  <input type="time" />
+      
+  </fieldset>
+  
+  <row>
+    
+  <!-- show results in event viewer -->
+  <event>
+    <title>Results</title>
+    <option name="count">50</option>
+  </event>
+    
+</row>
+  
+</form>
+
+</textarea>
+</div>
+
